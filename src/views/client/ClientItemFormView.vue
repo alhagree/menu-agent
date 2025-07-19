@@ -147,9 +147,11 @@ export default {
       this.item.sectionId = it.it_se_id;
       this.item.is_active = !!it.it_is_active;
       this.item.imageUrl = it.it_image
-        ? `${import.meta.env.VITE_API_BASE_URL}/uploads/items/${it.link_code}/${
-            it.it_image
-          }`
+        ? it.it_image.startsWith("http")
+          ? it.it_image
+          : `${import.meta.env.VITE_API_BASE_URL}/uploads/items/${
+              it.link_code
+            }/${it.it_image}`
         : "";
     },
     async submitForm() {

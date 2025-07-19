@@ -67,7 +67,7 @@
             <td>
               <img
                 v-if="item.it_image"
-                :src="`${apiBaseUrl}/uploads/items/${clientLinkCode}/${item.it_image}`"
+                :src="getImageUrl(item.it_image)"
                 alt="صورة"
                 width="40"
                 height="40"
@@ -159,6 +159,13 @@ export default {
     },
   },
   methods: {
+    getImageUrl(filename) {
+      if (!filename) return "";
+      if (filename.startsWith("http")) {
+        return filename; // صورة من ImageKit
+      }
+      return `${this.apiBaseUrl}/uploads/items/${this.clientLinkCode}/${filename}`;
+    },
     async loadItems() {
       try {
         const res = await api.get("/items");
