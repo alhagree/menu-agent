@@ -104,8 +104,8 @@ export default {
         const token = localStorage.getItem("client_token");
 
         const formData = new FormData();
-        formData.append("name", this.form.cl_name);
-        formData.append("phone", this.form.cl_phone);
+        formData.append("cl_name", this.form.cl_name);
+        formData.append("cl_phone", this.form.cl_phone);
         if (this.logoFile) formData.append("logo", this.logoFile);
         if (this.backgroundFile)
           formData.append("background", this.backgroundFile);
