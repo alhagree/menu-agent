@@ -112,9 +112,7 @@ export default {
         this.section.description = sec.se_description;
         this.section.is_active = !!sec.se_is_active;
         const link_code = localStorage.getItem("client_link_code");
-        this.section.imageUrl = sec.se_image
-          ? `${this.apiBaseUrl}/uploads/sections/${link_code}/${sec.se_image}`
-          : "";
+        this.section.imageUrl = sec.se_image || "";
       } catch (err) {
         console.error("فشل في تحميل بيانات القسم", err);
       }
