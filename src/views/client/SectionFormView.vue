@@ -112,7 +112,15 @@ export default {
         this.section.description = sec.se_description;
         this.section.is_active = !!sec.se_is_active;
         const link_code = localStorage.getItem("client_link_code");
-        this.section.imageUrl = sec.se_image || "";
+        if (sec.se_image) {
+          if (sec.se_image.startsWith("http")) {
+            this.section.imageUrl = sec.se_image; // صورة مرفوعة على ImageKit
+          } else {
+            this.section.imageUrl = `${this.apiBaseUrl}/uploads/sections/${link_code}/${sec.se_image}`;
+          }
+        } else {
+          this.section.imageUrl = "";
+        }
       } catch (err) {
         console.error("فشل في تحميل بيانات القسم", err);
       }
