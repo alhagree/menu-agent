@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "@/router";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}/agent`,
+  baseURL: `${process.env.VUE_APP_API_BASE_URL}/api/agent`, // ✅ صحيح
   headers: {
     "Content-Type": "application/json",
   },
