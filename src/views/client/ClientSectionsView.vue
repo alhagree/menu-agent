@@ -56,7 +56,7 @@
             <td>
               <img
                 v-if="sec.se_image"
-                :src="`${apiBaseUrl}/uploads/sections/${clientLinkCode}/${sec.se_image}`"
+                :src="getImageUrl(sec.se_image)"
                 alt="صورة القسم"
                 width="40"
                 height="40"
@@ -115,6 +115,12 @@ export default {
     },
   },
   methods: {
+    getImageUrl(filename) {
+      if (filename.startsWith("http")) {
+        return filename; // صورة من ImageKit
+      }
+      return `${this.apiBaseUrl}/uploads/sections/${this.clientLinkCode}/${filename}`; // صورة محلية
+    },
     async loadSections() {
       const token = localStorage.getItem("client_token");
       const client_id = localStorage.getItem("client_id");

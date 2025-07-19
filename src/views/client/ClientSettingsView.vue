@@ -1,3 +1,4 @@
+//agent-dashboard\src\views\client\ClientSettingsView.vue
 <template>
   <div class="container mt-5" style="max-width: 800px">
     <div class="card p-4 shadow-sm">
