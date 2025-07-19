@@ -69,18 +69,10 @@ export default {
       currentLogo: "",
       currentBackground: "",
       link_code: localStorage.getItem("client_link_code") || "",
-      apiBaseUrl: process.env.VUE_APP_API_BASE_URL, // ✅
+      apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
     };
   },
   methods: {
-    handleFileChange(field, event) {
-      const file = event.target.files[0];
-      if (field === "logo") {
-        this.logoFile = file;
-      } else if (field === "background") {
-        this.backgroundFile = file;
-      }
-    },
     async fetchData() {
       try {
         const token = localStorage.getItem("client_token");
@@ -100,35 +92,30 @@ export default {
         console.error("فشل تحميل بيانات الإعدادات", err);
       }
     },
+
+    handleFileChange(field, event) {
+      const file = event.target.files[0];
+      if (field === "logo") this.logoFile = file;
+      else if (field === "background") this.backgroundFile = file;
+    },
+
     async saveSettings() {
       try {
         const token = localStorage.getItem("client_token");
 
         const formData = new FormData();
+        formData.append("name", this.form.cl_name);
+        formData.append("phone", this.form.cl_phone);
         if (this.logoFile) formData.append("logo", this.logoFile);
         if (this.backgroundFile)
           formData.append("background", this.backgroundFile);
 
-        if (this.logoFile || this.backgroundFile) {
-          await axios.post(
-            `${this.apiBaseUrl}/api/agent/settings/upload-images`, // (إذا كان هذا المسار غير مستخدم حالياً يمكنك حذفه)
-            formData,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
-        }
-
-        await axios.put(
-          `${this.apiBaseUrl}/api/agent/settings`, // ✅ تم تصحيح المسار هنا
-          {
-            name: this.form.cl_name,
-            phone: this.form.cl_phone,
+        await axios.put(`${this.apiBaseUrl}/api/agent/settings`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        });
 
         alert("✅ تم حفظ التغييرات بنجاح");
         this.fetchData();
