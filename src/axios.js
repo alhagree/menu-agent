@@ -1,9 +1,8 @@
-// src/views/client/axios.js
 import axios from "axios";
 import router from "@/router";
 
 const api = axios.create({
-  baseURL: `${process.env.VUE_APP_API_BASE_URL}/api/agent`,
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/agent`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -21,7 +20,7 @@ api.interceptors.response.use(
     if ([401, 403].includes(error?.response?.status)) {
       alert("⛔ انتهت الجلسة، يرجى تسجيل الدخول مجددًا.");
       localStorage.removeItem("client_token");
-      router.push("/"); // صفحة تسجيل دخول العميل
+      router.push("/");
     }
     return Promise.reject(error);
   }
