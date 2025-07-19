@@ -18,7 +18,7 @@
         <label class="form-label fw-bold">شعار المشروع</label><br />
         <img
           v-if="currentLogo"
-          :src="`${apiBaseUrl}/uploads/settings/${link_code}/${currentLogo}`"
+          :src="currentLogo"
           alt="Logo"
           class="img-thumbnail mb-2"
           style="max-height: 100px"
@@ -34,7 +34,7 @@
         <label class="form-label fw-bold">صورة الخلفية</label><br />
         <img
           v-if="currentBackground"
-          :src="`${apiBaseUrl}/uploads/settings/${link_code}/${currentBackground}`"
+          :src="currentBackground"
           alt="Background"
           class="img-thumbnail mb-2"
           style="max-height: 120px"
@@ -73,6 +73,14 @@ export default {
     };
   },
   methods: {
+    handleFileChange(field, event) {
+      const file = event.target.files[0];
+      if (field === "logo") {
+        this.logoFile = file;
+      } else if (field === "background") {
+        this.backgroundFile = file;
+      }
+    },
     async fetchData() {
       try {
         const token = localStorage.getItem("client_token");
@@ -103,7 +111,7 @@ export default {
 
         if (this.logoFile || this.backgroundFile) {
           await axios.post(
-            `${this.apiBaseUrl}/api/agent/settings/upload-images`,
+            `${this.apiBaseUrl}/api/agent/settings/upload-images`, // (إذا كان هذا المسار غير مستخدم حالياً يمكنك حذفه)
             formData,
             {
               headers: { Authorization: `Bearer ${token}` },
@@ -112,8 +120,11 @@ export default {
         }
 
         await axios.put(
-          `${this.apiBaseUrl}/api/agent/settings/me`,
-          { cl_name: this.form.cl_name, cl_phone: this.form.cl_phone },
+          `${this.apiBaseUrl}/api/agent/settings`, // ✅ تم تصحيح المسار هنا
+          {
+            name: this.form.cl_name,
+            phone: this.form.cl_phone,
+          },
           {
             headers: { Authorization: `Bearer ${token}` },
           }
