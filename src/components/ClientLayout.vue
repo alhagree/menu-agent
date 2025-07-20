@@ -4,7 +4,10 @@
     <button class="toggle-sidebar-btn" @click="sidebarOpen = true">☰</button>
 
     <!-- الشريط الجانبي -->
-    <ClientSidebar :isOpen="sidebarOpen" @toggle-sidebar="sidebarOpen = $event" />
+    <ClientSidebar
+      :isOpen="sidebarOpen"
+      @toggle-sidebar="sidebarOpen = $event"
+    />
 
     <!-- المحتوى الرئيسي -->
     <main class="main-content flex-grow-1">
