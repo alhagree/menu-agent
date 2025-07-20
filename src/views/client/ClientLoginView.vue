@@ -1,15 +1,23 @@
 <template>
-  <div class="container mt-5" style="max-width: 500px">
+  <div class="container mt-5 text-center" style="max-width: 500px">
+    <!-- اللوغو -->
+    <img
+      :src="logoUrl"
+      alt="Tiklamu Logo"
+      class="mb-4"
+      style="max-height: 200px"
+    />
+
     <h3 class="mb-4">تسجيل دخول العميل</h3>
 
     <div class="alert alert-danger" v-if="errorMessage">{{ errorMessage }}</div>
 
-    <div class="form-group mb-3">
+    <div class="form-group mb-3 text-start">
       <label>اسم المستخدم</label>
       <input type="text" class="form-control" v-model="username" />
     </div>
 
-    <div class="form-group mb-3">
+    <div class="form-group mb-3 text-start">
       <label>كلمة المرور</label>
       <input type="password" class="form-control" v-model="password" />
     </div>
@@ -19,6 +27,7 @@
     </button>
   </div>
 </template>
+
 
 <script>
 import api from "../../axios"; // ← استيراد ملف api.js
@@ -31,6 +40,8 @@ export default {
       password: "",
       errorMessage: "",
       loading: false,
+      logoUrl:
+        "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png?updatedAt=1753026004161",
     };
   },
   methods: {
