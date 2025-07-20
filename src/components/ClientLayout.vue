@@ -1,9 +1,16 @@
 <template>
-  <div class="client-layout">
-    <ClientSidebar />
-    <main class="client-main">
+  <div class="client-layout d-flex">
+    <!-- ✅ الزر يظهر فقط على الموبايل -->
+    <button class="toggle-sidebar-btn d-md-none" @click="sidebarOpen = true">
+      ☰
+    </button>
+
+    <!-- ✅ الشريط الجانبي -->
+    <ClientSidebar :isOpen="sidebarOpen" @toggle-sidebar="sidebarOpen = $event" />
+
+    <!-- ✅ المحتوى -->
+    <main class="main-content flex-grow-1">
       <ClientTopbar />
-      <!-- ✅ شريط علوي جديد -->
       <router-view />
     </main>
   </div>
@@ -15,31 +22,40 @@ import ClientTopbar from "./ClientTopbar.vue";
 
 export default {
   name: "ClientLayout",
-  components: {
-    ClientSidebar,
-    ClientTopbar,
+  components: { ClientSidebar, ClientTopbar },
+  data() {
+    return {
+      sidebarOpen: false,
+    };
   },
 };
 </script>
 
 <style scoped>
 .client-layout {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
+  position: relative;
 }
 
-.client-main {
-  flex: 1;
-  background: #f9f9f9;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+.main-content {
+  margin-right: 220px; /* افتراضياً */
+  padding: 20px;
 }
 
-nav.navbar {
-  position: sticky;
-  top: 0;
-  z-index: 100;
+@media (max-width: 767px) {
+  .main-content {
+    margin-right: 0;
+  }
+  .toggle-sidebar-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    z-index: 1100;
+    border-radius: 5px;
+  }
 }
 </style>
