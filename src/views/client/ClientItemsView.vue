@@ -65,7 +65,7 @@
             <td>{{ item.se_name }}</td>
             <td>
               <button
-                class="btn btn-sm w-100"
+                class="btn btn-sm w-50"
                 :class="item.it_is_active ? 'btn-success' : 'btn-danger'"
                 style="min-width: 80px"
                 @click="toggleStatus(item)"
@@ -75,7 +75,7 @@
             </td>
             <td>
               <button
-                class="btn btn-sm w-100"
+                class="btn btn-sm w-50"
                 :class="item.it_available ? 'btn-success' : 'btn-danger'"
                 style="min-width: 80px"
                 @click="toggleAvailable(item)"
@@ -95,7 +95,7 @@
             <td>
               <router-link
                 :to="`/client/items/edit/${item.it_id}`"
-                class="btn btn-sm btn-warning w-100"
+                class="btn btn-sm btn-warning w-50"
                 style="min-width: 80px"
               >
                 تعديل
