@@ -20,7 +20,7 @@
         <div class="col-md-4 d-flex justify-content-center align-items-center">
           <img
             v-if="subscription.st_logo"
-            :src="`${subscription.st_logo}`"
+            :src="subscription.st_logo"
             alt="شعار المشروع"
             class="img-fluid"
             style="max-width: 100%; width: 150px"
@@ -51,6 +51,13 @@
           </div>
         </div>
       </div>
+
+      <!-- ✅ باركود QR في الأسفل -->
+      <div v-if="subscription.st_barcode" class="barcode-box">
+        <h3>رمز QR الخاص بك</h3>
+        <img :src="subscription.st_barcode" alt="QR Code" class="qr-image" />
+        <p>يمكنك تحميله وطباعته واستخدامه للعرض السريع.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -65,7 +72,7 @@ export default {
     return {
       subscription: {},
       link_code: localStorage.getItem("client_link_code") || "",
-      apiBaseUrl: process.env.VUE_APP_API_BASE_URL, // ✅
+      apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
     };
   },
   computed: {
@@ -191,5 +198,19 @@ export default {
   .subscription-card .d-flex.justify-content-between {
     gap: 40px;
   }
+}
+
+.barcode-box {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.qr-image {
+  width: 220px;
+  height: auto;
+  margin-bottom: 10px;
+  border: 1px dashed #ccc;
+  padding: 10px;
+  background: white;
 }
 </style>
