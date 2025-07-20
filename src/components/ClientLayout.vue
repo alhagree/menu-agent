@@ -2,7 +2,7 @@
   <div class="client-layout d-flex">
     <!-- ✅ زر الفتح يظهر فقط في الشاشات الصغيرة -->
     <button
-      class="toggle-sidebar-btn d-md-none"
+      class="toggle-sidebar-btn d-lg-none"
       @click="sidebarOpen = !sidebarOpen"
     >
       ☰

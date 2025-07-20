@@ -24,23 +24,9 @@ export default {
   props: {
     isOpen: Boolean,
   },
-  computed: {
-    sidebarClass() {
-      // ✅ دائمًا ظاهر على الشاشات الكبيرة
-      if (window.innerWidth >= 960) return "sidebar-open";
-      return this.isOpen ? "sidebar-open" : "sidebar-closed";
-    },
-  },
-  methods: {
-    closeSidebar() {
-      // ✅ فقط على الموبايل يتم الإغلاق
-      if (window.innerWidth < 960) {
-        this.$emit("toggle-sidebar", false);
-      }
-    },
-  },
   data() {
     return {
+      screenWidth: window.innerWidth,
       links: [
         { name: "الرئيسية", to: "/client", icon: "bi bi-house-door" },
         { name: "الأقسام", to: "/client/sections", icon: "bi bi-folder" },
@@ -54,6 +40,28 @@ export default {
         { name: "حول", to: "/client/about", icon: "bi bi-question-circle" },
       ],
     };
+  },
+  computed: {
+    sidebarClass() {
+      if (this.screenWidth >= 960) return "sidebar-open";
+      return this.isOpen ? "sidebar-open" : "sidebar-closed";
+    },
+  },
+  mounted() {
+    window.addEventListener("resize", this.updateWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.updateWidth);
+  },
+  methods: {
+    updateWidth() {
+      this.screenWidth = window.innerWidth;
+    },
+    closeSidebar() {
+      if (this.screenWidth < 960) {
+        this.$emit("toggle-sidebar", false);
+      }
+    },
   },
 };
 </script>
