@@ -1,5 +1,5 @@
 {
-  "name": "Tiklamu - لوحة تحكم العميل",
+  "name": "agent-dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
