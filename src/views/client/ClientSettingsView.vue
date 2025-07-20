@@ -1,6 +1,13 @@
-//agent-dashboard\src\views\client\ClientSettingsView.vue
 <template>
   <div class="container mt-5" style="max-width: 800px">
+    <!-- نافذة تحميل -->
+    <div v-if="isLoading" class="loader-overlay">
+      <div class="loader-content">
+        <div class="spinner-border text-light mb-3"></div>
+        <div>جاري حفظ التغييرات...</div>
+      </div>
+    </div>
+
     <div class="card p-4 shadow-sm">
       <h4 class="mb-4 text-center">⚙️ إعدادات الحساب</h4>
 
@@ -46,7 +53,11 @@
         />
       </div>
 
-      <button @click="saveSettings" class="btn btn-success w-100 mt-3">
+      <button
+        @click="saveSettings"
+        class="btn btn-success w-100 mt-3"
+        :disabled="isLoading"
+      >
         💾 حفظ التغييرات
       </button>
     </div>
@@ -58,6 +69,7 @@ import axios from "axios";
 
 export default {
   name: "ClientSettingsView",
+  inject: ["showToast"],
   data() {
     return {
       form: {
@@ -68,6 +80,7 @@ export default {
       backgroundFile: null,
       currentLogo: "",
       currentBackground: "",
+      isLoading: false,
       link_code: localStorage.getItem("client_link_code") || "",
       apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
     };
@@ -90,6 +103,7 @@ export default {
         this.currentBackground = data.st_background;
       } catch (err) {
         console.error("فشل تحميل بيانات الإعدادات", err);
+        this.showToast("فشل تحميل بيانات الإعدادات", "error");
       }
     },
 
@@ -100,6 +114,7 @@ export default {
     },
 
     async saveSettings() {
+      this.isLoading = true;
       try {
         const token = localStorage.getItem("client_token");
 
@@ -117,11 +132,13 @@ export default {
           },
         });
 
-        alert("✅ تم حفظ التغييرات بنجاح");
+        this.showToast("✅ تم حفظ التغييرات بنجاح", "success");
         this.fetchData();
       } catch (err) {
         console.error("فشل حفظ الإعدادات", err);
-        alert("❌ حدث خطأ أثناء الحفظ");
+        this.showToast("❌ حدث خطأ أثناء الحفظ", "error");
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -135,5 +152,24 @@ export default {
 img.img-thumbnail {
   display: block;
   margin-bottom: 8px;
+}
+
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-content {
+  text-align: center;
+  color: #fff;
+  font-size: 1.2rem;
 }
 </style>
