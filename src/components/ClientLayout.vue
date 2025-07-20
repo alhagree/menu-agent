@@ -1,15 +1,17 @@
 <template>
   <div class="client-layout d-flex">
-    <!-- زر فتح الشريط الجانبي -->
-    <button class="toggle-sidebar-btn" @click="sidebarOpen = true">☰</button>
+    <!-- ✅ زر الفتح يظهر فقط في الشاشات الصغيرة -->
+    <button class="toggle-sidebar-btn d-md-none" @click="sidebarOpen = true">
+      ☰
+    </button>
 
-    <!-- الشريط الجانبي -->
+    <!-- ✅ الشريط الجانبي -->
     <ClientSidebar
       :isOpen="sidebarOpen"
       @toggle-sidebar="sidebarOpen = $event"
     />
 
-    <!-- المحتوى الرئيسي -->
+    <!-- ✅ المحتوى -->
     <main class="main-content flex-grow-1">
       <ClientTopbar />
       <router-view />
@@ -39,19 +41,26 @@ export default {
 
 .main-content {
   padding: 20px;
+  margin-right: 220px;
 }
 
-/* زر فتح القائمة */
-.toggle-sidebar-btn {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: #0d6efd;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  font-size: 1.2rem;
-  z-index: 1100;
-  border-radius: 5px;
+/* ✅ إلغاء الهامش في الشاشات الصغيرة */
+@media (max-width: 767px) {
+  .main-content {
+    margin-right: 0;
+  }
+
+  .toggle-sidebar-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    z-index: 1100;
+    border-radius: 5px;
+  }
 }
 </style>

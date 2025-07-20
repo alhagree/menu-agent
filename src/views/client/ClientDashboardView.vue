@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋 XXXX</h2>
+    <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋</h2>
     <p class="date">اليوم: {{ todayDate }}</p>
 
     <div class="stats-grid">

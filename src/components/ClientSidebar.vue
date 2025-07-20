@@ -1,7 +1,7 @@
 <template>
   <div :class="['sidebar', sidebarClass]">
-    <!-- زر الإغلاق -->
-    <button class="btn-close" @click="closeSidebar">×</button>
+    <!-- ✅ زر الإغلاق يظهر فقط في الشاشات الصغيرة -->
+    <button class="btn-close d-md-none" @click="closeSidebar">×</button>
 
     <h5 style="color: azure" class="mb-4">لوحة العميل</h5>
     <ul class="nav flex-column">
@@ -26,12 +26,17 @@ export default {
   },
   computed: {
     sidebarClass() {
+      // ✅ دائمًا ظاهر على الشاشات الكبيرة
+      if (window.innerWidth >= 768) return "sidebar-open";
       return this.isOpen ? "sidebar-open" : "sidebar-closed";
     },
   },
   methods: {
     closeSidebar() {
-      this.$emit("toggle-sidebar", false);
+      // ✅ فقط على الموبايل يتم الإغلاق
+      if (window.innerWidth < 768) {
+        this.$emit("toggle-sidebar", false);
+      }
     },
   },
   data() {
@@ -67,12 +72,12 @@ export default {
   transition: transform 0.3s ease;
 }
 
-.sidebar-closed {
-  transform: translateX(100%);
-}
-
 .sidebar-open {
   transform: translateX(0);
+}
+
+.sidebar-closed {
+  transform: translateX(100%);
 }
 
 .btn-close {
