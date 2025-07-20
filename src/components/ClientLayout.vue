@@ -1,10 +1,12 @@
 <template>
   <div class="client-layout d-flex">
     <!-- ✅ زر الفتح يظهر فقط في الشاشات الصغيرة -->
-    <button class="toggle-sidebar-btn d-md-none" @click="sidebarOpen = true">
+    <button
+      class="toggle-sidebar-btn d-md-none"
+      @click="sidebarOpen = !sidebarOpen"
+    >
       ☰
     </button>
-
     <!-- ✅ الشريط الجانبي -->
     <ClientSidebar
       :isOpen="sidebarOpen"
