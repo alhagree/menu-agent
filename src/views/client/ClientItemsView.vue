@@ -73,13 +73,13 @@
               </button>
             </td>
             <td>
-              <span
+              <button
                 class="btn btn-sm"
                 :class="item.it_available ? 'bg-success' : 'bg-secondary'"
                 @click="toggleAvailable(item)"
               >
                 {{ item.it_available ? "متاح" : "غير متاح" }}
-              </span>
+              </button>
             </td>
             <td>
               <img
