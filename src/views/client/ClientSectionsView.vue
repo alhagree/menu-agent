@@ -65,8 +65,9 @@
             </td>
             <td class="text-center align-middle">
               <button
-                class="btn btn-sm"
+                class="btn btn-sm w-50"
                 :class="sec.se_is_active ? 'btn-success' : 'btn-danger'"
+                style="min-width: 80px"
                 @click="toggleStatus(sec)"
               >
                 {{ sec.se_is_active ? "مفعل" : "مخفي" }}
@@ -75,7 +76,8 @@
             <td class="text-center align-middle">
               <router-link
                 :to="`/client/sections/edit/${sec.se_id}`"
-                class="btn btn-sm btn-warning"
+                class="btn btn-sm btn-warning w-50"
+                style="min-width: 80px"
               >
                 تعديل
               </router-link>
