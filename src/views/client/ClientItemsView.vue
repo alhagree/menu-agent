@@ -65,8 +65,9 @@
             <td>{{ item.se_name }}</td>
             <td>
               <button
-                class="btn btn-sm"
+                class="btn btn-sm w-100"
                 :class="item.it_is_active ? 'btn-success' : 'btn-danger'"
+                style="min-width: 80px"
                 @click="toggleStatus(item)"
               >
                 {{ item.it_is_active ? "معروض" : "مخفي" }}
@@ -74,8 +75,9 @@
             </td>
             <td>
               <button
-                class="btn btn-sm"
+                class="btn btn-sm w-100"
                 :class="item.it_available ? 'btn-success' : 'btn-danger'"
+                style="min-width: 80px"
                 @click="toggleAvailable(item)"
               >
                 {{ item.it_available ? "متاح" : "غير متاح" }}
@@ -93,7 +95,8 @@
             <td>
               <router-link
                 :to="`/client/items/edit/${item.it_id}`"
-                class="btn btn-sm btn-warning"
+                class="btn btn-sm btn-warning w-100"
+                style="min-width: 80px"
               >
                 تعديل
               </router-link>

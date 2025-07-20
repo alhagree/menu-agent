@@ -12,7 +12,9 @@
       <h4 class="mb-4 text-center">⚙️ إعدادات الحساب</h4>
 
       <div class="mb-3">
-        <label class="form-label fw-bold">اسم العميل</label>
+        <label class="form-label fw-bold"
+          >اسم العميل / الاسم التجاري المعروض</label
+        >
         <input v-model="form.cl_name" type="text" class="form-control" />
       </div>
 
