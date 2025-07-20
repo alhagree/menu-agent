@@ -75,12 +75,13 @@
             <td>
               <button
                 class="btn btn-sm"
-                :class="item.it_available ? 'bg-success' : 'bg-secondary'"
+                :class="item.it_available ? 'btn-success' : 'btn-danger'"
                 @click="toggleAvailable(item)"
               >
                 {{ item.it_available ? "متاح" : "غير متاح" }}
               </button>
             </td>
+
             <td>
               <img
                 :src="getImageUrl(item.it_image)"
@@ -178,22 +179,40 @@ export default {
     },
   },
   methods: {
-    async toggleAvailable(item) {
+    async toggleStatus(item) {
+      const price = this.normalizeArabicNumber(item.it_price);
       try {
-        const price = this.normalizeArabicNumber(item.it_price);
         await api.put(`/items/${item.it_id}`, {
           it_name: item.it_name,
           it_price: price,
           it_description: item.it_description,
           it_se_id: item.it_se_id,
-          it_is_active: item.it_is_active,
+          it_is_active: item.it_is_active ? 0 : 1,
+          it_available: item.it_available, // مهم لضمان عدم حذفه عند التحديث
+        });
+        item.it_is_active = item.it_is_active ? 0 : 1;
+        this.showToast("تم تحديث حالة العرض", "success");
+      } catch (err) {
+        this.showToast("فشل في تحديث حالة العرض", "error");
+        console.error(err);
+      }
+    },
+
+    async toggleAvailable(item) {
+      const price = this.normalizeArabicNumber(item.it_price);
+      try {
+        await api.put(`/items/${item.it_id}`, {
+          it_name: item.it_name,
+          it_price: price,
+          it_description: item.it_description,
+          it_se_id: item.it_se_id,
+          it_is_active: item.it_is_active, // مهم
           it_available: item.it_available ? 0 : 1,
         });
-
         item.it_available = item.it_available ? 0 : 1;
-        this.showToast("تم تحديث التوفر", "success");
+        this.showToast("تم تحديث حالة التوفر", "success");
       } catch (err) {
-        this.showToast("فشل في تحديث التوفر", "error");
+        this.showToast("فشل في تحديث حالة التوفر", "error");
         console.error(err);
       }
     },
@@ -238,31 +257,6 @@ export default {
         console.error(err);
       } finally {
         this.isLoading = false;
-      }
-    },
-    async toggleStatus(item) {
-      const price = this.normalizeArabicNumber(item.it_price);
-      if (isNaN(price) || price === "") {
-        this.showToast(
-          "يرجى التأكد من كتابة السعر بشكل صحيح بالأرقام فقط.",
-          "warning"
-        );
-        return;
-      }
-
-      try {
-        await api.put(`/items/${item.it_id}`, {
-          it_name: item.it_name,
-          it_price: price,
-          it_description: item.it_description,
-          it_se_id: item.it_se_id,
-          it_is_active: item.it_is_active ? 0 : 1,
-        });
-        item.it_is_active = item.it_is_active ? 0 : 1;
-        this.showToast("تم تحديث حالة الصنف", "success");
-      } catch (err) {
-        this.showToast("فشل في تحديث الحالة", "error");
-        console.error(err);
       }
     },
     resetFilters() {
