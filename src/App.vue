@@ -1,6 +1,26 @@
+<!-- App.vue -->
 <template>
   <router-view />
+  <AppToast ref="toastRef" />
 </template>
+
+<script>
+import AppToast from "@/components/base/AppToast.vue";
+
+export default {
+  components: { AppToast },
+  provide() {
+    return {
+      showToast: this.showToast,
+    };
+  },
+  methods: {
+    showToast(message, type = "success") {
+      this.$refs.toastRef.show(message, type);
+    },
+  },
+};
+</script>
 
 <style>
 #app {

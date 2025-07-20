@@ -129,10 +129,12 @@
 </template>
 
 <script>
-import api from "../../axios";
+import api from "@/axios";
 
 export default {
   name: "ClientItemsView",
+  inject: ["showToast"],
+
   data() {
     return {
       items: [],
@@ -190,7 +192,7 @@ export default {
         const res = await api.get("/items");
         this.items = res.data;
       } catch (err) {
-        alert("فشل في جلب الأصناف");
+        this.showToast("فشل في جلب الأصناف", "error");
         console.error(err);
       } finally {
         this.isLoading = false;
@@ -202,7 +204,7 @@ export default {
         const res = await api.get("/sections");
         this.sections = res.data;
       } catch (err) {
-        alert("فشل في جلب الأقسام");
+        this.showToast("فشل في جلب الأقسام", "error");
         console.error(err);
       } finally {
         this.isLoading = false;
@@ -211,7 +213,10 @@ export default {
     async toggleStatus(item) {
       const price = this.normalizeArabicNumber(item.it_price);
       if (isNaN(price) || price === "") {
-        alert("يرجى التأكد من كتابة السعر بشكل صحيح بالأرقام فقط.");
+        this.showToast(
+          "يرجى التأكد من كتابة السعر بشكل صحيح بالأرقام فقط.",
+          "warning"
+        );
         return;
       }
 
@@ -224,8 +229,9 @@ export default {
           it_is_active: item.it_is_active ? 0 : 1,
         });
         item.it_is_active = item.it_is_active ? 0 : 1;
+        this.showToast("تم تحديث حالة الصنف", "success");
       } catch (err) {
-        alert("فشل في تحديث الحالة");
+        this.showToast("فشل في تحديث الحالة", "error");
         console.error(err);
       }
     },
