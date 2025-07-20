@@ -3,7 +3,7 @@
     <!-- زر الإغلاق -->
     <button class="btn-close" @click="closeSidebar">×</button>
 
-    <h5 class="mb-4">لوحة العميل</h5>
+    <h5 style="color: azure;" class="mb-4">لوحة العميل</h5>
     <ul class="nav flex-column">
       <li class="nav-item mb-2" v-for="link in links" :key="link.name">
         <router-link :to="link.to" class="nav-link text-white" @click="closeSidebar">
