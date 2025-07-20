@@ -53,7 +53,7 @@
         <input type="file" class="form-control" @change="handleImage" />
         <div class="mt-2 text-center">
           <img
-            :src="item.imageUrl || '/default-image.png'"
+            :src="item.imageUrl || 'https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/item.png?updatedAt=1753025679030'"
             alt="صورة الصنف"
             class="img-thumbnail"
             style="max-width: 200px; max-height: 200px"
