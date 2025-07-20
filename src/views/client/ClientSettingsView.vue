@@ -37,7 +37,8 @@
         />
       </div>
 
-      <div class="mb-3">
+      <!-- تم إخفاؤه مؤقتًا -->
+      <div class="mb-3" v-if="false">
         <label class="form-label fw-bold">صورة الخلفية</label><br />
         <img
           v-if="currentBackground"
