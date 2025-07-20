@@ -181,6 +181,14 @@ export default {
   methods: {
     async toggleStatus(item) {
       const price = this.normalizeArabicNumber(item.it_price);
+      if (isNaN(price) || price === "") {
+        this.showToast(
+          "يرجى التأكد من كتابة السعر بشكل صحيح بالأرقام فقط.",
+          "warning"
+        );
+        return;
+      }
+
       try {
         await api.put(`/items/${item.it_id}`, {
           it_name: item.it_name,
@@ -188,16 +196,15 @@ export default {
           it_description: item.it_description,
           it_se_id: item.it_se_id,
           it_is_active: item.it_is_active ? 0 : 1,
-          it_available: item.it_available, // مهم لضمان عدم حذفه عند التحديث
+          it_available: item.it_available, // أُضيفت
         });
         item.it_is_active = item.it_is_active ? 0 : 1;
         this.showToast("تم تحديث حالة العرض", "success");
       } catch (err) {
-        this.showToast("فشل في تحديث حالة العرض", "error");
+        this.showToast("فشل في تحديث الحالة", "error");
         console.error(err);
       }
     },
-
     async toggleAvailable(item) {
       const price = this.normalizeArabicNumber(item.it_price);
       try {
@@ -206,13 +213,14 @@ export default {
           it_price: price,
           it_description: item.it_description,
           it_se_id: item.it_se_id,
-          it_is_active: item.it_is_active, // مهم
+          it_is_active: item.it_is_active, // أُضيفت
           it_available: item.it_available ? 0 : 1,
         });
+
         item.it_available = item.it_available ? 0 : 1;
         this.showToast("تم تحديث حالة التوفر", "success");
       } catch (err) {
-        this.showToast("فشل في تحديث حالة التوفر", "error");
+        this.showToast("فشل في تحديث التوفر", "error");
         console.error(err);
       }
     },
