@@ -75,6 +75,17 @@
         <label class="form-check-label" for="activeCheck">معروض</label>
       </div>
 
+      <!-- التوفر -->
+      <div class="form-check mb-3">
+        <input
+          v-model="item.available"
+          type="checkbox"
+          class="form-check-input"
+          id="availableCheck"
+        />
+        <label class="form-check-label" for="availableCheck">متوفر</label>
+      </div>
+
       <!-- مؤشر تحميل -->
       <div v-if="isLoading" class="text-center mb-3">
         <div class="spinner-border text-primary" role="status"></div>
@@ -128,6 +139,7 @@ export default {
         image: null,
         imageUrl: "",
         is_active: true,
+        available: true,
       },
       isLoading: false,
       sections: [],
@@ -176,6 +188,7 @@ export default {
       this.item.description = it.it_description;
       this.item.sectionId = it.it_se_id;
       this.item.is_active = !!it.it_is_active;
+      this.item.available = !!it.it_available;
       this.item.imageUrl = it.it_image
         ? it.it_image.startsWith("http")
           ? it.it_image
@@ -200,6 +213,7 @@ export default {
       formData.append("it_description", this.item.description);
       formData.append("it_se_id", this.item.sectionId);
       formData.append("it_is_active", this.item.is_active ? 1 : 0);
+      formData.append("it_available", this.item.available ? 1 : 0);
       formData.append("link_code", link_code);
       if (this.item.image) {
         formData.append("image", this.item.image);

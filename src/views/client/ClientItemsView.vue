@@ -48,6 +48,7 @@
             <th>السعر</th>
             <th>القسم</th>
             <th>الحالة</th>
+            <th>التوفر</th>
             <th>صورة</th>
             <th>إجراءات</th>
           </tr>
@@ -70,6 +71,14 @@
               >
                 {{ item.it_is_active ? "معروض" : "مخفي" }}
               </button>
+            </td>
+            <td>
+              <span
+                class="badge"
+                :class="item.it_available ? 'bg-success' : 'bg-secondary'"
+              >
+                {{ item.it_available ? "متاح" : "غير متاح" }}
+              </span>
             </td>
             <td>
               <img
