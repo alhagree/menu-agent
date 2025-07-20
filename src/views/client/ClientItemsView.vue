@@ -1,3 +1,4 @@
+<!-- ClientItemsView.vue -->
 <template>
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -31,8 +32,14 @@
       </div>
     </div>
 
+    <!-- تحميل -->
+    <div v-if="isLoading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="mt-2">جاري التحميل...</p>
+    </div>
+
     <!-- جدول الأصناف -->
-    <div v-if="paginatedItems.length">
+    <div v-else-if="paginatedItems.length">
       <table class="table table-bordered align-middle text-center">
         <thead class="table-light">
           <tr>
@@ -53,7 +60,7 @@
           >
             <td>{{ (currentPage - 1) * itemsPerPage + index + 1 }}</td>
             <td>{{ item.it_name }}</td>
-            <td>{{ item.it_price.toLocaleString() }}</td>
+            <td>{{ normalizeArabicNumber(item.it_price).toLocaleString() }}</td>
             <td>{{ item.se_name }}</td>
             <td>
               <button
@@ -66,12 +73,11 @@
             </td>
             <td>
               <img
-                v-if="item.it_image"
                 :src="getImageUrl(item.it_image)"
                 alt="صورة"
                 width="40"
                 height="40"
-                onerror="this.style.display='none'"
+                onerror="this.src='/default-image.png'"
               />
             </td>
             <td>
@@ -115,6 +121,7 @@
         </ul>
       </nav>
     </div>
+
     <div v-else class="alert alert-warning text-center">
       لا توجد أصناف مطابقة.
     </div>
@@ -122,7 +129,7 @@
 </template>
 
 <script>
-import api from "../../axios"; // ← استخدام api بدلاً من axios مباشرة
+import api from "../../axios";
 
 export default {
   name: "ClientItemsView",
@@ -136,6 +143,7 @@ export default {
       itemsPerPage: 10,
       clientLinkCode: localStorage.getItem("client_link_code"),
       apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
+      isLoading: false,
     };
   },
   computed: {
@@ -160,40 +168,65 @@ export default {
   },
   methods: {
     getImageUrl(filename) {
-      if (!filename) return "";
+      if (!filename) return "/default-image.png";
       if (filename.startsWith("http")) {
-        return filename; // صورة من ImageKit
+        return filename;
       }
       return `${this.apiBaseUrl}/uploads/items/${this.clientLinkCode}/${filename}`;
     },
+    normalizeArabicNumber(input) {
+      const arabicNums = "٠١٢٣٤٥٦٧٨٩";
+      return input
+        .toString()
+        .split("")
+        .map((char) =>
+          arabicNums.includes(char) ? arabicNums.indexOf(char) : char
+        )
+        .join("");
+    },
     async loadItems() {
+      this.isLoading = true;
       try {
         const res = await api.get("/items");
         this.items = res.data;
       } catch (err) {
-        console.error("فشل في جلب الأصناف", err);
+        alert("فشل في جلب الأصناف");
+        console.error(err);
+      } finally {
+        this.isLoading = false;
       }
     },
     async loadSections() {
+      this.isLoading = true;
       try {
         const res = await api.get("/sections");
         this.sections = res.data;
       } catch (err) {
-        console.error("فشل في جلب الأقسام", err);
+        alert("فشل في جلب الأقسام");
+        console.error(err);
+      } finally {
+        this.isLoading = false;
       }
     },
     async toggleStatus(item) {
+      const price = this.normalizeArabicNumber(item.it_price);
+      if (isNaN(price) || price === "") {
+        alert("يرجى التأكد من كتابة السعر بشكل صحيح بالأرقام فقط.");
+        return;
+      }
+
       try {
         await api.put(`/items/${item.it_id}`, {
           it_name: item.it_name,
-          it_price: item.it_price,
+          it_price: price,
           it_description: item.it_description,
           it_se_id: item.it_se_id,
           it_is_active: item.it_is_active ? 0 : 1,
         });
         item.it_is_active = item.it_is_active ? 0 : 1;
       } catch (err) {
-        console.error("فشل في تغيير الحالة", err);
+        alert("فشل في تحديث الحالة");
+        console.error(err);
       }
     },
     resetFilters() {
