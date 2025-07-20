@@ -1,7 +1,7 @@
 <template>
   <div :class="['sidebar', sidebarClass]">
-    <!-- زر الإغلاق يظهر فقط على الموبايل -->
-    <button class="btn-close d-md-none" @click="closeSidebar">×</button>
+    <!-- زر الإغلاق -->
+    <button class="btn-close" @click="closeSidebar">×</button>
 
     <h5 class="mb-4">لوحة العميل</h5>
     <ul class="nav flex-column">
@@ -22,7 +22,6 @@ export default {
   },
   computed: {
     sidebarClass() {
-      if (window.innerWidth >= 768) return ""; // دائمًا ظاهر على الشاشات الكبيرة
       return this.isOpen ? "sidebar-open" : "sidebar-closed";
     },
   },
@@ -60,10 +59,10 @@ export default {
   transition: transform 0.3s ease;
 }
 
-/* الشريط مفتوح أو مغلق على الموبايل */
 .sidebar-closed {
   transform: translateX(100%);
 }
+
 .sidebar-open {
   transform: translateX(0);
 }
@@ -74,6 +73,7 @@ export default {
   color: white;
   font-size: 1.5rem;
   margin-bottom: 10px;
+  display: block;
 }
 
 .nav-link {

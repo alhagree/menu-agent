@@ -1,15 +1,12 @@
-//agent-dashboard\src\components\ClientLayout.vue
 <template>
   <div class="client-layout d-flex">
-    <!-- ✅ الزر يظهر فقط على الموبايل -->
-    <button class="toggle-sidebar-btn d-md-none" @click="sidebarOpen = true">
-      ☰
-    </button>
+    <!-- زر فتح الشريط الجانبي -->
+    <button class="toggle-sidebar-btn" @click="sidebarOpen = true">☰</button>
 
-    <!-- ✅ الشريط الجانبي -->
+    <!-- الشريط الجانبي -->
     <ClientSidebar :isOpen="sidebarOpen" @toggle-sidebar="sidebarOpen = $event" />
 
-    <!-- ✅ المحتوى -->
+    <!-- المحتوى الرئيسي -->
     <main class="main-content flex-grow-1">
       <ClientTopbar />
       <router-view />
@@ -38,25 +35,20 @@ export default {
 }
 
 .main-content {
-  margin-right: 220px; /* افتراضياً */
   padding: 20px;
 }
 
-@media (max-width: 767px) {
-  .main-content {
-    margin-right: 0;
-  }
-  .toggle-sidebar-btn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: #0d6efd;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 1.2rem;
-    z-index: 1100;
-    border-radius: 5px;
-  }
+/* زر فتح القائمة */
+.toggle-sidebar-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  z-index: 1100;
+  border-radius: 5px;
 }
 </style>
