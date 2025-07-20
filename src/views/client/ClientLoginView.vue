@@ -28,7 +28,6 @@
   </div>
 </template>
 
-
 <script>
 import api from "../../axios"; // ← استيراد ملف api.js
 
