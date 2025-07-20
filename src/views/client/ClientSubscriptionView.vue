@@ -20,7 +20,7 @@
         <div class="col-md-4 d-flex justify-content-center align-items-center">
           <img
             v-if="subscription.st_logo"
-            :src="`${apiBaseUrl}/uploads/settings/${link_code}/${subscription.st_logo}`"
+            :src="`${subscription.st_logo}`"
             alt="شعار المشروع"
             class="img-fluid"
             style="max-width: 100%; width: 150px"
@@ -50,17 +50,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- الخلفية أسفل البطاقة -->
-      <div v-if="subscription.st_background" class="mt-4 text-center">
-        <h6 class="text-muted">صورة الخلفية</h6>
-        <img
-          :src="`${apiBaseUrl}/uploads/settings/${link_code}/${subscription.st_background}`"
-          alt="الخلفية"
-          class="img-fluid rounded"
-          style="max-height: 200px"
-        />
       </div>
     </div>
   </div>
