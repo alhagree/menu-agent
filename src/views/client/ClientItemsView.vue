@@ -74,7 +74,7 @@
             </td>
             <td>
               <span
-                class="badge"
+                class="btn btn-sm"
                 :class="item.it_available ? 'bg-success' : 'bg-secondary'"
                 @click="toggleAvailable(item)"
               >
