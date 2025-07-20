@@ -1,3 +1,4 @@
+//agent-dashboard\src\components\ClientLayout.vue
 <template>
   <div class="client-layout d-flex">
     <!-- ✅ الزر يظهر فقط على الموبايل -->
