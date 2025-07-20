@@ -27,14 +27,14 @@ export default {
   computed: {
     sidebarClass() {
       // ✅ دائمًا ظاهر على الشاشات الكبيرة
-      if (window.innerWidth >= 768) return "sidebar-open";
+      if (window.innerWidth >= 960) return "sidebar-open";
       return this.isOpen ? "sidebar-open" : "sidebar-closed";
     },
   },
   methods: {
     closeSidebar() {
       // ✅ فقط على الموبايل يتم الإغلاق
-      if (window.innerWidth < 768) {
+      if (window.innerWidth < 960) {
         this.$emit("toggle-sidebar", false);
       }
     },

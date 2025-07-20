@@ -47,7 +47,7 @@ export default {
 }
 
 /* ✅ إلغاء الهامش في الشاشات الصغيرة */
-@media (max-width: 767px) {
+@media (max-width: 960px) {
   .main-content {
     margin-right: 0;
   }
