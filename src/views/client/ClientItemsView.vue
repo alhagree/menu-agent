@@ -76,6 +76,7 @@
               <span
                 class="badge"
                 :class="item.it_available ? 'bg-success' : 'bg-secondary'"
+                @click="toggleAvailable(item)"
               >
                 {{ item.it_available ? "متاح" : "غير متاح" }}
               </span>
@@ -177,6 +178,25 @@ export default {
     },
   },
   methods: {
+    async toggleAvailable(item) {
+      try {
+        const price = this.normalizeArabicNumber(item.it_price);
+        await api.put(`/items/${item.it_id}`, {
+          it_name: item.it_name,
+          it_price: price,
+          it_description: item.it_description,
+          it_se_id: item.it_se_id,
+          it_is_active: item.it_is_active,
+          it_available: item.it_available ? 0 : 1,
+        });
+
+        item.it_available = item.it_available ? 0 : 1;
+        this.showToast("تم تحديث التوفر", "success");
+      } catch (err) {
+        this.showToast("فشل في تحديث التوفر", "error");
+        console.error(err);
+      }
+    },
     getImageUrl(filename) {
       if (!filename || filename === "null") {
         return "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/item.png?updatedAt=1753025679030";
