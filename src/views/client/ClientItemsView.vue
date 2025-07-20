@@ -77,7 +77,6 @@
                 alt="صورة"
                 width="40"
                 height="40"
-                onerror="this.src='/default-image.png'"
               />
             </td>
             <td>
@@ -170,7 +169,9 @@ export default {
   },
   methods: {
     getImageUrl(filename) {
-      if (!filename) return "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/item.png?updatedAt=1753025679030";
+      if (!filename || filename === "null") {
+        return "/default-image.png";
+      }
       if (filename.startsWith("http")) {
         return filename;
       }
