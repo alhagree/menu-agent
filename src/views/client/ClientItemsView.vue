@@ -170,7 +170,7 @@ export default {
   },
   methods: {
     getImageUrl(filename) {
-      if (!filename) return "/default-image.png";
+      if (!filename) return "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/item.png?updatedAt=1753025679030";
       if (filename.startsWith("http")) {
         return filename;
       }
