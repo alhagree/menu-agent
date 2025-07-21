@@ -137,7 +137,7 @@ export default {
         }
       } catch (err) {
         console.error("فشل في تحميل بيانات القسم", err);
-        this.showToast("❌ فشل تحميل القسم", "error");
+        this.showToast("❌ فشل تحميل القسم", "danger");
       }
     },
 
@@ -161,17 +161,17 @@ export default {
         this.$router.push("/client/sections");
       } catch (err) {
         if (err.response?.data?.error) {
-          this.showToast(err.response.data.error, "error");
+          this.showToast(err.response.data.error, "danger");
         } else {
           console.error("خطأ أثناء الحذف", err);
-          this.showToast("❌ حدث خطأ أثناء الحذف", "error");
+          this.showToast("❌ حدث خطأ أثناء الحذف", "danger");
         }
       }
     },
 
     async submitForm() {
       if (!this.section.name.trim()) {
-        this.showToast("يرجى إدخال اسم القسم", "error");
+        this.showToast("يرجى إدخال اسم القسم", "danger");
         return;
       }
 
@@ -215,7 +215,7 @@ export default {
         this.$router.push("/client/sections");
       } catch (err) {
         console.error("خطأ أثناء الحفظ", err);
-        this.showToast("❌ فشل في حفظ البيانات", "error");
+        this.showToast("❌ فشل في حفظ البيانات", "danger");
       } finally {
         this.isLoading = false;
       }

@@ -198,13 +198,13 @@ export default {
     },
     async submitForm() {
       if (!this.item.name.trim())
-        return this.showToast("يرجى إدخال اسم الصنف", "error");
+        return this.showToast("يرجى إدخال اسم الصنف", "danger");
       if (!this.item.description.trim())
-        return this.showToast("يرجى إدخال وصف الصنف", "error");
+        return this.showToast("يرجى إدخال وصف الصنف", "danger");
       if (!this.item.sectionId)
-        return this.showToast("يرجى اختيار القسم", "error");
+        return this.showToast("يرجى اختيار القسم", "danger");
       if (!this.isValidPrice(this.item.price)) {
-        return this.showToast("يرجى إدخال السعر بالأرقام فقط", "error");
+        return this.showToast("يرجى إدخال السعر بالأرقام فقط", "danger");
       }
 
       const link_code = localStorage.getItem("client_link_code");
@@ -237,7 +237,7 @@ export default {
 
         this.$router.push("/client/items");
       } catch (err) {
-        this.showToast("❌ حدث خطأ أثناء الحفظ", "error");
+        this.showToast("❌ حدث خطأ أثناء الحفظ", "danger");
         console.error("خطأ أثناء الحفظ", err);
       } finally {
         this.isLoading = false;
@@ -251,7 +251,7 @@ export default {
         this.showToast("🗑️ تم حذف الصنف بنجاح", "success");
         this.$router.push("/client/items");
       } catch (err) {
-        this.showToast("فشل في حذف الصنف", "error");
+        this.showToast("فشل في حذف الصنف", "danger");
         console.error("فشل في حذف الصنف", err);
       }
     },
