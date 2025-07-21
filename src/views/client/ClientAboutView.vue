@@ -7,9 +7,9 @@
 
       <div class="mb-3">
         <p class="lead">
-          هذا النظام مصمم لإدارة المنيو الإلكتروني الخاص بنشاطك التجاري
-          بطريقة سهلة وسريعة، ويتيح لك عرض الأصناف والأقسام للعملاء بشكل
-          احترافي ومباشر من خلال رمز QR.
+          هذا النظام مصمم لإدارة المنيو الإلكتروني الخاص بنشاطك التجاري بطريقة
+          سهلة وسريعة، ويتيح لك عرض الأصناف والأقسام للعملاء بشكل احترافي ومباشر
+          من خلال رمز QR.
         </p>
       </div>
 
@@ -20,7 +20,7 @@
         <p>{{ businessName }}</p>
       </div>
 
-      <div class="mb-3" v-if="vShow=false">
+      <div class="mb-3" v-if="showLocation">
         <h5><i class="bi bi-geo-alt me-2"></i> الموقع</h5>
         <p>{{ businessLocation }}</p>
       </div>
@@ -56,8 +56,6 @@
 </template>
 
 <script>
-import { vShow } from 'vue';
-
 export default {
   name: "ClientAboutView",
   data() {
@@ -66,6 +64,7 @@ export default {
       businessLocation: "شارع فلسطين، بغداد - العراق",
       businessPhone: "+9647708146600",
       businessEmail: "info@alhagree.com",
+      showLocation: false, // أو true حسب
     };
   },
 };
