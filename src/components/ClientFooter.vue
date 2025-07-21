@@ -46,7 +46,7 @@ footer {
 }
 
 .footer-logo {
-  height: 30px;
+  height: 20px;
   object-fit: contain;
 }
 </style>
