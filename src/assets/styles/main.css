@@ -1,6 +1,6 @@
 /* الخط العام والاتجاه */
 body {
-  font-family: "Cairo", sans-serif;
+  font-family: 'Tajawal', sans-serif;
   background-color: #f8f9fa;
   margin: 0;
   padding: 0;
@@ -9,7 +9,7 @@ body {
 }
 
 * {
-  font-family: "Cairo", sans-serif !important;
+  font-family: 'Tajawal', sans-serif;
 }
 
 
