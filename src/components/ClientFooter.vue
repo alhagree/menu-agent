@@ -1,7 +1,7 @@
 <template>
   <footer>
     <a
-      href="https://tiklamu.com"
+      href="https://www.tiklamu.com"
       target="_blank"
       rel="noopener"
       class="footer-content"
