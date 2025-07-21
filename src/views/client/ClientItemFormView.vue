@@ -1,6 +1,13 @@
-<!-- ClientItemFormView.vue -->
 <template>
   <div class="container mt-4" style="max-width: 600px">
+    <!-- نافذة تحميل -->
+    <div v-if="isLoading" class="loader-overlay">
+      <div class="loader-content">
+        <div class="spinner-border text-light mb-3"></div>
+        <div>جاري حفظ البيانات...</div>
+      </div>
+    </div>
+
     <h3 class="mb-4 text-center">
       {{ isEditMode ? "🛠 تعديل الصنف" : "➕ إضافة صنف" }}
     </h3>
@@ -53,10 +60,7 @@
         <input type="file" class="form-control" @change="handleImage" />
         <div class="mt-2 text-center">
           <img
-            :src="
-              item.imageUrl ||
-              'https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/item.png?updatedAt=1753025679030'
-            "
+            :src="item.imageUrl || defaultImage"
             alt="صورة الصنف"
             class="img-thumbnail"
             style="max-width: 200px; max-height: 200px"
@@ -84,12 +88,6 @@
           id="availableCheck"
         />
         <label class="form-check-label" for="availableCheck">متوفر</label>
-      </div>
-
-      <!-- مؤشر تحميل -->
-      <div v-if="isLoading" class="text-center mb-3">
-        <div class="spinner-border text-primary" role="status"></div>
-        <p class="mt-2">جاري الحفظ...</p>
       </div>
 
       <!-- الأزرار -->
@@ -129,6 +127,7 @@ import api from "../../axios";
 
 export default {
   name: "ClientItemFormView",
+  inject: ["showToast"],
   data() {
     return {
       item: {
@@ -143,6 +142,8 @@ export default {
       },
       isLoading: false,
       sections: [],
+      defaultImage:
+        "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/item.png?updatedAt=1753025679030",
     };
   },
   computed: {
@@ -174,9 +175,7 @@ export default {
     },
     async loadSections() {
       const link_code = localStorage.getItem("client_link_code");
-      const res = await api.get("/sections", {
-        params: { link_code },
-      });
+      const res = await api.get("/sections", { params: { link_code } });
       this.sections = res.data;
     },
     async loadItem() {
@@ -198,12 +197,14 @@ export default {
         : "";
     },
     async submitForm() {
-      // التحقق من الحقول
-      if (!this.item.name.trim()) return alert("يرجى إدخال اسم الصنف");
-      if (!this.item.description.trim()) return alert("يرجى إدخال وصف الصنف");
-      if (!this.item.sectionId) return alert("يرجى اختيار القسم");
+      if (!this.item.name.trim())
+        return this.showToast("يرجى إدخال اسم الصنف", "error");
+      if (!this.item.description.trim())
+        return this.showToast("يرجى إدخال وصف الصنف", "error");
+      if (!this.item.sectionId)
+        return this.showToast("يرجى اختيار القسم", "error");
       if (!this.isValidPrice(this.item.price)) {
-        return alert("يرجى إدخال السعر بالأرقام فقط");
+        return this.showToast("يرجى إدخال السعر بالأرقام فقط", "error");
       }
 
       const link_code = localStorage.getItem("client_link_code");
@@ -226,15 +227,17 @@ export default {
           await api.put(`/items/${id}`, formData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
+          this.showToast("✅ تم تحديث الصنف بنجاح", "success");
         } else {
           await api.post("/items", formData, {
             headers: { "Content-Type": "multipart/form-data" },
           });
+          this.showToast("✅ تم إضافة الصنف بنجاح", "success");
         }
 
         this.$router.push("/client/items");
       } catch (err) {
-        alert("حدث خطأ أثناء الحفظ");
+        this.showToast("❌ حدث خطأ أثناء الحفظ", "error");
         console.error("خطأ أثناء الحفظ", err);
       } finally {
         this.isLoading = false;
@@ -245,9 +248,10 @@ export default {
       if (!confirm("هل أنت متأكد من حذف الصنف؟ لا يمكن التراجع.")) return;
       try {
         await api.delete(`/items/${id}`);
+        this.showToast("🗑️ تم حذف الصنف بنجاح", "success");
         this.$router.push("/client/items");
       } catch (err) {
-        alert("فشل في حذف الصنف");
+        this.showToast("فشل في حذف الصنف", "error");
         console.error("فشل في حذف الصنف", err);
       }
     },
@@ -258,3 +262,30 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+img.img-thumbnail {
+  display: block;
+  margin: auto;
+}
+
+/* نفس ستايل نافذة التحميل */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-content {
+  text-align: center;
+  color: #fff;
+  font-size: 1.2rem;
+}
+</style>

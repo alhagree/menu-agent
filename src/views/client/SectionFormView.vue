@@ -1,6 +1,13 @@
-//agent-dashboard\src\views\client\SectionFormView.vue
 <template>
   <div class="container mt-4" style="max-width: 600px">
+    <!-- نافذة تحميل -->
+    <div v-if="isLoading" class="loader-overlay">
+      <div class="loader-content">
+        <div class="spinner-border text-light mb-3"></div>
+        <div>جاري حفظ البيانات...</div>
+      </div>
+    </div>
+
     <h3 class="mb-4">
       <i class="bi bi-collection me-2"></i>
       {{ isEditMode ? "تعديل القسم" : "إضافة قسم جديد" }}
@@ -22,12 +29,12 @@
       <div class="form-group mb-3">
         <label>صورة</label>
         <input type="file" class="form-control" @change="handleImage" />
-        <div v-if="section.imageUrl" class="mt-2">
+        <div v-if="section.imageUrl" class="mt-2 text-center">
           <img
             :src="section.imageUrl"
             alt="الصورة الحالية"
-            width="200"
-            height="200"
+            class="img-thumbnail"
+            style="max-width: 200px; max-height: 200px"
           />
         </div>
       </div>
@@ -47,7 +54,11 @@
           <i class="bi bi-arrow-right-circle me-1"></i> رجوع
         </button>
 
-        <button class="btn btn-success action-btn" @click="submitForm">
+        <button
+          class="btn btn-success action-btn"
+          @click="submitForm"
+          :disabled="isLoading"
+        >
           <i class="bi bi-save2 me-1"></i>
           {{ isEditMode ? "تحديث القسم" : "إضافة القسم" }}
         </button>
@@ -56,6 +67,7 @@
           v-if="isEditMode"
           class="btn btn-danger action-btn"
           @click="confirmDelete"
+          :disabled="isLoading"
         >
           <i class="bi bi-trash3 me-1"></i> حذف نهائي
         </button>
@@ -69,6 +81,7 @@ import axios from "axios";
 
 export default {
   name: "SectionFormView",
+  inject: ["showToast"],
   data() {
     return {
       section: {
@@ -79,6 +92,7 @@ export default {
         is_active: true,
       },
       apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
+      isLoading: false,
     };
   },
   computed: {
@@ -90,7 +104,6 @@ export default {
     handleImage(e) {
       const file = e.target.files[0];
       this.section.image = file;
-
       if (file) {
         this.section.imageUrl = URL.createObjectURL(file);
       }
@@ -111,10 +124,11 @@ export default {
         this.section.name = sec.se_name;
         this.section.description = sec.se_description;
         this.section.is_active = !!sec.se_is_active;
+
         const link_code = localStorage.getItem("client_link_code");
         if (sec.se_image) {
           if (sec.se_image.startsWith("http")) {
-            this.section.imageUrl = sec.se_image; // صورة مرفوعة على ImageKit
+            this.section.imageUrl = sec.se_image;
           } else {
             this.section.imageUrl = `${this.apiBaseUrl}/uploads/sections/${link_code}/${sec.se_image}`;
           }
@@ -123,6 +137,7 @@ export default {
         }
       } catch (err) {
         console.error("فشل في تحميل بيانات القسم", err);
+        this.showToast("❌ فشل تحميل القسم", "error");
       }
     },
 
@@ -142,25 +157,27 @@ export default {
         await axios.delete(`${this.apiBaseUrl}/api/agent/sections/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        alert("تم حذف القسم بنجاح");
+        this.showToast("🗑️ تم حذف القسم بنجاح", "success");
         this.$router.push("/client/sections");
       } catch (err) {
-        if (err.response && err.response.data && err.response.data.error) {
-          alert(err.response.data.error);
+        if (err.response?.data?.error) {
+          this.showToast(err.response.data.error, "error");
         } else {
           console.error("خطأ أثناء الحذف", err);
+          this.showToast("❌ حدث خطأ أثناء الحذف", "error");
         }
       }
     },
 
     async submitForm() {
       if (!this.section.name.trim()) {
-        alert("يرجى إدخال اسم القسم");
+        this.showToast("يرجى إدخال اسم القسم", "error");
         return;
       }
 
       const token = localStorage.getItem("client_token");
       const client_id = localStorage.getItem("client_id");
+
       const formData = new FormData();
       formData.append("name", this.section.name);
       formData.append("description", this.section.description);
@@ -170,6 +187,7 @@ export default {
         formData.append("image", this.section.image);
       }
 
+      this.isLoading = true;
       try {
         if (this.isEditMode) {
           const id = this.$route.params.id;
@@ -183,6 +201,7 @@ export default {
               },
             }
           );
+          this.showToast("✅ تم تحديث القسم بنجاح", "success");
         } else {
           await axios.post(`${this.apiBaseUrl}/api/agent/sections`, formData, {
             headers: {
@@ -190,11 +209,15 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           });
+          this.showToast("✅ تم إضافة القسم بنجاح", "success");
         }
 
         this.$router.push("/client/sections");
       } catch (err) {
         console.error("خطأ أثناء الحفظ", err);
+        this.showToast("❌ فشل في حفظ البيانات", "error");
+      } finally {
+        this.isLoading = false;
       }
     },
   },
@@ -209,5 +232,25 @@ export default {
 <style scoped>
 .action-btn {
   width: 150px;
+}
+
+/* نافذة التحميل */
+.loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-content {
+  text-align: center;
+  color: #fff;
+  font-size: 1.2rem;
 }
 </style>
