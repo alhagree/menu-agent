@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div>© 2025 جميع الحقوق محفوظة - منيو إلكتروني</div>
+    <div>© 2025 جميع الحقوق محفوظة - Tiklamu - Software Solution</div>
   </footer>
 </template>
 
