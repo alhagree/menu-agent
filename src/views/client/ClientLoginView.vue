@@ -8,6 +8,7 @@
       style="max-height: 200px"
     />
 
+    <h2 class="mb-4">نظام ادارة منيو الكتروني</h2>
     <h3 class="mb-4">تسجيل دخول العميل</h3>
 
     <div class="alert alert-danger" v-if="errorMessage">{{ errorMessage }}</div>
