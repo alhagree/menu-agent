@@ -7,7 +7,7 @@
       class="footer-content"
     >
       <img
-        src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/small-logo.png?updatedAt=1753105833982"
+        src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/small-logo.png?updatedAt=1753106773917"
         alt="TIKLAMU Logo"
         class="footer-logo me-2"
       />
