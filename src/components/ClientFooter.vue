@@ -11,7 +11,9 @@
         alt="TIKLAMU Logo"
         class="footer-logo me-2"
       />
-      <span class="text">TIKLAMU - Software Solution | © 2025 جميع الحقوق محفوظة</span>
+      <span class="text"
+        >TIKLAMU - Software Solution | © 2025 جميع الحقوق محفوظة</span
+      >
     </a>
   </footer>
 </template>
