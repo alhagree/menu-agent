@@ -14,5 +14,6 @@ export default {
 footer {
   width: 100%;
   text-align: center;
+  direction: ltr;
 }
 </style>
