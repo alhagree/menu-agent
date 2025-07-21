@@ -1,6 +1,6 @@
 <template>
   <footer>
-    <div>© 2025 جميع الحقوق محفوظة - Tiklamu - Software Solution</div>
+    <div>Tiklamu - Software Solution | © 2025 جميع الحقوق محفوظة</div>
   </footer>
 </template>
 
@@ -14,6 +14,5 @@ export default {
 footer {
   width: 100%;
   text-align: center;
-  direction: ltr;
 }
 </style>
