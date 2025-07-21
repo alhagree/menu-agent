@@ -62,7 +62,7 @@ export default {
     return {
       businessName: "Tiklamu - للحلول البرمجية",
       businessLocation: "شارع فلسطين، بغداد - العراق",
-      businessPhone: "+9647708146600",
+      businessPhone: "009647708146600",
       businessEmail: "info@alhagree.com",
       showLocation: false, // أو true حسب
     };
