@@ -3,15 +3,18 @@
     <!-- ✅ زر الإغلاق يظهر فقط في الشاشات الصغيرة -->
     <button class="btn-close d-md-none" @click="closeSidebar">×</button>
 
-    <h5 style="color: azure" class="mb-4">لوحة العميل</h5>
+    <h5 class="sidebar-title">لوحة العميل</h5>
     <ul class="nav flex-column">
-      <li class="nav-item mb-2" v-for="link in links" :key="link.name">
+      <li class="nav-item" v-for="link in links" :key="link.name">
         <router-link
           :to="link.to"
-          class="nav-link text-white"
+          class="nav-link"
+          active-class="active-link"
+          exact
           @click="closeSidebar"
         >
-          <i :class="link.icon"></i> {{ link.name }}
+          <i :class="link.icon"></i>
+          <span class="ms-2">{{ link.name }}</span>
         </router-link>
       </li>
     </ul>
@@ -72,12 +75,17 @@ export default {
   color: white;
   padding: 20px;
   width: 220px;
-  height: 100vh;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1050;
+  height: 100%;
+  /* ملاحظة: تم حذف position: fixed والـ top/right */
   transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+.sidebar-title {
+  color: #e9ecef;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
 }
 
 .sidebar-open {
@@ -98,12 +106,22 @@ export default {
 }
 
 .nav-link {
-  color: white;
+  color: #dee2e6;
   font-weight: 500;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  display: flex;
+  align-items: center;
 }
 
-.nav-link:hover,
-.router-link-exact-active {
-  color: #0d6efd;
+.nav-link:hover {
+  background-color: #343a40;
+  color: #fff;
+}
+
+.active-link {
+  background-color: #0d6efd;
+  color: white !important;
 }
 </style>
