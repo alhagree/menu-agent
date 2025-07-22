@@ -63,7 +63,7 @@ export default {
         subscription_expired:
           "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/expired.png",
         invalid_credentials:
-          "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_imag",
+          "https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/failed.png",
       },
       errorColors: {
         account_inactive: "#FF971E",
