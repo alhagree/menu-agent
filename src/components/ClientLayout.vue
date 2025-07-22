@@ -1,14 +1,15 @@
 <template>
   <div class="client-layout d-flex flex-column">
     <!-- ✅ الشريط العلوي ثابت -->
-    <ClientTopbar class="topbar-fixed" />
+    <ClientTopbar class="topbar-fixed" @toggle-sidebar="toggleSidebar" />
 
     <div class="layout-body d-flex flex-grow-1">
-      <!-- ✅ الشريط الجانبي الثابت -->
+      <!-- ✅ الشريط الجانبي -->
       <ClientSidebar
         class="sidebar-fixed"
+        :class="{ 'sidebar-hidden': !sidebarOpen }"
         :isOpen="sidebarOpen"
-        @toggle-sidebar="sidebarOpen = $event"
+        @toggle-sidebar="toggleSidebar"
       />
 
       <!-- ✅ المحتوى -->
@@ -32,8 +33,13 @@ export default {
   components: { ClientSidebar, ClientTopbar, ClientFooter },
   data() {
     return {
-      sidebarOpen: false,
+      sidebarOpen: window.innerWidth >= 960, // ظاهر على الحاسوب، مخفي على الموبايل
     };
+  },
+  methods: {
+    toggleSidebar() {
+      this.sidebarOpen = !this.sidebarOpen;
+    },
   },
 };
 </script>
@@ -46,33 +52,40 @@ export default {
 .client-layout {
   min-height: 100vh;
   position: relative;
+  direction: rtl;
 }
 
 /* ✅ الشريط الجانبي */
 .sidebar-fixed {
   position: fixed;
-  top: 60px; /* بعد التوب بار */
+  top: 60px;
   right: 0;
   width: var(--sidebar-width);
-  height: calc(100vh - 110px); /* استثناء التوب والفوتر */
+  height: calc(100vh - 110px);
   background-color: #212529;
   z-index: 1045;
   overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-hidden {
+  transform: translateX(100%);
 }
 
 /* ✅ الجسم الرئيسي */
 .layout-body {
   flex-grow: 1;
   display: flex;
-  margin-top: 60px; /* ارتفاع التوب بار */
-  margin-bottom: 50px; /* ارتفاع الفوتر */
+  margin-top: 60px;
+  margin-bottom: 50px;
 }
 
 /* ✅ محتوى الصفحة */
 .main-content {
   padding: 20px;
-  margin-right: var(--sidebar-width); /* حجز مساحة للسايد بار */
+  margin-right: var(--sidebar-width);
   width: 100%;
+  transition: margin 0.3s ease;
 }
 
 /* ✅ topbar */
@@ -85,6 +98,9 @@ export default {
   background-color: white;
   border-bottom: 1px solid #ddd;
   height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
 }
 
 /* ✅ footer */
@@ -104,7 +120,7 @@ export default {
   z-index: 1040;
 }
 
-/* ✅ للموبايل: نلغي المساحات ونعرض السايد بار فوق */
+/* ✅ للموبايل */
 @media (max-width: 960px) {
   .main-content {
     margin-right: 0;
@@ -116,12 +132,10 @@ export default {
   }
 
   .sidebar-fixed {
-    position: fixed;
-    top: 60px;
-    right: 0;
     width: 100%;
+    right: 0;
+    top: 60px;
     height: calc(100vh - 110px);
-    z-index: 1050;
   }
 }
 </style>

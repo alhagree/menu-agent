@@ -5,6 +5,14 @@
   >
     <!-- ⬅️ يسار: الأزرار -->
     <div class="d-flex gap-2 align-items-center">
+      <!-- زر إظهار/إخفاء القائمة الجانبية -->
+      <button
+        class="btn btn-outline-dark btn-sm d-md-none"
+        @click="$emit('toggle-sidebar')"
+      >
+        <i class="bi bi-list"></i>
+      </button>
+
       <button class="btn btn-outline-secondary btn-sm" @click="goToMenu">
         <span>عرض المنيو الخاص بك</span>
         <i class="bi bi-box-arrow-up-right ms-2"></i>
@@ -71,7 +79,8 @@ export default {
   border-bottom: 1px solid #ddd;
 }
 .btn-outline-secondary:hover,
-.btn-outline-danger:hover {
+.btn-outline-danger:hover,
+.btn-outline-dark:hover {
   background-color: #f8f9fa;
   transition: background-color 0.2s ease-in-out;
 }
