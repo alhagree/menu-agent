@@ -168,7 +168,9 @@ export default {
 .dashboard {
   padding: 30px;
   background: #f4f6f8;
-  min-height: 100vh;
+  min-height: calc(100vh - 60px); /* خصم الشريط العلوي إن وجد */
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .title {
@@ -192,7 +194,10 @@ export default {
   border-radius: 16px;
   padding: 20px;
   display: flex;
+  flex-direction: column; /* ← عمودي */
   align-items: center;
+  justify-content: center; /* ← توسيط عمودي */
+  text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: 0.3s;
 }
@@ -205,7 +210,7 @@ export default {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  margin-left: 15px;
+  margin-bottom: 10px; /* بدلًا من margin-left */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -259,6 +264,12 @@ export default {
   100% {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard {
+    padding: 15px;
   }
 }
 </style>
