@@ -1,11 +1,17 @@
+//ClientLayout.vue
 <template>
   <div class="client-layout d-flex flex-column">
     <!-- ✅ الشريط العلوي ثابت -->
     <ClientTopbar class="topbar-fixed" />
 
     <div class="layout-body d-flex flex-grow-1">
-      <!-- ✅ زر الفتح دائمًا ظاهر -->
-      <button class="toggle-sidebar-btn" @click="toggleSidebar">☰</button>
+      <!-- ✅ زر الفتح يظهر فقط في الشاشات الصغيرة -->
+      <button
+        class="toggle-sidebar-btn d-lg-none"
+        @click="sidebarOpen = !sidebarOpen"
+      >
+        ☰
+      </button>
 
       <!-- ✅ الشريط الجانبي -->
       <ClientSidebar
@@ -34,29 +40,8 @@ export default {
   components: { ClientSidebar, ClientTopbar, ClientFooter },
   data() {
     return {
-      sidebarOpen: window.innerWidth >= 960,
-      screenWidth: window.innerWidth,
+      sidebarOpen: false,
     };
-  },
-  mounted() {
-    window.addEventListener("resize", this.handleResize);
-  },
-  beforeUnmount() {
-    window.removeEventListener("resize", this.handleResize);
-  },
-  methods: {
-    handleResize() {
-      this.screenWidth = window.innerWidth;
-      if (this.screenWidth >= 960 && !this.sidebarOpen) {
-        this.sidebarOpen = true;
-      }
-      if (this.screenWidth < 960 && this.sidebarOpen) {
-        this.sidebarOpen = false;
-      }
-    },
-    toggleSidebar() {
-      this.sidebarOpen = !this.sidebarOpen;
-    },
   },
 };
 </script>
@@ -85,19 +70,19 @@ export default {
   .main-content {
     margin-right: 0;
   }
-}
 
-.toggle-sidebar-btn {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: #0d6efd;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  font-size: 1.2rem;
-  z-index: 1100;
-  border-radius: 5px;
+  .toggle-sidebar-btn {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1.2rem;
+    z-index: 1100;
+    border-radius: 5px;
+  }
 }
 
 /* ✅ topbar ثابت */
@@ -110,11 +95,6 @@ export default {
   background-color: white;
   border-bottom: 1px solid #ddd;
   height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 15px;
-  direction: ltr;
 }
 
 /* ✅ footer ثابت */
@@ -132,6 +112,5 @@ export default {
   font-size: 0.9rem;
   color: #555;
   z-index: 1040;
-  direction: ltr;
 }
 </style>
