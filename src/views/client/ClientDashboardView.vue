@@ -3,25 +3,19 @@
     <!-- تنبيه الاشتراك المنتهي -->
     <div
       v-if="showExpiredMessage"
-      class="alert alert-warning d-flex align-items-center mb-4 p-3"
+      class="alert alert-warning mb-4 p-3 text-end"
+      style="font-size: 1rem"
     >
-      <img
-        src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/inactive.png"
-        alt="تنبيه"
-        class="me-3"
-        style="height: 60px"
-      />
-      <br />
-      <div class="text-end">
-        <strong>⚠️ لقد انتهت مدة الاشتراك منذ تاريخ:</strong><br />
-        <span class="text-danger fw-bold">{{ subscriptionEnd }}</span>
-        <p class="mb-0">
-          سوف يبقى المنيو <strong>فعالاً</strong> لغاية
-          <strong>{{ graceEndDate }}</strong
-          >، بعدها سيتوقف تلقائيًا. يرجى التواصل مع الإدارة لضمان استمرارية
-          الخدمة.
-        </p>
-      </div>
+      <strong class="d-block mb-2">⚠️ لقد انتهت مدة الاشتراك</strong>
+      <span>منذ تاريخ:</span>
+      <span class="text-danger fw-bold">{{ arabicDate(subscriptionEnd) }}</span
+      ><br />
+      <span>سوف يبقى المنيو <strong>فعالاً</strong> لغاية</span>
+      <strong class="text-dark">{{ arabicDate(graceEndDateRaw) }}</strong>
+      <span>، بعدها سيتوقف تلقائيًا.</span><br />
+      <span class="text-muted"
+        >يرجى التواصل مع الإدارة لضمان استمرارية الخدمة.</span
+      >
     </div>
 
     <!-- العنوان -->
@@ -59,6 +53,21 @@ export default {
     };
   },
   computed: {
+    graceEndDateRaw() {
+      if (!this.subscriptionEnd) return null;
+      const end = new Date(this.subscriptionEnd);
+      end.setDate(end.getDate() + 7);
+      return end;
+    },
+    arabicDate(date) {
+      if (!date) return "غير متوفر";
+      const d = new Date(date);
+      return d.toLocaleDateString("ar-EG", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+    },
     todayDate() {
       return new Date().toLocaleDateString("ar-EG", {
         weekday: "long",
