@@ -3,8 +3,15 @@
   <nav
     class="navbar navbar-light px-4 d-flex justify-content-between align-items-center"
   >
-    <!-- ✅ الأزرار ← نقلناها إلى البداية لتظهر على اليسار -->
-    <div class="d-flex gap-2 align-items-center order-1 order-md-3">
+    <!-- ✅ الشعار والعنوان في الوسط -->
+    <div
+      class="flex-grow-1 text-center fw-bold topbar-title d-flex justify-content-center align-items-center gap-2"
+    >
+      <span>{{ welcomeMessage }}</span>
+    </div>
+
+    <!-- ✅ الأزرار ← تظهر على اليسار (نهاية السطر في RTL) -->
+    <div class="d-flex gap-2 align-items-center">
       <button class="btn btn-outline-secondary btn-sm" @click="goToMenu">
         <span>عرض المنيو الخاص بك</span>
         <i class="bi bi-box-arrow-up-right ms-2"></i>
@@ -13,13 +20,6 @@
         <span>تسجيل الخروج</span>
         <i class="bi bi-box-arrow-right ms-2"></i>
       </button>
-    </div>
-
-    <!-- ✅ الشعار والعنوان في الوسط -->
-    <div
-      class="flex-grow-1 text-center fw-bold topbar-title d-flex justify-content-center align-items-center gap-2 order-2"
-    >
-      <span>{{ welcomeMessage }}</span>
     </div>
   </nav>
 </template>
