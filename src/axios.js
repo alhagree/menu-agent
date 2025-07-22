@@ -17,11 +17,25 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (error) => {
-    if ([401, 403].includes(error?.response?.status)) {
+    const status = error?.response?.status;
+    const errorCode = error?.response?.data?.error_code;
+
+    // فقط نعيد التوجيه إذا لم تكن رسالة دخول
+    const isAuthError =
+      (status === 401 || status === 403) &&
+      ![
+        "invalid_credentials",
+        "account_inactive",
+        "subscription_inactive",
+        "subscription_expired",
+      ].includes(errorCode);
+
+    if (isAuthError) {
       alert("⛔ انتهت الجلسة، يرجى تسجيل الدخول مجددًا.");
       localStorage.removeItem("client_token");
       router.push("/");
     }
+
     return Promise.reject(error);
   }
 );
