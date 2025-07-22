@@ -1,5 +1,6 @@
 <template>
   <nav
+    dir="ltr"
     class="navbar navbar-light px-4 d-flex justify-content-between align-items-center"
   >
     <!-- ⬅️ يسار: الأزرار -->
