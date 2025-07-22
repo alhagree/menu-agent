@@ -32,7 +32,7 @@
         <span></span>
         <span>انتهت مدة الاشتراك ولم يتم التجديد خلال المهلة المحددة.</span
         ><br />
-        <span class="text-muted">يرجى التجديد فورًا لإعادة تفعيل المنيو.</span>
+        <span class="text-muted">يرجى التجديد لإعادة تفعيل المنيو.</span>
       </template>
     </div>
 
