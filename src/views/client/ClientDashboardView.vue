@@ -6,11 +6,12 @@
       class="alert alert-warning d-flex align-items-center mb-4 p-3"
     >
       <img
-        src="/img/expired-warning.png"
+        src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/inactive.png"
         alt="تنبيه"
         class="me-3"
         style="height: 60px"
       />
+      <br />
       <div class="text-end">
         <strong>⚠️ لقد انتهت مدة الاشتراك منذ تاريخ:</strong><br />
         <span class="text-danger fw-bold">{{ subscriptionEnd }}</span>
