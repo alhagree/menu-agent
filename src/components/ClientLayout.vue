@@ -7,7 +7,7 @@
       <!-- ✅ الشريط الجانبي -->
       <ClientSidebar
         class="sidebar-fixed"
-        :class="{ 'sidebar-hidden': !sidebarOpen }"
+        :class="sidebarOpen ? '' : 'sidebar-hidden'"
         :isOpen="sidebarOpen"
         @toggle-sidebar="toggleSidebar"
       />
@@ -33,12 +33,23 @@ export default {
   components: { ClientSidebar, ClientTopbar, ClientFooter },
   data() {
     return {
-      sidebarOpen: window.innerWidth >= 960, // ظاهر على الحاسوب، مخفي على الموبايل
+      sidebarOpen: window.innerWidth >= 960,
     };
+  },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
+    },
+    handleResize() {
+      if (window.innerWidth >= 960 && !this.sidebarOpen) {
+        this.sidebarOpen = true;
+      }
     },
   },
 };
