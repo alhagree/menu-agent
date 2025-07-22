@@ -1,25 +1,24 @@
 <template>
   <nav
-    dir="ltr"
-    class="navbar navbar-light bg-light px-4 d-flex justify-content-between align-items-center"
+    class="navbar navbar-light bg-light px-3 py-2 d-flex align-items-center justify-content-between flex-row-reverse"
   >
-    <!-- يمين: فارغ -->
-    <div style="width: 200px"></div>
-
-    <!-- وسط: الترحيب -->
-    <div class="text-center flex-grow-1">
-      <span class="fw-bold">{{ welcomeMessage }}</span>
-    </div>
-
     <!-- يسار: الأزرار -->
     <div class="d-flex gap-2">
-      <button class="btn btn-outline-primary btn-sm" @click="goToMenu">
+      <button class="btn btn-outline-primary btn-sm menu-btn" @click="goToMenu">
         عرض المنيو
       </button>
-      <button class="btn btn-outline-danger btn-sm" @click="logout">
+      <button class="btn btn-outline-danger btn-sm logout-btn" @click="logout">
         تسجيل الخروج
       </button>
     </div>
+
+    <!-- وسط: الترحيب -->
+    <div class="text-center flex-grow-1 d-none d-md-block">
+      <span class="fw-bold">{{ welcomeMessage }}</span>
+    </div>
+
+    <!-- يمين: حشو أو فراغ لموازنة التصميم -->
+    <div style="width: 200px"></div>
   </nav>
 </template>
 
@@ -60,17 +59,27 @@ export default {
 </script>
 
 <style scoped>
-.topbar {
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* تأثير عند المرور على الأزرار */
+/* تأثير عند المرور */
 .menu-btn:hover,
 .logout-btn:hover {
   transform: scale(1.05);
   transition: 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover {
+  background-color: #0d6efd;
+  color: white;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* خاصية إخفاء الرسالة في الشاشات الصغيرة */
+@media (max-width: 767px) {
+  .text-center.flex-grow-1 {
+    display: none !important;
+  }
 }
 </style>
