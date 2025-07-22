@@ -1,20 +1,17 @@
-// ✅ ClientSidebar.vue
 <template>
   <div :class="['sidebar', sidebarClass]">
+    <!-- ✅ زر الإغلاق يظهر فقط في الشاشات الصغيرة -->
     <button class="btn-close d-md-none" @click="closeSidebar">×</button>
 
-    <h5 class="sidebar-title">لوحة العميل</h5>
+    <h5 style="color: azure" class="mb-4">لوحة العميل</h5>
     <ul class="nav flex-column">
-      <li class="nav-item" v-for="link in links" :key="link.name">
+      <li class="nav-item mb-2" v-for="link in links" :key="link.name">
         <router-link
           :to="link.to"
-          class="nav-link"
-          active-class="active-link"
-          exact
+          class="nav-link text-white"
           @click="closeSidebar"
         >
-          <i :class="link.icon"></i>
-          <span class="ms-2">{{ link.name }}</span>
+          <i :class="link.icon"></i> {{ link.name }}
         </router-link>
       </li>
     </ul>
@@ -46,8 +43,8 @@ export default {
   },
   computed: {
     sidebarClass() {
-      if (this.screenWidth >= 960) return "sidebar-visible";
-      return this.isOpen ? "sidebar-visible" : "sidebar-hidden";
+      if (this.screenWidth >= 960) return "sidebar-open";
+      return this.isOpen ? "sidebar-open" : "sidebar-closed";
     },
   },
   mounted() {
@@ -62,7 +59,7 @@ export default {
     },
     closeSidebar() {
       if (this.screenWidth < 960) {
-        this.$emit("toggle-sidebar");
+        this.$emit("toggle-sidebar", false);
       }
     },
   },
@@ -74,22 +71,20 @@ export default {
   background-color: #212529;
   color: white;
   padding: 20px;
-  width: var(--sidebar-width);
-  height: 100%;
-  transition: transform 0.3s ease;
-  overflow-y: auto;
+  width: 220px;
+  height: 100vh;
   position: fixed;
   right: 0;
-  top: 60px;
-  height: calc(100vh - 110px);
-  z-index: 1045;
+  top: 0;
+  z-index: 1050;
+  transition: transform 0.3s ease;
 }
 
-.sidebar-visible {
+.sidebar-open {
   transform: translateX(0);
 }
 
-.sidebar-hidden {
+.sidebar-closed {
   transform: translateX(100%);
 }
 
@@ -102,32 +97,13 @@ export default {
   display: block;
 }
 
-.sidebar-title {
-  color: #e9ecef;
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
 .nav-link {
-  color: #dee2e6;
+  color: white;
   font-weight: 500;
-  padding: 10px;
-  border-radius: 5px;
-  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-  display: flex;
-  align-items: center;
 }
 
-.nav-link:hover {
-  background-color: #495057;
-  color: #fff;
-  transform: scale(1.03);
-}
-
-.active-link {
-  background-color: #0d6efd;
-  color: white !important;
-  font-weight: bold;
+.nav-link:hover,
+.router-link-exact-active {
+  color: #0d6efd;
 }
 </style>

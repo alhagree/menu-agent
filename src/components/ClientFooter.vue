@@ -1,4 +1,3 @@
-// ClientFooter.vue
 <template>
   <footer>
     <a
