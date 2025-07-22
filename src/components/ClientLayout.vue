@@ -117,7 +117,7 @@ export default {
 
   .sidebar-fixed {
     position: fixed;
-    top: 60px;
+    top: 60px; 
     right: 0;
     width: 100%;
     height: calc(100vh - 110px);
