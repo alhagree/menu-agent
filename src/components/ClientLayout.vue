@@ -4,16 +4,9 @@
     <ClientTopbar class="topbar-fixed" />
 
     <div class="layout-body d-flex flex-grow-1">
-      <!-- ✅ زر الفتح يظهر فقط في الشاشات الصغيرة -->
-      <button
-        class="toggle-sidebar-btn d-lg-none"
-        @click="sidebarOpen = !sidebarOpen"
-      >
-        ☰
-      </button>
-
-      <!-- ✅ الشريط الجانبي -->
+      <!-- ✅ الشريط الجانبي الثابت -->
       <ClientSidebar
+        class="sidebar-fixed"
         :isOpen="sidebarOpen"
         @toggle-sidebar="sidebarOpen = $event"
       />
@@ -46,11 +39,28 @@ export default {
 </script>
 
 <style scoped>
+:root {
+  --sidebar-width: 220px;
+}
+
 .client-layout {
   min-height: 100vh;
   position: relative;
 }
 
+/* ✅ الشريط الجانبي */
+.sidebar-fixed {
+  position: fixed;
+  top: 60px; /* بعد التوب بار */
+  right: 0;
+  width: var(--sidebar-width);
+  height: calc(100vh - 110px); /* استثناء التوب والفوتر */
+  background-color: #212529;
+  z-index: 1045;
+  overflow-y: auto;
+}
+
+/* ✅ الجسم الرئيسي */
 .layout-body {
   flex-grow: 1;
   display: flex;
@@ -58,50 +68,31 @@ export default {
   margin-bottom: 50px; /* ارتفاع الفوتر */
 }
 
+/* ✅ محتوى الصفحة */
 .main-content {
   padding: 20px;
-  margin-right: 220px;
+  margin-right: var(--sidebar-width); /* حجز مساحة للسايد بار */
   width: 100%;
 }
 
-/* ✅ إلغاء الهامش في الشاشات الصغيرة */
-@media (max-width: 960px) {
-  .main-content {
-    margin-right: 0;
-  }
-
-  .toggle-sidebar-btn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: #0d6efd;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 1.2rem;
-    z-index: 1100;
-    border-radius: 5px;
-  }
-}
-
-/* ✅ topbar ثابت */
+/* ✅ topbar */
 .topbar-fixed {
   position: fixed;
   top: 0;
   right: 0;
-  left: 0;
+  left: var(--sidebar-width);
   z-index: 1050;
   background-color: white;
   border-bottom: 1px solid #ddd;
   height: 60px;
 }
 
-/* ✅ footer ثابت */
+/* ✅ footer */
 .footer-fixed {
   position: fixed;
   bottom: 0;
-  left: 0;
   right: 0;
+  left: var(--sidebar-width);
   height: 50px;
   background-color: #f8f9fa;
   border-top: 1px solid #ddd;
@@ -111,5 +102,26 @@ export default {
   font-size: 0.9rem;
   color: #555;
   z-index: 1040;
+}
+
+/* ✅ للموبايل: نلغي المساحات ونعرض السايد بار فوق */
+@media (max-width: 960px) {
+  .main-content {
+    margin-right: 0;
+  }
+
+  .topbar-fixed,
+  .footer-fixed {
+    left: 0;
+  }
+
+  .sidebar-fixed {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    height: calc(100vh - 110px);
+    z-index: 1050;
+  }
 }
 </style>
