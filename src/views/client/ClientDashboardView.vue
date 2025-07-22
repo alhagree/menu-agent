@@ -85,6 +85,11 @@ export default {
       });
     },
     statItems() {
+      const days = this.daysLeft;
+      const isExpired = days < 0;
+      const isTodayLast = days === 0;
+      const isActive = days > 0;
+
       return [
         {
           key: "sectionCount",
@@ -109,10 +114,22 @@ export default {
         },
         {
           key: "daysLeft",
-          label: "تبقى على انتهاء الاشتراك",
-          icon: "bi bi-hourglass-split",
-          color: this.daysLeft <= 0 ? "bg-danger" : "bg-red",
-          value: this.daysLeft !== null ? this.daysLeft + " يوم" : "--",
+          label: isActive
+            ? "تبقى على انتهاء الاشتراك"
+            : isTodayLast
+            ? "اليوم هو آخر يوم للاشتراك"
+            : "لقد مضى على انتهاء اشتراكك",
+          icon: isActive
+            ? "bi bi-hourglass-split"
+            : isTodayLast
+            ? "bi bi-exclamation-triangle"
+            : "bi bi-x-octagon",
+          color: isActive
+            ? "bg-red"
+            : isTodayLast
+            ? "bg-warning"
+            : "bg-dark expired-alert", // ← فقط في حال انتهى الاشتراك تمامًا
+          value: days !== null ? (isExpired ? days * -1 : days) + " يوم" : "--",
         },
       ];
     },
@@ -221,5 +238,25 @@ export default {
   font-weight: bold;
   margin: 0;
   color: #111;
+}
+
+.expired-alert {
+  animation: pulseBlink 1.2s infinite;
+  box-shadow: 0 0 12px #b71c1c;
+}
+
+@keyframes pulseBlink {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.03);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 </style>
