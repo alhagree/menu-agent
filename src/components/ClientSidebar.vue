@@ -1,3 +1,4 @@
+//ClientSidebar.vue
 <template>
   <div :class="['sidebar', sidebarClass]">
     <!-- ✅ زر الإغلاق يظهر فقط في الشاشات الصغيرة -->

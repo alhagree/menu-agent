@@ -4,13 +4,8 @@
     <ClientTopbar class="topbar-fixed" />
 
     <div class="layout-body d-flex flex-grow-1">
-      <!-- ✅ زر الفتح يظهر فقط في الشاشات الصغيرة -->
-      <button
-        class="toggle-sidebar-btn d-lg-none"
-        @click="sidebarOpen = !sidebarOpen"
-      >
-        ☰
-      </button>
+      <!-- ✅ زر الفتح دائمًا ظاهر -->
+      <button class="toggle-sidebar-btn" @click="toggleSidebar">☰</button>
 
       <!-- ✅ الشريط الجانبي -->
       <ClientSidebar
@@ -39,8 +34,28 @@ export default {
   components: { ClientSidebar, ClientTopbar, ClientFooter },
   data() {
     return {
-      sidebarOpen: false,
+      sidebarOpen: true,
+      screenWidth: window.innerWidth,
     };
+  },
+  mounted() {
+    this.adjustSidebarDefault();
+    window.addEventListener("resize", this.handleResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  methods: {
+    handleResize() {
+      this.screenWidth = window.innerWidth;
+      this.adjustSidebarDefault();
+    },
+    adjustSidebarDefault() {
+      this.sidebarOpen = this.screenWidth >= 960;
+    },
+    toggleSidebar() {
+      this.sidebarOpen = !this.sidebarOpen;
+    },
   },
 };
 </script>
@@ -69,19 +84,19 @@ export default {
   .main-content {
     margin-right: 0;
   }
+}
 
-  .toggle-sidebar-btn {
-    position: fixed;
-    top: 10px;
-    right: 10px;
-    background: #0d6efd;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    font-size: 1.2rem;
-    z-index: 1100;
-    border-radius: 5px;
-  }
+.toggle-sidebar-btn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 1.2rem;
+  z-index: 1100;
+  border-radius: 5px;
 }
 
 /* ✅ topbar ثابت */
@@ -94,6 +109,11 @@ export default {
   background-color: white;
   border-bottom: 1px solid #ddd;
   height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 15px;
+  direction: ltr;
 }
 
 /* ✅ footer ثابت */
@@ -111,5 +131,6 @@ export default {
   font-size: 0.9rem;
   color: #555;
   z-index: 1040;
+  direction: ltr;
 }
 </style>
