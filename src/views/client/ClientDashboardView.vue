@@ -59,15 +59,6 @@ export default {
       end.setDate(end.getDate() + 7);
       return end;
     },
-    arabicDate(date) {
-      if (!date) return "غير متوفر";
-      const d = new Date(date);
-      return d.toLocaleDateString("ar-EG", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-    },
     todayDate() {
       return new Date().toLocaleDateString("ar-EG", {
         weekday: "long",
@@ -108,11 +99,16 @@ export default {
         },
       ];
     },
-    graceEndDate() {
-      if (!this.subscriptionEnd) return "غير متوفر";
-      const end = new Date(this.subscriptionEnd);
-      end.setDate(end.getDate() + 7);
-      return end.toLocaleDateString("ar-EG");
+  },
+  methods: {
+    arabicDate(date) {
+      if (!date) return "غير متوفر";
+      const d = new Date(date);
+      return d.toLocaleDateString("ar-EG", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
     },
   },
   async mounted() {
