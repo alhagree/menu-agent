@@ -1,21 +1,10 @@
+//agent-dashboard\src\components\ClientTopbar.vue
 <template>
   <nav
     class="navbar navbar-light px-4 d-flex justify-content-between align-items-center"
   >
-    <!-- الشعار والعنوان في الوسط -->
-    <div
-      class="flex-grow-1 text-center fw-bold topbar-title d-flex justify-content-center align-items-center gap-2"
-    >
-      <img
-        src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png"
-        alt="Logo"
-        class="logo-icon"
-      />
-      <span>{{ welcomeMessage }}</span>
-    </div>
-
-    <!-- الأزرار -->
-    <div class="d-flex gap-2 align-items-center">
+    <!-- ✅ الأزرار ← نقلناها إلى البداية لتظهر على اليسار -->
+    <div class="d-flex gap-2 align-items-center order-1 order-md-3">
       <button class="btn btn-outline-secondary btn-sm" @click="goToMenu">
         <span>عرض المنيو الخاص بك</span>
         <i class="bi bi-box-arrow-up-right ms-2"></i>
@@ -24,6 +13,13 @@
         <span>تسجيل الخروج</span>
         <i class="bi bi-box-arrow-right ms-2"></i>
       </button>
+    </div>
+
+    <!-- ✅ الشعار والعنوان في الوسط -->
+    <div
+      class="flex-grow-1 text-center fw-bold topbar-title d-flex justify-content-center align-items-center gap-2 order-2"
+    >
+      <span>{{ welcomeMessage }}</span>
     </div>
   </nav>
 </template>
@@ -63,13 +59,6 @@ export default {
 </script>
 
 <style scoped>
-.logo-icon {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-  filter: grayscale(20%) brightness(1.2);
-}
-
 .topbar-title {
   font-size: 1.1rem;
   position: absolute;
