@@ -8,8 +8,9 @@
       <li class="nav-item" v-for="link in links" :key="link.name">
         <router-link
           :to="link.to"
-          class="nav-link"
+          class="nav-link text-white"
           active-class="active-link"
+          exact
           @click="closeSidebar"
         >
           <i :class="link.icon" class="me-2"></i>
