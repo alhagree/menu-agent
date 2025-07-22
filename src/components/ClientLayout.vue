@@ -1,3 +1,4 @@
+// ✅ ClientLayout.vue
 <template>
   <div class="client-layout d-flex flex-column">
     <!-- ✅ الشريط العلوي ثابت -->
@@ -46,6 +47,7 @@ export default {
 </script>
 
 <style scoped>
+/* Layout Styles */
 .client-layout {
   min-height: 100vh;
   position: relative;
@@ -64,7 +66,6 @@ export default {
   width: 100%;
 }
 
-/* ✅ إلغاء الهامش في الشاشات الصغيرة */
 @media (max-width: 960px) {
   .main-content {
     margin-right: 0;
@@ -84,19 +85,17 @@ export default {
   }
 }
 
-/* ✅ topbar ثابت */
 .topbar-fixed {
   position: fixed;
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1050;
+  z-index: 1100;
   background-color: white;
   border-bottom: 1px solid #ddd;
   height: 60px;
 }
 
-/* ✅ footer ثابت */
 .footer-fixed {
   position: fixed;
   bottom: 0;
@@ -111,5 +110,75 @@ export default {
   font-size: 0.9rem;
   color: #555;
   z-index: 1040;
+}
+
+/* Sidebar */
+.sidebar {
+  background-color: #212529;
+  color: white;
+  padding: 20px;
+  width: 220px;
+  height: 100vh;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 1050;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-open {
+  transform: translateX(0);
+}
+
+.sidebar-closed {
+  transform: translateX(100%);
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.nav-link {
+  color: white;
+  font-weight: 500;
+}
+
+.nav-link:hover,
+.router-link-exact-active {
+  color: #0d6efd;
+}
+
+/* Topbar */
+.logo-icon {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(20%) brightness(1.2);
+}
+
+.topbar-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.navbar {
+  background: linear-gradient(to left, #fdfdfd, #f5f5f5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  z-index: 1100;
+  position: relative;
+  border-bottom: 1px solid #ddd;
+  min-height: 60px;
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-danger:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease-in-out;
 }
 </style>

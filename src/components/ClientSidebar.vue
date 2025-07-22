@@ -1,8 +1,7 @@
+<!-- ✅ ClientSidebar.vue -->
 <template>
   <div :class="['sidebar', sidebarClass]">
-    <!-- ✅ زر الإغلاق يظهر فقط في الشاشات الصغيرة -->
     <button class="btn-close d-md-none" @click="closeSidebar">×</button>
-
     <h5 style="color: azure" class="mb-4">لوحة العميل</h5>
     <ul class="nav flex-column">
       <li class="nav-item mb-2" v-for="link in links" :key="link.name">
@@ -65,45 +64,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.sidebar {
-  background-color: #212529;
-  color: white;
-  padding: 20px;
-  width: 220px;
-  height: 100vh;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 1050;
-  transition: transform 0.3s ease;
-}
-
-.sidebar-open {
-  transform: translateX(0);
-}
-
-.sidebar-closed {
-  transform: translateX(100%);
-}
-
-.btn-close {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.nav-link {
-  color: white;
-  font-weight: 500;
-}
-
-.nav-link:hover,
-.router-link-exact-active {
-  color: #0d6efd;
-}
-</style>
