@@ -7,12 +7,13 @@
       style="font-size: 1rem"
     >
       <template v-if="!graceExpired">
-        <strong class="d-block mb-2">⚠️ لقد انتهت مدة الاشتراك</strong>
-        <span>منذ تاريخ:</span>
-        <span class="text-danger fw-bold">{{
-          arabicDate(subscriptionEnd)
-        }}</span
-        ><br />
+        <strong class="d-block mb-2"
+          >⚠️ لقد انتهت مدة الاشتراك منذ تاريخ :
+          <span class="text-danger fw-bold">{{
+            arabicDate(subscriptionEnd)
+          }}</span>
+        </strong>
+        <span></span>
         <span>سوف يبقى المنيو <strong>فعالاً</strong> لغاية</span>
         <strong class="text-dark">{{ arabicDate(graceEndDateRaw) }}</strong>
         <span>، بعدها سيتوقف تلقائيًا.</span><br />
@@ -22,12 +23,13 @@
       </template>
 
       <template v-else>
-        <strong class="d-block mb-2 text-danger">⛔ تم إيقاف المنيو</strong>
-        <span>بتاريخ:</span>
-        <span class="fw-bold text-danger">{{
-          arabicDate(graceEndDateRaw)
-        }}</span
-        ><br />
+        <strong class="d-block mb-2 text-danger"
+          >⛔ تم إيقاف المنيو بتاريخ :
+          <span class="fw-bold text-danger">{{
+            arabicDate(graceEndDateRaw)
+          }}</span>
+        </strong>
+        <span></span>
         <span>انتهت مدة الاشتراك ولم يتم التجديد خلال المهلة المحددة.</span
         ><br />
         <span class="text-muted">يرجى التجديد فورًا لإعادة تفعيل المنيو.</span>
