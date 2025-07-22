@@ -6,16 +6,32 @@
       class="alert alert-warning mb-4 p-3 text-end"
       style="font-size: 1rem"
     >
-      <strong class="d-block mb-2">⚠️ لقد انتهت مدة الاشتراك</strong>
-      <span>منذ تاريخ:</span>
-      <span class="text-danger fw-bold">{{ arabicDate(subscriptionEnd) }}</span
-      ><br />
-      <span>سوف يبقى المنيو <strong>فعالاً</strong> لغاية</span>
-      <strong class="text-dark">{{ arabicDate(graceEndDateRaw) }}</strong>
-      <span>، بعدها سيتوقف تلقائيًا.</span><br />
-      <span class="text-muted"
-        >يرجى التواصل مع الإدارة لضمان استمرارية الخدمة.</span
-      >
+      <template v-if="!graceExpired">
+        <strong class="d-block mb-2">⚠️ لقد انتهت مدة الاشتراك</strong>
+        <span>منذ تاريخ:</span>
+        <span class="text-danger fw-bold">{{
+          arabicDate(subscriptionEnd)
+        }}</span
+        ><br />
+        <span>سوف يبقى المنيو <strong>فعالاً</strong> لغاية</span>
+        <strong class="text-dark">{{ arabicDate(graceEndDateRaw) }}</strong>
+        <span>، بعدها سيتوقف تلقائيًا.</span><br />
+        <span class="text-muted"
+          >يرجى التواصل مع الإدارة لضمان استمرارية الخدمة.</span
+        >
+      </template>
+
+      <template v-else>
+        <strong class="d-block mb-2 text-danger">⛔ تم إيقاف المنيو</strong>
+        <span>بتاريخ:</span>
+        <span class="fw-bold text-danger">{{
+          arabicDate(graceEndDateRaw)
+        }}</span
+        ><br />
+        <span>انتهت مدة الاشتراك ولم يتم التجديد خلال المهلة المحددة.</span
+        ><br />
+        <span class="text-muted">يرجى التجديد فورًا لإعادة تفعيل المنيو.</span>
+      </template>
     </div>
 
     <!-- العنوان -->
@@ -50,6 +66,7 @@ export default {
       subscriptionEnd: null,
       daysLeft: null,
       showExpiredMessage: false,
+      graceExpired: false,
     };
   },
   computed: {
@@ -120,6 +137,7 @@ export default {
       this.subscriptionEnd = res.data.subscriptionEnd;
       this.daysLeft = res.data.daysLeft;
       this.showExpiredMessage = res.data.subscriptionExpired;
+      this.graceExpired = this.daysLeft < -7; // تجاوز 7 أيام بعد الانتهاء
     } catch (err) {
       console.error("فشل تحميل البيانات:", err);
     }
