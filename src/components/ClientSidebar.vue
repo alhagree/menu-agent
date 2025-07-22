@@ -2,10 +2,17 @@
 <template>
   <div
     class="sidebar"
-    :class="{ 'sidebar-open': isOpen, 'sidebar-closed': !isOpen && isSmallScreen }"
+    :class="{
+      'sidebar-open': isOpen,
+      'sidebar-closed': !isOpen && isSmallScreen,
+    }"
   >
     <!-- زر إغلاق للهواتف -->
-    <button v-if="isSmallScreen" class="btn-close" @click="$emit('toggle-sidebar', false)">
+    <button
+      v-if="isSmallScreen"
+      class="btn-close"
+      @click="$emit('toggle-sidebar', false)"
+    >
       ×
     </button>
 

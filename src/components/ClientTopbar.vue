@@ -15,11 +15,17 @@
 
     <!-- ✅ الأزرار: عرض المنيو وتسجيل الخروج -->
     <div class="d-flex gap-2 align-items-center">
-      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" @click="goToMenu">
+      <button
+        class="btn btn-outline-secondary btn-sm d-flex align-items-center"
+        @click="goToMenu"
+      >
         <i class="bi bi-box-arrow-up-right ms-2"></i>
         <span>عرض المنيو الخاص بك</span>
       </button>
-      <button class="btn btn-outline-danger btn-sm d-flex align-items-center" @click="logout">
+      <button
+        class="btn btn-outline-danger btn-sm d-flex align-items-center"
+        @click="logout"
+      >
         <i class="bi bi-box-arrow-right ms-2"></i>
         <span>تسجيل الخروج</span>
       </button>
