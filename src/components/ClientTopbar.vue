@@ -14,7 +14,7 @@
 
     <!-- وسط: الترحيب -->
     <div class="text-center flex-grow-1 d-none d-md-block">
-      <span class="fw-bold">{{ welcomeMessage }}</span>
+      <span class="fw-bold"></span>
     </div>
 
     <!-- يمين: حشو أو فراغ لموازنة التصميم -->
