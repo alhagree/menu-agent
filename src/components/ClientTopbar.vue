@@ -1,11 +1,9 @@
-<!-- ✅ ClientTopbar.vue -->
+<!-- ClientTopbar.vue -->
 <template>
-  <nav
-    class="navbar navbar-light px-4 d-flex justify-content-between align-items-center flex-wrap"
-  >
-    <!-- الشعار + العنوان -->
+  <nav class="navbar d-flex justify-content-between align-items-center">
+    <!-- ✅ الرسالة الترحيبية (تُخفى في الموبايل) -->
     <div
-      class="topbar-title d-flex align-items-center gap-2 mx-auto d-none d-md-flex"
+      class="flex-grow-1 text-center fw-bold topbar-title d-none d-md-flex justify-content-center align-items-center gap-2"
     >
       <img
         src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png"
@@ -15,22 +13,15 @@
       <span>{{ welcomeMessage }}</span>
     </div>
 
-    <!-- الأزرار -->
-    <div class="d-flex gap-2 align-items-center ms-auto me-auto me-md-0">
-      <button
-        class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2"
-        @click="goToMenu"
-      >
+    <!-- ✅ الأزرار: عرض المنيو وتسجيل الخروج -->
+    <div class="d-flex gap-2 align-items-center">
+      <button class="btn btn-outline-secondary btn-sm d-flex align-items-center" @click="goToMenu">
+        <i class="bi bi-box-arrow-up-right ms-2"></i>
         <span>عرض المنيو الخاص بك</span>
-        <i class="bi bi-box-arrow-up-right"></i>
       </button>
-
-      <button
-        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
-        @click="logout"
-      >
+      <button class="btn btn-outline-danger btn-sm d-flex align-items-center" @click="logout">
+        <i class="bi bi-box-arrow-right ms-2"></i>
         <span>تسجيل الخروج</span>
-        <i class="bi bi-box-arrow-right"></i>
       </button>
     </div>
   </nav>
@@ -47,7 +38,7 @@ export default {
   mounted() {
     const name = localStorage.getItem("client_name");
     if (name) {
-      this.welcomeMessage = `👋 أهلاً ${name}`;
+      this.welcomeMessage = `👋 أهلاً بك من جديد يا ${name}`;
     }
   },
   methods: {

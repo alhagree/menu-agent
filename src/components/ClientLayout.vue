@@ -1,11 +1,11 @@
-// ✅ ClientLayout.vue
+<!-- ClientLayout.vue -->
 <template>
   <div class="client-layout d-flex flex-column">
-    <!-- ✅ الشريط العلوي ثابت -->
+    <!-- ✅ الشريط العلوي -->
     <ClientTopbar class="topbar-fixed" />
 
     <div class="layout-body d-flex flex-grow-1">
-      <!-- ✅ زر الفتح يظهر فقط في الشاشات الصغيرة -->
+      <!-- ✅ زر فتح الشريط الجانبي للشاشات الصغيرة -->
       <button
         class="toggle-sidebar-btn d-lg-none"
         @click="sidebarOpen = !sidebarOpen"
@@ -19,13 +19,13 @@
         @toggle-sidebar="sidebarOpen = $event"
       />
 
-      <!-- ✅ المحتوى -->
+      <!-- ✅ محتوى الصفحة -->
       <main class="main-content flex-grow-1">
         <router-view />
       </main>
     </div>
 
-    <!-- ✅ الفوتر الثابت -->
+    <!-- ✅ الفوتر -->
     <ClientFooter class="footer-fixed" />
   </div>
 </template>
@@ -47,7 +47,6 @@ export default {
 </script>
 
 <style scoped>
-/* Layout Styles */
 .client-layout {
   min-height: 100vh;
   position: relative;
@@ -90,7 +89,7 @@ export default {
   top: 0;
   right: 0;
   left: 0;
-  z-index: 1100;
+  z-index: 1050;
   background-color: white;
   border-bottom: 1px solid #ddd;
   height: 60px;
@@ -112,7 +111,7 @@ export default {
   z-index: 1040;
 }
 
-/* Sidebar */
+/* الشريط الجانبي */
 .sidebar {
   background-color: #212529;
   color: white;
@@ -125,15 +124,12 @@ export default {
   z-index: 1050;
   transition: transform 0.3s ease;
 }
-
 .sidebar-open {
   transform: translateX(0);
 }
-
 .sidebar-closed {
   transform: translateX(100%);
 }
-
 .btn-close {
   background: none;
   border: none;
@@ -142,40 +138,33 @@ export default {
   margin-bottom: 10px;
   display: block;
 }
-
 .nav-link {
   color: white;
   font-weight: 500;
 }
-
 .nav-link:hover,
 .router-link-exact-active {
   color: #0d6efd;
 }
 
-/* Topbar */
-.logo-icon {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-  filter: grayscale(20%) brightness(1.2);
+/* التوب بار */
+.navbar {
+  background: linear-gradient(to left, #fdfdfd, #f5f5f5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid #ddd;
+  min-height: 60px;
+  padding: 0 1.5rem;
 }
-
 .topbar-title {
   font-size: 1.1rem;
   font-weight: bold;
   text-align: center;
 }
-
-.navbar {
-  background: linear-gradient(to left, #fdfdfd, #f5f5f5);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  z-index: 1100;
-  position: relative;
-  border-bottom: 1px solid #ddd;
-  min-height: 60px;
+.logo-icon {
+  height: 28px;
+  object-fit: contain;
+  filter: grayscale(20%) brightness(1.2);
 }
-
 .btn-outline-secondary:hover,
 .btn-outline-danger:hover {
   background-color: #f8f9fa;
