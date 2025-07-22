@@ -197,7 +197,7 @@ tr:nth-child(even) {
 }
 
 .failed-image {
-  max-width: 250px;
+  max-width: 150px;
   height: auto;
   object-fit: contain;
   display: block;
