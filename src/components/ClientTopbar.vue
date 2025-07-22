@@ -1,10 +1,10 @@
 <template>
   <nav
-    class="navbar navbar-light px-4 d-flex justify-content-between align-items-center"
+    class="navbar navbar-light px-4 d-flex justify-content-between align-items-center flex-wrap"
   >
-    <!-- الشعار والعنوان في الوسط -->
+    <!-- الشعار + العنوان -->
     <div
-      class="flex-grow-1 text-center fw-bold topbar-title d-flex justify-content-center align-items-center gap-2"
+      class="topbar-title d-flex align-items-center gap-2 mx-auto d-none d-md-flex"
     >
       <img
         src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png"
@@ -15,14 +15,21 @@
     </div>
 
     <!-- الأزرار -->
-    <div class="d-flex gap-2 align-items-center">
-      <button class="btn btn-outline-secondary btn-sm" @click="goToMenu">
+    <div class="d-flex gap-2 align-items-center ms-auto me-auto me-md-0">
+      <button
+        class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2"
+        @click="goToMenu"
+      >
+        <i class="bi bi-box-arrow-up-right"></i>
         <span>عرض المنيو الخاص بك</span>
-        <i class="bi bi-box-arrow-up-right ms-2"></i>
       </button>
-      <button class="btn btn-outline-danger btn-sm" @click="logout">
+
+      <button
+        class="btn btn-outline-danger btn-sm d-flex align-items-center gap-2"
+        @click="logout"
+      >
+        <i class="bi bi-box-arrow-right"></i>
         <span>تسجيل الخروج</span>
-        <i class="bi bi-box-arrow-right ms-2"></i>
       </button>
     </div>
   </nav>
@@ -72,17 +79,19 @@ export default {
 
 .topbar-title {
   font-size: 1.1rem;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  font-weight: bold;
+  text-align: center;
 }
+/* التوب بار */
 .navbar {
-  background: linear-gradient(to left, #fdfdfd, #f5f5f5); /* تدرج ناعم */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* ظل خفيف للأسفل */
+  background: linear-gradient(to left, #fdfdfd, #f5f5f5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   z-index: 1020;
   position: relative;
   border-bottom: 1px solid #ddd;
+  min-height: 60px;
 }
+/* الهوفر */
 .btn-outline-secondary:hover,
 .btn-outline-danger:hover {
   background-color: #f8f9fa;
