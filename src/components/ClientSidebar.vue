@@ -1,6 +1,6 @@
+// ✅ ClientSidebar.vue
 <template>
   <div :class="['sidebar', sidebarClass]">
-    <!-- ✅ زر الإغلاق يظهر فقط في الشاشات الصغيرة -->
     <button class="btn-close d-md-none" @click="closeSidebar">×</button>
 
     <h5 class="sidebar-title">لوحة العميل</h5>
@@ -46,8 +46,8 @@ export default {
   },
   computed: {
     sidebarClass() {
-      if (this.screenWidth >= 960) return "sidebar-open";
-      return this.isOpen ? "sidebar-open" : "sidebar-closed";
+      if (this.screenWidth >= 960) return "sidebar-visible";
+      return this.isOpen ? "sidebar-visible" : "sidebar-hidden";
     },
   },
   mounted() {
@@ -62,7 +62,7 @@ export default {
     },
     closeSidebar() {
       if (this.screenWidth < 960) {
-        this.$emit("toggle-sidebar", false);
+        this.$emit("toggle-sidebar");
       }
     },
   },
@@ -74,25 +74,22 @@ export default {
   background-color: #212529;
   color: white;
   padding: 20px;
-  width: 220px;
+  width: var(--sidebar-width);
   height: 100%;
-  /* ملاحظة: تم حذف position: fixed والـ top/right */
   transition: transform 0.3s ease;
   overflow-y: auto;
+  position: fixed;
+  right: 0;
+  top: 60px;
+  height: calc(100vh - 110px);
+  z-index: 1045;
 }
 
-.sidebar-title {
-  color: #e9ecef;
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
-.sidebar-open {
+.sidebar-visible {
   transform: translateX(0);
 }
 
-.sidebar-closed {
+.sidebar-hidden {
   transform: translateX(100%);
 }
 
@@ -105,23 +102,32 @@ export default {
   display: block;
 }
 
+.sidebar-title {
+  color: #e9ecef;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
 .nav-link {
   color: #dee2e6;
   font-weight: 500;
   padding: 10px;
   border-radius: 5px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
   display: flex;
   align-items: center;
 }
 
 .nav-link:hover {
-  background-color: #343a40;
+  background-color: #495057;
   color: #fff;
+  transform: scale(1.03);
 }
 
 .active-link {
   background-color: #0d6efd;
   color: white !important;
+  font-weight: bold;
 }
 </style>

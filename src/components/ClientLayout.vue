@@ -1,7 +1,17 @@
+// ClientLayout.vue
 <template>
   <div class="client-layout d-flex flex-column">
     <!-- ✅ الشريط العلوي ثابت -->
-    <ClientTopbar class="topbar-fixed" @toggle-sidebar="toggleSidebar" />
+    <ClientTopbar
+      class="topbar-fixed"
+      :class="{ 'with-sidebar': sidebarOpen && screenWidth >= 960 }"
+      @toggle-sidebar="toggleSidebar"
+    />
+
+    <ClientFooter
+      class="footer-fixed"
+      :class="{ 'with-sidebar': sidebarOpen && screenWidth >= 960 }"
+    />
 
     <div class="layout-body d-flex flex-grow-1">
       <!-- ✅ الشريط الجانبي -->
@@ -13,7 +23,10 @@
       />
 
       <!-- ✅ المحتوى -->
-      <main class="main-content flex-grow-1">
+      <main
+        class="main-content"
+        :class="{ 'with-sidebar': sidebarOpen && screenWidth >= 960 }"
+      >
         <router-view />
       </main>
     </div>
@@ -34,6 +47,7 @@ export default {
   data() {
     return {
       sidebarOpen: window.innerWidth >= 960,
+      screenWidth: window.innerWidth,
     };
   },
   mounted() {
@@ -47,8 +61,12 @@ export default {
       this.sidebarOpen = !this.sidebarOpen;
     },
     handleResize() {
-      if (window.innerWidth >= 960 && !this.sidebarOpen) {
+      this.screenWidth = window.innerWidth;
+      if (this.screenWidth >= 960 && !this.sidebarOpen) {
         this.sidebarOpen = true;
+      }
+      if (this.screenWidth < 960 && this.sidebarOpen) {
+        this.sidebarOpen = false;
       }
     },
   },
@@ -94,9 +112,11 @@ export default {
 /* ✅ محتوى الصفحة */
 .main-content {
   padding: 20px;
-  margin-right: var(--sidebar-width);
   width: 100%;
   transition: margin 0.3s ease;
+}
+.main-content.with-sidebar {
+  margin-right: var(--sidebar-width);
 }
 
 /* ✅ topbar */
@@ -104,22 +124,24 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  left: var(--sidebar-width);
-  z-index: 1050;
+  height: 60px;
   background-color: white;
   border-bottom: 1px solid #ddd;
-  height: 60px;
   display: flex;
   align-items: center;
   padding: 0 10px;
+  z-index: 1050;
+  left: 0;
+  transition: left 0.3s ease;
 }
-
+.topbar-fixed.with-sidebar {
+  left: var(--sidebar-width);
+}
 /* ✅ footer */
 .footer-fixed {
   position: fixed;
   bottom: 0;
   right: 0;
-  left: var(--sidebar-width);
   height: 50px;
   background-color: #f8f9fa;
   border-top: 1px solid #ddd;
@@ -129,6 +151,12 @@ export default {
   font-size: 0.9rem;
   color: #555;
   z-index: 1040;
+  left: 0;
+  transition: left 0.3s ease;
+}
+
+.footer-fixed.with-sidebar {
+  left: var(--sidebar-width);
 }
 
 /* ✅ للموبايل */

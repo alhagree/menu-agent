@@ -1,3 +1,4 @@
+// ✅ ClientTopbar.vue
 <template>
   <nav
     dir="ltr"
@@ -5,7 +6,6 @@
   >
     <!-- ⬅️ يسار: الأزرار -->
     <div class="d-flex gap-2 align-items-center">
-      <!-- زر إظهار/إخفاء القائمة الجانبية -->
       <button
         class="btn btn-outline-dark btn-sm d-md-none"
         @click="$emit('toggle-sidebar')"
@@ -71,6 +71,7 @@ export default {
 .topbar-title {
   font-size: 1.1rem;
 }
+
 .navbar {
   background: linear-gradient(to left, #fdfdfd, #f5f5f5);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -78,10 +79,26 @@ export default {
   position: relative;
   border-bottom: 1px solid #ddd;
 }
+
 .btn-outline-secondary:hover,
 .btn-outline-danger:hover,
 .btn-outline-dark:hover {
   background-color: #f8f9fa;
   transition: background-color 0.2s ease-in-out;
+}
+
+@media (max-width: 960px) {
+  .topbar-title {
+    display: none;
+  }
+
+  .navbar {
+    justify-content: center;
+  }
+
+  .navbar > .d-flex:first-child {
+    justify-content: center;
+    flex: 1;
+  }
 }
 </style>
