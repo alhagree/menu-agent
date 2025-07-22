@@ -1,16 +1,8 @@
-//agent-dashboard\src\components\ClientTopbar.vue
 <template>
   <nav
     class="navbar navbar-light px-4 d-flex justify-content-between align-items-center"
   >
-    <!-- ✅ الشعار والعنوان في الوسط -->
-    <div
-      class="flex-grow-1 text-center fw-bold topbar-title d-flex justify-content-center align-items-center gap-2"
-    >
-      <span>{{ welcomeMessage }}</span>
-    </div>
-
-    <!-- ✅ الأزرار ← تظهر على اليسار (نهاية السطر في RTL) -->
+    <!-- ⬅️ يسار: الأزرار -->
     <div class="d-flex gap-2 align-items-center">
       <button class="btn btn-outline-secondary btn-sm" @click="goToMenu">
         <span>عرض المنيو الخاص بك</span>
@@ -21,6 +13,14 @@
         <i class="bi bi-box-arrow-right ms-2"></i>
       </button>
     </div>
+
+    <!-- ⬅️ الوسط: العنوان -->
+    <div class="text-center fw-bold topbar-title">
+      <span>{{ welcomeMessage }}</span>
+    </div>
+
+    <!-- ⬅️ اليمين: فراغ للموازنة -->
+    <div class="d-none d-md-block" style="width: 200px"></div>
   </nav>
 </template>
 
@@ -61,13 +61,10 @@ export default {
 <style scoped>
 .topbar-title {
   font-size: 1.1rem;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .navbar {
-  background: linear-gradient(to left, #fdfdfd, #f5f5f5); /* تدرج ناعم */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* ظل خفيف للأسفل */
+  background: linear-gradient(to left, #fdfdfd, #f5f5f5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   z-index: 1020;
   position: relative;
   border-bottom: 1px solid #ddd;
