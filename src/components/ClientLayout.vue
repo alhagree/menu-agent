@@ -34,12 +34,11 @@ export default {
   components: { ClientSidebar, ClientTopbar, ClientFooter },
   data() {
     return {
-      sidebarOpen: true,
+      sidebarOpen: window.innerWidth >= 960,
       screenWidth: window.innerWidth,
     };
   },
   mounted() {
-    this.adjustSidebarDefault();
     window.addEventListener("resize", this.handleResize);
   },
   beforeUnmount() {
@@ -48,10 +47,12 @@ export default {
   methods: {
     handleResize() {
       this.screenWidth = window.innerWidth;
-      this.adjustSidebarDefault();
-    },
-    adjustSidebarDefault() {
-      this.sidebarOpen = this.screenWidth >= 960;
+      if (this.screenWidth >= 960 && !this.sidebarOpen) {
+        this.sidebarOpen = true;
+      }
+      if (this.screenWidth < 960 && this.sidebarOpen) {
+        this.sidebarOpen = false;
+      }
     },
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
