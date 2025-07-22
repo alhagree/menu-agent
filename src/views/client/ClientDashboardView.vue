@@ -1,8 +1,33 @@
 <template>
   <div class="dashboard">
+    <!-- تنبيه الاشتراك المنتهي -->
+    <div
+      v-if="showExpiredMessage"
+      class="alert alert-warning d-flex align-items-center mb-4 p-3"
+    >
+      <img
+        src="/img/expired-warning.png"
+        alt="تنبيه"
+        class="me-3"
+        style="height: 60px"
+      />
+      <div class="text-end">
+        <strong>⚠️ لقد انتهت مدة الاشتراك منذ تاريخ:</strong><br />
+        <span class="text-danger fw-bold">{{ subscriptionEnd }}</span>
+        <p class="mb-0">
+          سوف يبقى المنيو <strong>فعالاً</strong> لغاية
+          <strong>{{ graceEndDate }}</strong
+          >، بعدها سيتوقف تلقائيًا. يرجى التواصل مع الإدارة لضمان استمرارية
+          الخدمة.
+        </p>
+      </div>
+    </div>
+
+    <!-- العنوان -->
     <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋</h2>
     <p class="date">اليوم: {{ todayDate }}</p>
 
+    <!-- الإحصائيات -->
     <div class="stats-grid">
       <div v-for="item in statItems" :key="item.key" class="stat-card">
         <div :class="['icon', item.color]">
@@ -18,7 +43,7 @@
 </template>
 
 <script>
-import api from "../../axios"; // ← التعديل هنا فقط
+import api from "../../axios";
 
 export default {
   name: "ClientDashboardView",
@@ -29,6 +54,7 @@ export default {
       itemCount: 0,
       subscriptionEnd: null,
       daysLeft: null,
+      showExpiredMessage: false,
     };
   },
   computed: {
@@ -67,10 +93,16 @@ export default {
           key: "daysLeft",
           label: "تبقى على انتهاء الاشتراك",
           icon: "bi bi-hourglass-split",
-          color: "bg-red",
+          color: this.daysLeft <= 0 ? "bg-danger" : "bg-red",
           value: this.daysLeft !== null ? this.daysLeft + " يوم" : "--",
         },
       ];
+    },
+    graceEndDate() {
+      if (!this.subscriptionEnd) return "غير متوفر";
+      const end = new Date(this.subscriptionEnd);
+      end.setDate(end.getDate() + 7);
+      return end.toLocaleDateString("ar-EG");
     },
   },
   async mounted() {
@@ -80,19 +112,15 @@ export default {
       this.sectionCount = res.data.sectionCount;
       this.itemCount = res.data.itemCount;
       this.subscriptionEnd = res.data.subscriptionEnd;
-
-      if (this.subscriptionEnd) {
-        const endDate = new Date(this.subscriptionEnd);
-        const now = new Date();
-        const diffTime = endDate - now;
-        this.daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      }
+      this.daysLeft = res.data.daysLeft;
+      this.showExpiredMessage = res.data.subscriptionExpired;
     } catch (err) {
       console.error("فشل تحميل البيانات:", err);
     }
   },
 };
 </script>
+
 <style>
 .dashboard {
   padding: 30px;
@@ -153,6 +181,9 @@ export default {
 }
 .bg-red {
   background: #e74c3c;
+}
+.bg-danger {
+  background: #b71c1c;
 }
 
 .content h4 {
