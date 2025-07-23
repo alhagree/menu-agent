@@ -1,3 +1,4 @@
+// ClientSettingsView.vue
 <template>
   <div class="container mt-5" style="max-width: 800px">
     <!-- نافذة تحميل -->
@@ -13,7 +14,12 @@
 
       <div class="mb-3">
         <label class="form-label fw-bold">الاسم التجاري المعروض</label>
-        <input v-model="form.cl_name" type="text" class="form-control" />
+        <input
+          v-model="form.cl_name"
+          type="text"
+          class="form-control"
+          :disabled="!canCustomize"
+        />
       </div>
 
       <div class="mb-3">
@@ -28,7 +34,12 @@
 
       <div class="mb-3">
         <label class="form-label fw-bold">رقم الهاتف</label>
-        <input v-model="form.cl_phone" type="tel" class="form-control" />
+        <input
+          v-model="form.cl_phone"
+          type="tel"
+          class="form-control"
+          disabled
+        />
       </div>
 
       <div class="mb-3">
@@ -44,7 +55,13 @@
           type="file"
           @change="handleFileChange('logo', $event)"
           class="form-control"
+          :disabled="!canCustomize"
         />
+      </div>
+
+      <div v-if="!canCustomize" class="alert alert-info text-center mt-2">
+        ❗️ هذه الخطة لا تسمح بتعديل الاسم التجاري أو الشعار. يمكنك الترقية
+        للاستفادة من هذه المزايا.
       </div>
 
       <!-- تم إخفاؤه مؤقتًا -->
@@ -88,6 +105,7 @@ export default {
         cl_phone: "",
         cl_fullname: "",
       },
+      canCustomize: true,
       logoFile: null,
       backgroundFile: null,
       currentLogo: "",
@@ -114,6 +132,7 @@ export default {
         this.form.cl_fullname = data.cl_fullname;
         this.currentLogo = data.st_logo;
         this.currentBackground = data.st_background;
+        this.canCustomize = data.level_features?.can_customize_logo;
       } catch (err) {
         console.error("فشل تحميل بيانات الإعدادات", err);
         this.showToast("فشل تحميل بيانات الإعدادات", "error");
