@@ -233,20 +233,17 @@ export default {
 .title {
   font-size: 24px;
   margin-bottom: 5px;
-  text-align: center;
 }
 
 .date {
-  text-align: center;
-  margin-bottom: 30px;
+  color: #666;
+  margin-bottom: 25px;
 }
 
 .stats-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   gap: 20px;
-  margin-bottom: 20px;
 }
 
 .stat-card {
@@ -396,42 +393,6 @@ export default {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
-}
-
-/* تحديث لون الدائرة حسب نوع الميزة */
-.feature-card.name-card {
-  background: #dceeff; /* أزرق فاتح */
-  color: #1e5f99;
-}
-
-.feature-card.circle-progress {
-  background: #ffe3e3; /* وردي للأصناف */
-}
-.feature-card.circle-progress:nth-of-type(3) {
-  background: #ffe8d4; /* برتقالي للأقسام */
-}
-
-.feature-card.enabled {
-  background: #d4f5e6 !important; /* أخضر فاتح */
-  color: #27ae60;
-}
-
-.feature-card i {
-  font-size: 24px;
-  margin-bottom: 6px;
-}
-
-@keyframes spinSlow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.feature-card.circle-progress svg {
-  animation: spinSlow 20s linear infinite;
 }
 
 @media (max-width: 576px) {
