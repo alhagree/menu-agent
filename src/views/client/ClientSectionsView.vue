@@ -8,6 +8,16 @@
       </router-link>
     </div>
 
+    <div
+      v-if="
+        levelLimits.max_sections !== 'unlimited' &&
+        visibleSections.length > levelLimits.max_sections
+      "
+      class="alert alert-warning text-center"
+    >
+      ⚠️ لقد تجاوزت الحد الأقصى لعدد الأقسام المسموح بها في خطتك.
+    </div>
+
     <!-- فلاتر البحث -->
     <div class="row mb-3">
       <div class="col-md-6">
@@ -102,9 +112,15 @@ export default {
       filterStatus: "",
       clientLinkCode: localStorage.getItem("client_link_code"),
       apiBaseUrl: process.env.VUE_APP_API_BASE_URL, // ✅ هنا الإضافة
+      levelLimits: {
+        max_sections: 1000,
+      },
     };
   },
   computed: {
+    visibleSections() {
+      return this.sections.filter((s) => s.se_is_active == 1);
+    },
     filteredSections() {
       return this.sections.filter((sec) => {
         const matchesSearch = sec.se_name
@@ -159,13 +175,32 @@ export default {
         console.error("فشل في تحديث الحالة", err);
       }
     },
+    async loadLimits() {
+      const token = localStorage.getItem("client_token");
+
+      try {
+        const response = await axios.get(
+          `${this.apiBaseUrl}/api/agent/dashboard`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        this.levelLimits.max_sections =
+          response.data?.level?.sectionLimit === "غير محدود"
+            ? "unlimited"
+            : parseInt(response.data.level.sectionLimit || 1000);
+      } catch (err) {
+        console.error("فشل في جلب حدود الخطة:", err);
+      }
+    },
     resetFilters() {
       this.searchTerm = "";
       this.filterStatus = "";
     },
   },
-  mounted() {
+  async mounted() {
     this.loadSections();
+    await this.loadLimits();
   },
 };
 </script>
