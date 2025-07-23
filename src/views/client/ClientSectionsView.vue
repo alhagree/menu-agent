@@ -8,7 +8,7 @@
       </router-link>
     </div>
 
-    <!-- 🔶 تنبيه تجاوز الحد -->
+    <!-- 1️⃣ تجاوز الحد المسموح به -->
     <div v-if="limitExceeded" class="alert alert-warning text-center">
       ⚠️ لقد تجاوزت عدد الأقسام المسموح بها في خطتك.
       <br />
@@ -20,21 +20,39 @@
       من المنيو.
       <br />
       لتجنّب ذلك، يُرجى
-      <strong>إخفاء {{ exceededSectionsCount }}</strong> قسم/أقسام يدويًا أو
+      <strong>إخفاء {{ exceededSectionsCount }}</strong> قسم/أقسام يدوياً أو
       ترقية الخطة.
     </div>
 
-    <!-- 🔷 تنبيه الوصول للحد مع وجود غير مفعّل -->
-    <div
-      v-else-if="limitReached && hasInactiveSections"
-      class="alert alert-info text-center"
-    >
+    <!-- 2️⃣ الوصول للحد الأقصى بدقة -->
+    <div v-else-if="limitReached" class="alert alert-info text-center">
       ℹ️ لقد وصلت إلى الحد الأقصى للأقسام المسموح بها في خطتك (<strong>{{
         visibleSections.length
       }}</strong>
+      / {{ levelLimits.max_sections }})، لإضافة المزيد يُرجى ترقية الخطة.
+    </div>
+
+    <!-- 3️⃣ وجود أقسام مخفية ضمن الحد -->
+    <div v-else-if="hasHiddenSections" class="alert alert-info text-center">
+      ℹ️ عدد الأقسام المفعّلة حالياً أقل من الحد المسموح (<strong>{{
+        visibleSections.length
+      }}</strong>
       / {{ levelLimits.max_sections }})، ويوجد
-      <strong>{{ inactiveSections.length }}</strong> قسم/أقسام غير مفعّلة
-      حاليًا. <br />لإعادة تفعيلها، يُرجى إخفاء قسم آخر أو ترقية الخطة.
+      <strong>{{ hiddenSectionsCount }}</strong> قسم/أقسام مخفية. يمكنك تفعيلها
+      أو ترقية الخطة لإضافة المزيد.
+    </div>
+
+    <!-- 4️⃣ وجود أقسام مخفية بسبب تجاوز العدد الكلي للخطة -->
+    <div
+      v-else-if="hasHiddenDueToLimit"
+      class="alert alert-warning text-center"
+    >
+      ⚠️ لديك أقسام مخفية حالياً بسبب تجاوز العدد الكلي للأقسام حد الخطة.
+      <br />
+      عدد الأقسام الكلي: <strong>{{ sections.length }}</strong> /
+      {{ levelLimits.max_sections }}
+      <br />
+      لتتمكن من تفعيل باقي الأقسام، يُرجى ترقية الخطة.
     </div>
 
     <!-- ✅ جدول عرض الأقسام -->
@@ -134,41 +152,48 @@ export default {
     };
   },
   computed: {
-    visibleSections() {
-      return this.sections.filter((s) => s.se_is_active == 1);
-    },
-    inactiveSections() {
-      return this.sections.filter((s) => s.se_is_active == 0);
-    },
-    filteredSections() {
-      return this.sections.filter((sec) => {
-        const matchesSearch = sec.se_name
-          .toLowerCase()
-          .includes(this.searchTerm.toLowerCase());
-        const matchesStatus =
-          this.filterStatus === "" || sec.se_is_active == this.filterStatus;
-        return matchesSearch && matchesStatus;
-      });
-    },
-    exceededSectionsCount() {
-      if (this.levelLimits.max_sections === "unlimited") return 0;
-      return Math.max(
-        0,
-        this.visibleSections.length - this.levelLimits.max_sections
-      );
-    },
-    limitReached() {
-      return (
-        this.levelLimits.max_sections !== "unlimited" &&
-        this.visibleSections.length === this.levelLimits.max_sections &&
-        this.sections.length > this.levelLimits.max_sections
-      );
-    },
-    limitExceeded() {
-      return (
-        this.levelLimits.max_sections !== "unlimited" &&
-        this.visibleSections.length > this.levelLimits.max_sections
-      );
+    computed: {
+      visibleSections() {
+        return this.sections.filter((s) => s.se_is_active == 1);
+      },
+      hiddenSectionsCount() {
+        return this.sections.filter((s) => s.se_is_active == 0).length;
+      },
+      exceededSectionsCount() {
+        if (this.levelLimits.max_sections === "unlimited") return 0;
+        return Math.max(
+          0,
+          this.visibleSections.length - this.levelLimits.max_sections
+        );
+      },
+      limitExceeded() {
+        return (
+          this.levelLimits.max_sections !== "unlimited" &&
+          this.visibleSections.length > this.levelLimits.max_sections
+        );
+      },
+      limitReached() {
+        return (
+          this.levelLimits.max_sections !== "unlimited" &&
+          this.visibleSections.length === this.levelLimits.max_sections &&
+          this.sections.length === this.levelLimits.max_sections
+        );
+      },
+      hasHiddenSections() {
+        return (
+          this.levelLimits.max_sections !== "unlimited" &&
+          this.visibleSections.length < this.levelLimits.max_sections &&
+          this.hiddenSectionsCount > 0 &&
+          this.sections.length <= this.levelLimits.max_sections
+        );
+      },
+      hasHiddenDueToLimit() {
+        return (
+          this.levelLimits.max_sections !== "unlimited" &&
+          this.sections.length > this.levelLimits.max_sections &&
+          this.visibleSections.length < this.levelLimits.max_sections
+        );
+      },
     },
     hasInactiveSections() {
       return this.inactiveSections.length > 0;
