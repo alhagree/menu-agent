@@ -1,4 +1,5 @@
 // ClientSectionsView.vue
+<!-- ClientSectionsView.vue -->
 <template>
   <div class="container mt-4">
     <div class="header mb-3 d-flex justify-content-between align-items-center">
@@ -8,7 +9,7 @@
       </router-link>
     </div>
 
-    <!-- 🔶 مسج التحذير عند تجاوز الحد -->
+    <!-- 🔶 تجاوز الحد المسموح -->
     <div v-if="limitExceeded" class="alert alert-warning text-center">
       ⚠️ لقد تجاوزت عدد الأقسام المسموح بها في خطتك.
       <br />
@@ -19,11 +20,12 @@
       سيتم <span class="text-danger fw-bold">إخفاء</span> بعض الأقسام تلقائيًا
       من المنيو.
       <br />
-      لتجنّب ذلك، يُرجى <strong>إخفاء {{ exceededSectionsCount }}</strong>
-      قسم/أقسام يدوياً أو ترقية الخطة.
+      لتجنّب ذلك، يُرجى
+      <strong>إخفاء {{ exceededSectionsCount }}</strong> قسم/أقسام يدويًا أو
+      ترقية الخطة.
     </div>
 
-    <!-- 🔷 مسج تنبيهي عند بلوغ الحد بدون تجاوز -->
+    <!-- 🔷 الوصول للحد المسموح بدون تجاوز -->
     <div v-else-if="limitReached" class="alert alert-info text-center">
       ℹ️ لقد وصلت إلى الحد الأقصى للأقسام المسموح بها في خطتك (<strong>{{
         visibleSections.length
@@ -31,7 +33,7 @@
       / {{ levelLimits.max_sections }})، لإضافة المزيد يُرجى ترقية الخطة.
     </div>
 
-    <!-- فلاتر البحث -->
+    <!-- ✅ جدول عرض الأقسام -->
     <div class="row mb-3">
       <div class="col-md-6">
         <input
@@ -54,17 +56,16 @@
       </div>
     </div>
 
-    <!-- جدول عرض الأقسام -->
     <div v-if="filteredSections.length">
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th class="text-center align-middle">#</th>
-            <th class="text-center align-middle">الاسم</th>
-            <th class="text-center align-middle">الوصف</th>
-            <th class="text-center align-middle">صورة</th>
-            <th class="text-center align-middle">الحالة</th>
-            <th class="text-center align-middle">إجراءات</th>
+            <th class="text-center">#</th>
+            <th class="text-center">الاسم</th>
+            <th class="text-center">الوصف</th>
+            <th class="text-center">صورة</th>
+            <th class="text-center">الحالة</th>
+            <th class="text-center">إجراءات</th>
           </tr>
         </thead>
         <tbody>
@@ -73,10 +74,10 @@
             :key="sec.se_id"
             :class="{ 'table-danger': sec.se_is_active == 0 }"
           >
-            <td class="text-center align-middle">{{ index + 1 }}</td>
-            <td class="text-center align-middle">{{ sec.se_name }}</td>
-            <td class="text-center align-middle">{{ sec.se_description }}</td>
-            <td>
+            <td class="text-center">{{ index + 1 }}</td>
+            <td class="text-center">{{ sec.se_name }}</td>
+            <td class="text-center">{{ sec.se_description }}</td>
+            <td class="text-center">
               <img
                 v-if="sec.se_image"
                 :src="getImageUrl(sec.se_image)"
@@ -86,21 +87,19 @@
                 onerror="this.style.display='none'"
               />
             </td>
-            <td class="text-center align-middle">
+            <td class="text-center">
               <button
                 class="btn btn-sm w-50"
                 :class="sec.se_is_active ? 'btn-success' : 'btn-danger'"
-                style="min-width: 80px"
                 @click="toggleStatus(sec)"
               >
                 {{ sec.se_is_active ? "مفعل" : "مخفي" }}
               </button>
             </td>
-            <td class="text-center align-middle">
+            <td class="text-center">
               <router-link
                 :to="`/client/sections/edit/${sec.se_id}`"
                 class="btn btn-sm btn-warning w-50"
-                style="min-width: 80px"
               >
                 تعديل
               </router-link>
@@ -124,7 +123,7 @@ export default {
       searchTerm: "",
       filterStatus: "",
       clientLinkCode: localStorage.getItem("client_link_code"),
-      apiBaseUrl: process.env.VUE_APP_API_BASE_URL, // ✅ هنا الإضافة
+      apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
       levelLimits: {
         max_sections: 1000,
       },
@@ -154,16 +153,20 @@ export default {
     limitReached() {
       return (
         this.levelLimits.max_sections !== "unlimited" &&
+        this.visibleSections.length === this.levelLimits.max_sections
+      );
+    },
+    limitExceeded() {
+      return (
+        this.levelLimits.max_sections !== "unlimited" &&
         this.visibleSections.length > this.levelLimits.max_sections
       );
     },
   },
   methods: {
     getImageUrl(filename) {
-      if (filename.startsWith("http")) {
-        return filename; // صورة من ImageKit
-      }
-      return `${this.apiBaseUrl}/uploads/sections/${this.clientLinkCode}/${filename}`; // صورة محلية
+      if (filename.startsWith("http")) return filename;
+      return `${this.apiBaseUrl}/uploads/sections/${this.clientLinkCode}/${filename}`;
     },
     async loadSections() {
       const token = localStorage.getItem("client_token");
@@ -203,7 +206,6 @@ export default {
     },
     async loadLimits() {
       const token = localStorage.getItem("client_token");
-
       try {
         const response = await axios.get(
           `${this.apiBaseUrl}/api/agent/dashboard`,
@@ -225,8 +227,8 @@ export default {
     },
   },
   async mounted() {
-    this.loadSections();
     await this.loadLimits();
+    this.loadSections();
   },
 };
 </script>
