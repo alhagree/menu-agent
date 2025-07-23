@@ -140,8 +140,11 @@
       <div v-if="subscription.st_barcode" class="barcode-box">
         <h5 class="text-center">رمز QR الخاص بك</h5>
         <img :src="subscription.st_barcode" alt="QR Code" class="qr-image" />
-        <p class="text-center text-primary fw-bold mt-2">
-          يمكنك تحميله وطباعته واستخدامه للعرض السريع.
+        <p
+          class="text-center text-primary fw-bold mt-2"
+          style="font-size: 0.95rem"
+        >
+          يمكنك تحميله وطباعته واستخدامه للعرض السريع
         </p>
       </div>
     </div>
