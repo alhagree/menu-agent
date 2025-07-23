@@ -51,25 +51,50 @@
           <p>{{ item.value }}</p>
         </div>
       </div>
+
+      <!-- بطاقة دائرية لعدد الأقسام -->
+      <div class="stat-card">
+        <circle-progress
+          :size="100"
+          :progress="sectionPercent"
+          :strokeWidth="10"
+          :animation="true"
+          :animationDuration="1500"
+          :emptyStroke="'#eee'"
+          :fill="true"
+          :stroke="'#2f80ed'"
+        >
+          <template #default>
+            <div class="circle-label">
+              الأقسام<br />
+              {{ sectionCount }} / {{ sectionLimit }}
+            </div>
+          </template>
+        </circle-progress>
+      </div>
+
+      <!-- بطاقة دائرية لعدد الأصناف -->
+      <div class="stat-card">
+        <circle-progress
+          :size="100"
+          :progress="itemPercent"
+          :strokeWidth="10"
+          :animation="true"
+          :animationDuration="1500"
+          :emptyStroke="'#eee'"
+          :fill="true"
+          :stroke="'#27ae60'"
+        >
+          <template #default>
+            <div class="circle-label">
+              الأصناف<br />
+              {{ itemCount }} / {{ itemLimit }}
+            </div>
+          </template>
+        </circle-progress>
+      </div>
     </div>
   </div>
-  <circle-progress
-    :size="120"
-    :progress="sectionPercent"
-    :strokeWidth="10"
-    :animation="true"
-    :animationDuration="1500"
-    :emptyStroke="'#eee'"
-    :fill="true"
-    :stroke="'#2f80ed'"
-  >
-    <template #default>
-      <div class="circle-label">
-        الأقسام <br />
-        {{ sectionCount }} / {{ sectionLimit }}
-      </div>
-    </template>
-  </circle-progress>
 </template>
 
 <script>
@@ -304,5 +329,11 @@ export default {
   font-weight: bold;
   color: #444;
   line-height: 1.3;
+}
+
+.stat-card circle-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
