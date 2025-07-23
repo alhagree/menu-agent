@@ -1,55 +1,67 @@
 <template>
   <div class="container mt-4" style="max-width: 700px">
     <div class="card shadow-sm p-4">
-      <h2 class="text-center mb-4">
-        <i class="bi bi-info-circle me-2"></i> حول النشاط
-      </h2>
+      <!-- عنوان -->
+      <h3 class="text-center mb-4 fw-bold">
+        <i class="bi bi-info-circle me-2"></i> حول النظام
+      </h3>
 
-      <div class="mb-3">
-        <p class="lead">
-          هذا النظام مصمم لإدارة المنيو الإلكتروني الخاص بنشاطك التجاري بطريقة
-          سهلة وسريعة، ويتيح لك عرض الأصناف والأقسام للعملاء بشكل احترافي ومباشر
-          من خلال رمز QR.
-        </p>
+      <!-- وصف النظام -->
+      <p class="text-center text-primary" style="font-size: 1rem">
+        هذا النظام مصمم لإدارة المنيو الإلكتروني الخاص بنشاطك التجاري بطريقة
+        سهلة وسريعة، ويتيح لك عرض الأصناف والأقسام للعملاء بشكل احترافي ومباشر
+        من خلال رمز QR.
+      </p>
+
+      <hr />
+
+      <!-- معلومات النشاط -->
+      <div class="row text-center mb-4">
+        <div class="col-md-12">
+          <h5 class="mb-1">
+            <i class="bi bi-shop me-1"></i> اسم النشاط التجاري
+          </h5>
+          <p class="fw-bold text-primary fs-5">{{ businessName }}</p>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-6 text-center">
+          <h6><i class="bi bi-telephone me-1"></i> رقم الهاتف</h6>
+          <a
+            :href="`tel:${businessPhone}`"
+            class="d-block text-decoration-none text-dark fw-bold"
+          >
+            {{ businessPhone }}
+          </a>
+        </div>
+        <div class="col-md-6 text-center">
+          <h6><i class="bi bi-whatsapp me-1 text-success"></i> واتساب</h6>
+          <a
+            :href="`https://wa.me/${businessPhone.replace('+', '')}`"
+            target="_blank"
+            class="text-success fw-bold text-decoration-none"
+          >
+            تواصل عبر واتساب
+          </a>
+        </div>
+        <div class="col-md-6 text-center">
+          <h6><i class="bi bi-envelope me-1"></i> البريد الإلكتروني</h6>
+          <a :href="`mailto:${businessEmail}`" class="d-block fw-bold">
+            {{ businessEmail }}
+          </a>
+        </div>
+        <div class="col-md-6 text-center" v-if="showLocation">
+          <h6><i class="bi bi-geo-alt me-1"></i> الموقع</h6>
+          <p class="fw-bold text-muted">{{ businessLocation }}</p>
+        </div>
       </div>
 
       <hr />
 
-      <div class="mb-3">
-        <h5><i class="bi bi-shop me-2"></i> اسم النشاط التجاري</h5>
-        <p>{{ businessName }}</p>
-      </div>
-
-      <div class="mb-3" v-if="showLocation">
-        <h5><i class="bi bi-geo-alt me-2"></i> الموقع</h5>
-        <p>{{ businessLocation }}</p>
-      </div>
-
-      <div class="mb-3">
-        <h5><i class="bi bi-telephone me-2"></i> رقم الهاتف</h5>
-        <p>
-          <a :href="`tel:${businessPhone}`">{{ businessPhone }}</a>
-        </p>
-      </div>
-
-      <div class="mb-3">
-        <h5><i class="bi bi-whatsapp me-2 text-success"></i> واتساب</h5>
-        <p>
-          <a
-            :href="`https://wa.me/${businessPhone.replace('+', '')}`"
-            target="_blank"
-            class="text-success"
-          >
-            تواصل عبر واتساب
-          </a>
-        </p>
-      </div>
-
-      <div class="mb-3">
-        <h5><i class="bi bi-envelope me-2"></i> البريد الإلكتروني</h5>
-        <p>
-          <a :href="`mailto:${businessEmail}`">{{ businessEmail }}</a>
-        </p>
+      <!-- ملاحظة -->
+      <div class="text-center text-muted small">
+        جميع الحقوق محفوظة © Tiklamu
       </div>
     </div>
   </div>
@@ -64,7 +76,7 @@ export default {
       businessLocation: "شارع فلسطين، بغداد - العراق",
       businessPhone: "009647834113500",
       businessEmail: "info@alhagree.com",
-      showLocation: false, // أو true حسب
+      showLocation: false,
     };
   },
 };
