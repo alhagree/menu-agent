@@ -54,7 +54,8 @@
     </div>
   </div>
 
-  <h4 class="mt-5 mb-3">مزايا الباقة الحالية:</h4>
+  <h4 class="mt-5 mb-3">مزايا الباقة الحالية :</h4>
+
   <div class="plan-features">
     <div class="feature-card name-card">
       <div class="circle-content">
@@ -64,17 +65,21 @@
     </div>
 
     <div class="feature-card">
-      <div class="circle-content">
-        <div class="label">الأقسام</div>
-        <div class="value">{{ sectionCount }} / {{ plan.sectionLimit }}</div>
-      </div>
+      <CircleProgress
+        :used="itemCount"
+        :total="level.itemLimit === 'unlimited' ? 'unlimited' : level.itemLimit"
+        label="الأصناف"
+      />
     </div>
 
     <div class="feature-card">
-      <div class="circle-content">
-        <div class="label">الأصناف</div>
-        <div class="value">{{ itemCount }} / {{ plan.itemLimit }}</div>
-      </div>
+      <CircleProgress
+        :used="sectionCount"
+        :total="
+          level.sectionLimit === 'unlimited' ? 'unlimited' : level.sectionLimit
+        "
+        label="الأقسام"
+      />
     </div>
 
     <div class="feature-card" :class="{ enabled: plan.hasDashboard }">
@@ -99,9 +104,11 @@
 
 <script>
 import api from "../../axios";
+import CircleProgress from "@/components/CircleProgress.vue";
 
 export default {
   name: "ClientDashboardView",
+  components: { CircleProgress },
   data() {
     return {
       username: null,
