@@ -1,7 +1,7 @@
 // ClientSettingsView.vue
 <template>
-  <div class="container mt-5" style="max-width: 800px">
-    <!-- نافذة تحميل -->
+  <div class="container mt-4" style="max-width: 700px">
+    <!-- شاشة التحميل -->
     <div v-if="isLoading" class="loader-overlay">
       <div class="loader-content">
         <div class="spinner-border text-light mb-3"></div>
@@ -9,9 +9,12 @@
       </div>
     </div>
 
-    <div class="card p-4 shadow-sm">
-      <h4 class="mb-4 text-center">⚙️ إعدادات الحساب</h4>
+    <div class="card shadow-sm p-4">
+      <h4 class="text-center fw-bold mb-4">
+        <i class="bi bi-gear me-1"></i> إعدادات الحساب
+      </h4>
 
+      <!-- الاسم التجاري -->
       <div class="mb-3">
         <label class="form-label fw-bold">الاسم التجاري المعروض</label>
         <input
@@ -22,6 +25,7 @@
         />
       </div>
 
+      <!-- اسم العميل -->
       <div class="mb-3">
         <label class="form-label fw-bold">اسم العميل</label>
         <input
@@ -32,6 +36,7 @@
         />
       </div>
 
+      <!-- رقم الهاتف -->
       <div class="mb-3">
         <label class="form-label fw-bold">رقم الهاتف</label>
         <input
@@ -42,6 +47,7 @@
         />
       </div>
 
+      <!-- رفع الشعار -->
       <div class="mb-3">
         <label class="form-label fw-bold">شعار المشروع</label><br />
         <img
@@ -59,31 +65,16 @@
         />
       </div>
 
-      <div v-if="!canCustomize" class="alert alert-info text-center mt-2">
-        ❗️ هذه الخطة لا تسمح بتعديل الاسم التجاري أو الشعار. يمكنك الترقية
+      <!-- تنبيه الخطة -->
+      <div v-if="!canCustomize" class="alert alert-info text-center mt-3">
+        ⚠️ هذه الخطة لا تسمح بتعديل الاسم التجاري أو الشعار. يرجى الترقية
         للاستفادة من هذه المزايا.
       </div>
 
-      <!-- تم إخفاؤه مؤقتًا -->
-      <div class="mb-3" v-if="false">
-        <label class="form-label fw-bold">صورة الخلفية</label><br />
-        <img
-          v-if="currentBackground"
-          :src="currentBackground"
-          alt="Background"
-          class="img-thumbnail mb-2"
-          style="max-height: 120px"
-        />
-        <input
-          type="file"
-          @change="handleFileChange('background', $event)"
-          class="form-control"
-        />
-      </div>
-
+      <!-- زر حفظ -->
       <button
         @click="saveSettings"
-        class="btn btn-success w-100 mt-3"
+        class="btn btn-success w-100 mt-4"
         :disabled="isLoading || !canCustomize"
       >
         💾 حفظ التغييرات

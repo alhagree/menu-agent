@@ -6,13 +6,7 @@
         <img
           src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png"
           alt="Tiklamu Logo"
-          class="rounded-circle"
-          style="
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border: 2px solid #ccc;
-          "
+          style="width: 100px; height: 100px"
         />
       </div>
 
