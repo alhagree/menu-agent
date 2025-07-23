@@ -4,7 +4,7 @@
       class="card p-4 shadow-sm w-100 animate__animated animate__fadeIn subscription-card"
       style="max-width: 900px"
     >
-      <!-- شريط حالة الاشتراك -->
+      <!-- 🔹 شريط حالة الاشتراك -->
       <div
         class="subscription-status-bar text-white fw-bold text-center py-2 rounded mb-4"
         :class="{
@@ -15,36 +15,28 @@
         حالة الاشتراك: {{ statusTextOnly }}
       </div>
 
-      <div class="row">
-        <!-- عمود الشعار -->
-        <div class="col-md-4 d-flex justify-content-center align-items-center">
-          <img
-            v-if="subscription.st_logo"
-            :src="subscription.st_logo"
-            alt="شعار المشروع"
-            class="img-fluid"
-            style="max-width: 100%; width: 150px"
-          />
-        </div>
+      <!-- 🔹 الشعار -->
+      <div class="text-center mb-4">
+        <img
+          v-if="subscription.st_logo"
+          :src="subscription.st_logo"
+          alt="شعار المشروع"
+          class="img-fluid rounded"
+          style="max-width: 150px"
+        />
+      </div>
 
-        <!-- عمود تفاصيل الاشتراك -->
-        <div class="col-md-8">
-          <h4 class="text-center mb-4">📝 تفاصيل الاشتراك</h4>
-
+      <!-- 🔹 جدول معلومات الاشتراك -->
+      <div class="row mb-4">
+        <div class="col-md-6" v-for="(item, index) in infoItems" :key="index">
           <div
-            v-for="(item, index) in infoItems"
-            :key="index"
-            class="d-flex justify-content-between align-items-center mb-3 px-2"
+            class="d-flex justify-content-between align-items-center border-bottom py-2"
           >
-            <div
-              class="d-flex align-items-center flex-shrink-0"
-              style="min-width: 250px"
-            >
-              <i :class="['me-2 fs-5', item.icon, item.iconColor]"></i>
-              <span class="fw-bold">{{ item.label }}</span>
+            <div class="fw-bold">
+              <i :class="['me-2', item.icon, item.iconColor]"></i
+              >{{ item.label }}
             </div>
-
-            <div :class="['text-end flex-grow-1', item.color || 'text-muted']">
+            <div :class="['text-end', item.color || 'text-muted']">
               <span v-if="item.isHtml" v-html="item.value"></span>
               <span v-else>{{ item.value }}</span>
             </div>
@@ -52,11 +44,86 @@
         </div>
       </div>
 
-      <!-- ✅ باركود QR في الأسفل -->
+      <!-- 🔹 تفاصيل خطة الاشتراك -->
+      <div v-if="subscription.level_name" class="mb-4">
+        <h5 class="text-center mb-3">📦 {{ subscription.level_name }}</h5>
+        <p class="text-center text-muted mb-4">
+          {{ subscription.level_description }}
+        </p>
+
+        <!-- الأقسام -->
+        <div class="mb-3">
+          <strong>الأقسام:</strong>
+          <div class="d-flex justify-content-between">
+            <span
+              >{{ subscription.section_count }} /
+              {{ subscription.level_max_sections }}</span
+            >
+            <span>{{ sectionUsagePercent }}%</span>
+          </div>
+          <div class="progress">
+            <div
+              class="progress-bar bg-info"
+              role="progressbar"
+              :style="{ width: sectionUsagePercent + '%' }"
+            ></div>
+          </div>
+        </div>
+
+        <!-- الأصناف -->
+        <div class="mb-3">
+          <strong>الأصناف:</strong>
+          <div class="d-flex justify-content-between">
+            <span
+              >{{ subscription.item_count }} /
+              {{ subscription.level_max_items }}</span
+            >
+            <span>{{ itemUsagePercent }}%</span>
+          </div>
+          <div class="progress">
+            <div
+              class="progress-bar bg-success"
+              role="progressbar"
+              :style="{ width: itemUsagePercent + '%' }"
+            ></div>
+          </div>
+        </div>
+
+        <!-- المزايا -->
+        <div class="row text-center mt-4">
+          <div class="col-md-6 mb-2">
+            لوحة التحكم:
+            <i
+              :class="
+                subscription.level_has_dashboard
+                  ? 'bi bi-check-circle-fill text-success'
+                  : 'bi bi-x-circle-fill text-danger'
+              "
+            ></i>
+          </div>
+          <div class="col-md-6 mb-2">
+            تخصيص الشعار والخلفية:
+            <i
+              :class="
+                subscription.level_can_customize
+                  ? 'bi bi-check-circle-fill text-success'
+                  : 'bi bi-x-circle-fill text-danger'
+              "
+            ></i>
+          </div>
+        </div>
+      </div>
+      <div v-else class="alert alert-warning text-center mt-4">
+        لم يتم تحديد خطة اشتراك بعد.
+      </div>
+
+      <!-- 🔹 رمز QR -->
       <div v-if="subscription.st_barcode" class="barcode-box">
-        <h3>رمز QR الخاص بك</h3>
+        <h5 class="text-center">رمز QR الخاص بك</h5>
         <img :src="subscription.st_barcode" alt="QR Code" class="qr-image" />
-        <p>يمكنك تحميله وطباعته واستخدامه للعرض السريع.</p>
+        <p class="text-center text-primary fw-bold mt-2">
+          يمكنك تحميله وطباعته واستخدامه للعرض السريع.
+        </p>
       </div>
     </div>
   </div>
@@ -79,25 +146,25 @@ export default {
     infoItems() {
       return [
         {
-          label: "اسم العميل ",
+          label: "اسم العميل",
           value: this.subscription.cl_name || "—",
           icon: "bi bi-person-fill",
           iconColor: "text-primary",
         },
         {
-          label: "رقم الهاتف ",
+          label: "رقم الهاتف",
           value: this.subscription.cl_phone || "—",
           icon: "bi bi-telephone-fill",
           iconColor: "text-info",
         },
         {
-          label: "نوع الاشتراك ",
+          label: "نوع الاشتراك",
           value: this.subscriptionTypeName,
           icon: "bi bi-box-seam",
           iconColor: "text-warning",
         },
         {
-          label: "حالة الاشتراك ",
+          label: "حالة الاشتراك",
           value: this.statusIconText,
           icon: "bi bi-info-circle-fill",
           iconColor: "text-dark",
@@ -108,19 +175,19 @@ export default {
           isHtml: true,
         },
         {
-          label: "تاريخ البدء ",
+          label: "تاريخ البدء",
           value: this.formatDate(this.subscription.su_start_date),
           icon: "bi bi-calendar-plus",
           iconColor: "text-success",
         },
         {
-          label: "تاريخ الانتهاء ",
+          label: "تاريخ الانتهاء",
           value: this.formatDate(this.subscription.su_end_date),
           icon: "bi bi-calendar-x",
           iconColor: "text-danger",
         },
         {
-          label: "المدة المتبقية ",
+          label: "المدة المتبقية",
           value:
             this.subscription.days_remaining >= 0
               ? `${this.subscription.days_remaining} يوم`
@@ -140,6 +207,7 @@ export default {
       };
       return map[this.subscription.su_type] || "غير معروف";
     },
+
     statusIconText() {
       const status = this.subscription.su_status;
       if (status === "active")
@@ -153,6 +221,16 @@ export default {
       if (status === "active") return "فعال";
       if (status === "inactive") return "غير فعال";
       return "غير معروف";
+    },
+    sectionUsagePercent() {
+      const used = this.subscription.section_count || 0;
+      const max = this.subscription.level_max_sections || 0;
+      return max > 0 ? Math.min(100, Math.round((used / max) * 100)) : 0;
+    },
+    itemUsagePercent() {
+      const used = this.subscription.item_count || 0;
+      const max = this.subscription.level_max_items || 0;
+      return max > 0 ? Math.min(100, Math.round((used / max) * 100)) : 0;
     },
   },
   methods: {
@@ -171,7 +249,10 @@ export default {
         );
         this.subscription = res.data;
       } catch (err) {
-        console.error("فشل تحميل بيانات الاشتراك", err);
+        console.error(
+          "❌ فشل تحميل بيانات الاشتراك:",
+          err?.response?.data || err.message || err
+        );
       }
     },
   },
@@ -184,6 +265,8 @@ export default {
 <style>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
 
+/************************ */
+
 .subscription-card {
   background: #f9f9f9;
   border-radius: 16px;
@@ -192,12 +275,6 @@ export default {
 .subscription-status-bar {
   font-size: 1rem;
   border-radius: 8px;
-}
-
-@media (min-width: 768px) {
-  .subscription-card .d-flex.justify-content-between {
-    gap: 40px;
-  }
 }
 
 .barcode-box {
