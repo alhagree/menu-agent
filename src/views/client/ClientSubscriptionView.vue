@@ -12,7 +12,7 @@
           'bg-danger': subscription.su_status === 'inactive',
         }"
       >
-        حالة الاشتراك: {{ statusTextOnly }}
+        حالة الاشتراك : {{ statusTextOnly }}
       </div>
 
       <!-- 🔹 الشعار -->
@@ -53,7 +53,7 @@
 
         <!-- الأقسام -->
         <div class="mb-3">
-          <strong>الأقسام:</strong>
+          <strong>الأقسام : </strong>
           <div class="d-flex justify-content-between">
             <span
               >{{ subscription.section_count }} /
@@ -80,7 +80,7 @@
 
         <!-- الأصناف -->
         <div class="mb-3">
-          <strong>الأصناف:</strong>
+          <strong>الأصناف : </strong>
           <div class="d-flex justify-content-between">
             <span
               >{{ subscription.item_count }} /
@@ -108,7 +108,7 @@
         <!-- المزايا -->
         <div class="row text-center mt-4">
           <div class="col-md-6 mb-2">
-            لوحة التحكم:
+            لوحة التحكم :
             <i
               :class="
                 subscription.level_has_dashboard
@@ -118,7 +118,7 @@
             ></i>
           </div>
           <div class="col-md-6 mb-2">
-            تخصيص الشعار والخلفية:
+            تخصيص الشعار :
             <i
               :class="
                 subscription.level_can_customize
