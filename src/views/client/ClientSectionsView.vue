@@ -8,15 +8,34 @@
       </router-link>
     </div>
 
+    <!-- مسج التحذير عند تجاوز الحد -->
+    <div v-if="limitReached" class="alert alert-warning text-center">
+      ⚠️ لديك حالياً <strong>{{ visibleSections.length }}</strong> قسماً مفعلاً،
+      بينما خطتك تسمح بـ <strong>{{ levelLimits.max_sections }}</strong> كحد
+      أقصى.
+      <br />
+      سيتم
+      <strong class="text-danger">إخفاء {{ exceededSectionsCount }}</strong>
+      قسم/أقسام تلقائيًا في واجهة المنيو الخاصة بالزبائن.
+      <br />
+      لتفادي ذلك، يُرجى إخفاء
+      <strong>{{ exceededSectionsCount }}</strong> قسم/أقسام بشكل يدوي أو ترقية
+      الخطة.
+    </div>
+
+    <!-- مسج تنبيهي خفيف عند عدم تجاوز الحد ولكن هناك أقسام مخفية -->
     <div
-      v-if="
+      v-else-if="
         levelLimits.max_sections !== 'unlimited' &&
-        visibleSections.length > levelLimits.max_sections
+        visibleSections.length < sections.length
       "
-      class="alert alert-warning text-center"
+      class="alert alert-info text-center"
     >
-      ⚠️ لقد تجاوزت الحد الأقصى لعدد الأقسام المسموح بها في خطتك، اخفي بعض
-      الاقسام لتجنب عملية الاخفاء التلقائية في واجهة المنيو الخاصة بالزبائن
+      ℹ️ عدد الأقسام المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong>{{
+        visibleSections.length
+      }}</strong>
+      / {{ levelLimits.max_sections }}). يمكنك تفعيل المزيد أو ترقية الخطة
+      لزيادة الحد.
     </div>
 
     <!-- فلاتر البحث -->
@@ -131,6 +150,19 @@ export default {
           this.filterStatus === "" || sec.se_is_active == this.filterStatus;
         return matchesSearch && matchesStatus;
       });
+    },
+    exceededSectionsCount() {
+      if (this.levelLimits.max_sections === "unlimited") return 0;
+      return Math.max(
+        0,
+        this.visibleSections.length - this.levelLimits.max_sections
+      );
+    },
+    limitReached() {
+      return (
+        this.levelLimits.max_sections !== "unlimited" &&
+        this.visibleSections.length > this.levelLimits.max_sections
+      );
     },
   },
   methods: {
