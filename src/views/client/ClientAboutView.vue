@@ -1,15 +1,6 @@
 <template>
   <div class="container mt-4" style="max-width: 700px">
     <div class="card shadow-sm p-4">
-      <!-- ✅ الشعار -->
-      <div class="text-center mb-3">
-        <img
-          src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png"
-          alt="Tiklamu Logo"
-          style="width: 100px; height: 100px"
-        />
-      </div>
-
       <!-- عنوان -->
       <h3 class="text-center mb-4 fw-bold">
         <i class="bi bi-info-circle me-2"></i> حول النظام
@@ -23,6 +14,15 @@
       </p>
 
       <hr />
+
+      <!-- ✅ الشعار -->
+      <div class="text-center mb-3">
+        <img
+          src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png"
+          alt="Tiklamu Logo"
+          style="width: 100px; height: 100px"
+        />
+      </div>
 
       <!-- معلومات النشاط -->
       <div class="row text-center mb-4">
