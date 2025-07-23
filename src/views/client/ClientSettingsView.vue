@@ -12,10 +12,18 @@
       <h4 class="mb-4 text-center">⚙️ إعدادات الحساب</h4>
 
       <div class="mb-3">
-        <label class="form-label fw-bold"
-          >اسم العميل / الاسم التجاري المعروض</label
-        >
+        <label class="form-label fw-bold">الاسم التجاري المعروض</label>
         <input v-model="form.cl_name" type="text" class="form-control" />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-bold">اسم العميل</label>
+        <input
+          v-model="form.cl_fullname"
+          type="text"
+          class="form-control"
+          disabled
+        />
       </div>
 
       <div class="mb-3">
@@ -78,6 +86,7 @@ export default {
       form: {
         cl_name: "",
         cl_phone: "",
+        cl_fullname: "",
       },
       logoFile: null,
       backgroundFile: null,
@@ -102,6 +111,7 @@ export default {
         const data = res.data;
         this.form.cl_name = data.cl_name;
         this.form.cl_phone = data.cl_phone;
+        this.form.cl_fullname = data.cl_fullname;
         this.currentLogo = data.st_logo;
         this.currentBackground = data.st_background;
       } catch (err) {

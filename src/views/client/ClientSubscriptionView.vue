@@ -164,8 +164,14 @@ export default {
     infoItems() {
       return [
         {
-          label: "اسم العميل",
+          label: "الاسم التجاري",
           value: this.subscription.cl_name || "—",
+          icon: "bi bi-person-fill",
+          iconColor: "text-primary",
+        },
+        {
+          label: "اسم العميل",
+          value: this.subscription.cl_fullname || "—",
           icon: "bi bi-person-fill",
           iconColor: "text-primary",
         },
@@ -182,17 +188,6 @@ export default {
           iconColor: "text-warning",
         },
         {
-          label: "حالة الاشتراك",
-          value: this.statusIconText,
-          icon: "bi bi-info-circle-fill",
-          iconColor: "text-dark",
-          color:
-            this.subscription.su_status === "active"
-              ? "text-success fw-bold"
-              : "text-danger fw-bold",
-          isHtml: true,
-        },
-        {
           label: "تاريخ البدء",
           value: this.formatDate(this.subscription.su_start_date),
           icon: "bi bi-calendar-plus",
@@ -203,6 +198,17 @@ export default {
           value: this.formatDate(this.subscription.su_end_date),
           icon: "bi bi-calendar-x",
           iconColor: "text-danger",
+        },
+        {
+          label: "حالة الاشتراك",
+          value: this.statusIconText,
+          icon: "bi bi-info-circle-fill",
+          iconColor: "text-dark",
+          color:
+            this.subscription.su_status === "active"
+              ? "text-success fw-bold"
+              : "text-danger fw-bold",
+          isHtml: true,
         },
         {
           label: "المدة المتبقية",
