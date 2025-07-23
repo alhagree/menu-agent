@@ -1,6 +1,21 @@
 <template>
   <div class="container mt-4" style="max-width: 700px">
     <div class="card shadow-sm p-4">
+      <!-- ✅ الشعار -->
+      <div class="text-center mb-3">
+        <img
+          src="https://ik.imagekit.io/idbeilkk4/menu_project/defulat_image/logo.png"
+          alt="Tiklamu Logo"
+          class="rounded-circle"
+          style="
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 2px solid #ccc;
+          "
+        />
+      </div>
+
       <!-- عنوان -->
       <h3 class="text-center mb-4 fw-bold">
         <i class="bi bi-info-circle me-2"></i> حول النظام
@@ -55,13 +70,6 @@
           <h6><i class="bi bi-geo-alt me-1"></i> الموقع</h6>
           <p class="fw-bold text-muted">{{ businessLocation }}</p>
         </div>
-      </div>
-
-      <hr />
-
-      <!-- ملاحظة -->
-      <div class="text-center text-muted small">
-        جميع الحقوق محفوظة © Tiklamu
       </div>
     </div>
   </div>
