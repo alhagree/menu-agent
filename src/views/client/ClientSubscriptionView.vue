@@ -50,7 +50,7 @@
         <h4 class="text-center mb-2 fw-bold">
           📦 {{ subscription.level_name }}
         </h4>
-        <p class="text-center text-muted small">
+        <p class="text-center text-muted" style="font-size: 0.875rem">
           {{ subscription.level_description }}
         </p>
 
