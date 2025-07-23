@@ -55,38 +55,64 @@ export default {
 
 <style scoped>
 .progress-circle-container {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 15px 10px;
+  width: 120px;
+  height: 120px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-}
-.progress-ring {
-  transform: rotate(-90deg);
-}
-.bg {
-  fill: none;
-  stroke: #eee;
-  stroke-width: 8;
-}
-.progress {
-  fill: none;
-  stroke: #3498db;
-  stroke-width: 8;
-  stroke-linecap: round;
-  transition: stroke-dashoffset 1s ease-out;
-}
-.progress-text {
-  fill: #222;
-  font-size: 14px;
-  transform: rotate(90deg); /* لإلغاء الدوران العام */
-}
-.label {
-  margin-top: 10px;
-  font-weight: bold;
-  color: #444;
+  animation: fadeSlideUp 0.7s ease;
+  text-align: center;
+  margin: auto;
 }
 
 svg.progress-ring {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 5px;
+  transform: rotate(-90deg);
+}
+
+.bg {
+  fill: none;
+  stroke: #eee;
+  stroke-width: 6;
+}
+
+.progress {
+  fill: none;
+  stroke: #2f80ed;
+  stroke-width: 6;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1s ease-out;
+}
+
+.progress-text {
+  fill: #2f80ed;
+  font-size: 10px;
+  transform: rotate(90deg); /* عكس الدوران العام */
+  font-weight: bold;
+}
+
+.label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* نفس حركة fadeSlideUp للبطاقات */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 </style>
