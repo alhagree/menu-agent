@@ -1,4 +1,4 @@
-<!-- ClientSectionsView.vue -->
+// ClientSectionsView.vue
 <template>
   <div class="container mt-4">
     <div class="header mb-3 d-flex justify-content-between align-items-center">
@@ -8,7 +8,7 @@
       </router-link>
     </div>
 
-    <!-- 1️⃣ تجاوز الحد المسموح به -->
+    <!-- 🔶 مسج التحذير عند تجاوز الحد -->
     <div v-if="limitExceeded" class="alert alert-warning text-center">
       ⚠️ لقد تجاوزت عدد الأقسام المسموح بها في خطتك.
       <br />
@@ -19,12 +19,11 @@
       سيتم <span class="text-danger fw-bold">إخفاء</span> بعض الأقسام تلقائيًا
       من المنيو.
       <br />
-      لتجنّب ذلك، يُرجى
-      <strong>إخفاء {{ exceededSectionsCount }}</strong> قسم/أقسام يدوياً أو
-      ترقية الخطة.
+      لتجنّب ذلك، يُرجى <strong>إخفاء {{ exceededSectionsCount }}</strong>
+      قسم/أقسام يدوياً أو ترقية الخطة.
     </div>
 
-    <!-- 2️⃣ الوصول للحد الأقصى بدقة -->
+    <!-- 🔷 مسج تنبيهي عند بلوغ الحد بدون تجاوز -->
     <div v-else-if="limitReached" class="alert alert-info text-center">
       ℹ️ لقد وصلت إلى الحد الأقصى للأقسام المسموح بها في خطتك (<strong>{{
         visibleSections.length
@@ -32,30 +31,7 @@
       / {{ levelLimits.max_sections }})، لإضافة المزيد يُرجى ترقية الخطة.
     </div>
 
-    <!-- 3️⃣ وجود أقسام مخفية ضمن الحد -->
-    <div v-else-if="hasHiddenSections" class="alert alert-info text-center">
-      ℹ️ عدد الأقسام المفعّلة حالياً أقل من الحد المسموح (<strong>{{
-        visibleSections.length
-      }}</strong>
-      / {{ levelLimits.max_sections }})، ويوجد
-      <strong>{{ hiddenSectionsCount }}</strong> قسم/أقسام مخفية. يمكنك تفعيلها
-      أو ترقية الخطة لإضافة المزيد.
-    </div>
-
-    <!-- 4️⃣ وجود أقسام مخفية بسبب تجاوز العدد الكلي للخطة -->
-    <div
-      v-else-if="hasHiddenDueToLimit"
-      class="alert alert-warning text-center"
-    >
-      ⚠️ لديك أقسام مخفية حالياً بسبب تجاوز العدد الكلي للأقسام حد الخطة.
-      <br />
-      عدد الأقسام الكلي: <strong>{{ sections.length }}</strong> /
-      {{ levelLimits.max_sections }}
-      <br />
-      لتتمكن من تفعيل باقي الأقسام، يُرجى ترقية الخطة.
-    </div>
-
-    <!-- ✅ جدول عرض الأقسام -->
+    <!-- فلاتر البحث -->
     <div class="row mb-3">
       <div class="col-md-6">
         <input
@@ -78,16 +54,17 @@
       </div>
     </div>
 
+    <!-- جدول عرض الأقسام -->
     <div v-if="filteredSections.length">
       <table class="table table-bordered">
         <thead>
           <tr>
-            <th class="text-center">#</th>
-            <th class="text-center">الاسم</th>
-            <th class="text-center">الوصف</th>
-            <th class="text-center">صورة</th>
-            <th class="text-center">الحالة</th>
-            <th class="text-center">إجراءات</th>
+            <th class="text-center align-middle">#</th>
+            <th class="text-center align-middle">الاسم</th>
+            <th class="text-center align-middle">الوصف</th>
+            <th class="text-center align-middle">صورة</th>
+            <th class="text-center align-middle">الحالة</th>
+            <th class="text-center align-middle">إجراءات</th>
           </tr>
         </thead>
         <tbody>
@@ -96,10 +73,10 @@
             :key="sec.se_id"
             :class="{ 'table-danger': sec.se_is_active == 0 }"
           >
-            <td class="text-center">{{ index + 1 }}</td>
-            <td class="text-center">{{ sec.se_name }}</td>
-            <td class="text-center">{{ sec.se_description }}</td>
-            <td class="text-center">
+            <td class="text-center align-middle">{{ index + 1 }}</td>
+            <td class="text-center align-middle">{{ sec.se_name }}</td>
+            <td class="text-center align-middle">{{ sec.se_description }}</td>
+            <td>
               <img
                 v-if="sec.se_image"
                 :src="getImageUrl(sec.se_image)"
@@ -109,19 +86,21 @@
                 onerror="this.style.display='none'"
               />
             </td>
-            <td class="text-center">
+            <td class="text-center align-middle">
               <button
                 class="btn btn-sm w-50"
                 :class="sec.se_is_active ? 'btn-success' : 'btn-danger'"
+                style="min-width: 80px"
                 @click="toggleStatus(sec)"
               >
                 {{ sec.se_is_active ? "مفعل" : "مخفي" }}
               </button>
             </td>
-            <td class="text-center">
+            <td class="text-center align-middle">
               <router-link
                 :to="`/client/sections/edit/${sec.se_id}`"
                 class="btn btn-sm btn-warning w-50"
+                style="min-width: 80px"
               >
                 تعديل
               </router-link>
@@ -145,64 +124,46 @@ export default {
       searchTerm: "",
       filterStatus: "",
       clientLinkCode: localStorage.getItem("client_link_code"),
-      apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
+      apiBaseUrl: process.env.VUE_APP_API_BASE_URL, // ✅ هنا الإضافة
       levelLimits: {
         max_sections: 1000,
       },
     };
   },
   computed: {
-    computed: {
-      visibleSections() {
-        return this.sections.filter((s) => s.se_is_active == 1);
-      },
-      hiddenSectionsCount() {
-        return this.sections.filter((s) => s.se_is_active == 0).length;
-      },
-      exceededSectionsCount() {
-        if (this.levelLimits.max_sections === "unlimited") return 0;
-        return Math.max(
-          0,
-          this.visibleSections.length - this.levelLimits.max_sections
-        );
-      },
-      limitExceeded() {
-        return (
-          this.levelLimits.max_sections !== "unlimited" &&
-          this.visibleSections.length > this.levelLimits.max_sections
-        );
-      },
-      limitReached() {
-        return (
-          this.levelLimits.max_sections !== "unlimited" &&
-          this.visibleSections.length === this.levelLimits.max_sections &&
-          this.sections.length === this.levelLimits.max_sections
-        );
-      },
-      hasHiddenSections() {
-        return (
-          this.levelLimits.max_sections !== "unlimited" &&
-          this.visibleSections.length < this.levelLimits.max_sections &&
-          this.hiddenSectionsCount > 0 &&
-          this.sections.length <= this.levelLimits.max_sections
-        );
-      },
-      hasHiddenDueToLimit() {
-        return (
-          this.levelLimits.max_sections !== "unlimited" &&
-          this.sections.length > this.levelLimits.max_sections &&
-          this.visibleSections.length < this.levelLimits.max_sections
-        );
-      },
+    visibleSections() {
+      return this.sections.filter((s) => s.se_is_active == 1);
     },
-    hasInactiveSections() {
-      return this.inactiveSections.length > 0;
+    filteredSections() {
+      return this.sections.filter((sec) => {
+        const matchesSearch = sec.se_name
+          .toLowerCase()
+          .includes(this.searchTerm.toLowerCase());
+        const matchesStatus =
+          this.filterStatus === "" || sec.se_is_active == this.filterStatus;
+        return matchesSearch && matchesStatus;
+      });
+    },
+    exceededSectionsCount() {
+      if (this.levelLimits.max_sections === "unlimited") return 0;
+      return Math.max(
+        0,
+        this.visibleSections.length - this.levelLimits.max_sections
+      );
+    },
+    limitReached() {
+      return (
+        this.levelLimits.max_sections !== "unlimited" &&
+        this.visibleSections.length > this.levelLimits.max_sections
+      );
     },
   },
   methods: {
     getImageUrl(filename) {
-      if (filename.startsWith("http")) return filename;
-      return `${this.apiBaseUrl}/uploads/sections/${this.clientLinkCode}/${filename}`;
+      if (filename.startsWith("http")) {
+        return filename; // صورة من ImageKit
+      }
+      return `${this.apiBaseUrl}/uploads/sections/${this.clientLinkCode}/${filename}`; // صورة محلية
     },
     async loadSections() {
       const token = localStorage.getItem("client_token");
@@ -242,6 +203,7 @@ export default {
     },
     async loadLimits() {
       const token = localStorage.getItem("client_token");
+
       try {
         const response = await axios.get(
           `${this.apiBaseUrl}/api/agent/dashboard`,
@@ -263,8 +225,8 @@ export default {
     },
   },
   async mounted() {
-    await this.loadLimits();
     this.loadSections();
+    await this.loadLimits();
   },
 };
 </script>
