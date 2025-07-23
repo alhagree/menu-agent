@@ -225,7 +225,7 @@ export default {
 .dashboard {
   padding: 30px;
   background: #f4f6f8;
-  min-height: calc(100vh - 60px); /* خصم الشريط العلوي إن وجد */
+  min-height: calc(100vh - 60px);
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -251,9 +251,9 @@ export default {
   border-radius: 16px;
   padding: 20px;
   display: flex;
-  flex-direction: column; /* ← عمودي */
+  flex-direction: column;
   align-items: center;
-  justify-content: center; /* ← توسيط عمودي */
+  justify-content: center;
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: 0.3s;
@@ -267,7 +267,7 @@ export default {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  margin-bottom: 10px; /* بدلًا من margin-left */
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -324,56 +324,80 @@ export default {
   }
 }
 
-@media (max-width: 576px) {
-  .dashboard {
-    padding: 15px;
-  }
-}
-
+/* ✅ مظهر مزايا الباقة */
 .plan-features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 15px;
-  margin-top: 20px;
+  gap: 20px;
+  margin-top: 10px;
 }
 
 .feature-card {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
   background: white;
-  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  padding: 15px;
-  border: 2px solid #ccc;
-  transition: 0.3s;
-}
-
-.feature-card.enabled {
-  border-color: #27ae60;
-  color: #27ae60;
-}
-
-.feature-card:not(.enabled) {
-  border-color: #e74c3c;
-  color: #e74c3c;
-}
-
-.feature-card .label {
-  font-size: 14px;
-  margin-top: 6px;
-  color: #555;
-}
-
-.feature-card .value {
-  font-size: 18px;
-  font-weight: bold;
-  color: #222;
+  transition: 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: fadeSlideUp 0.7s ease;
+  margin: auto;
+  padding: 10px;
+  border: none !important;
 }
 
 .name-card {
   background: #2f80ed;
   color: white;
 }
-
 .name-card .label {
-  color: #eee;
+  color: #e1eaff;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.name-card .value {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* دوائر المزايا */
+.feature-card.enabled {
+  background: #d4f5e6;
+  color: #27ae60;
+}
+.feature-card:not(.enabled) {
+  background: #ffe3e3;
+  color: #e74c3c;
+}
+
+.feature-card i {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
+.feature-card .label {
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* ✅ حركة دخول */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard {
+    padding: 15px;
+  }
 }
 </style>
