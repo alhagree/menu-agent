@@ -9,32 +9,50 @@
     </div>
 
     <!-- ⚠️ تنبيه التجاوز -->
+    <!-- ⚠️ تنبيه تجاوز الحد -->
     <div v-if="limitReached" class="alert alert-warning text-center">
-      ⚠️ لديك حالياً <strong>{{ visibleItems.length }}</strong> صنفاً مفعلاً،
-      بينما خطتك تسمح بـ <strong>{{ levelLimits.max_items }}</strong> كحد أقصى.
+      ⚠️ لقد تجاوزت عدد الأصناف المسموح بها في خطتك.
       <br />
-      سيتم
-      <strong class="text-danger">إخفاء {{ exceededItemsCount }}</strong>
-      صنف/أصناف تلقائيًا في واجهة المنيو الخاصة بالزبائن.
+      عدد الأصناف المفعّلة حاليًا: <strong>{{ visibleItems.length }}</strong> /
+      <strong>{{ levelLimits.max_items }}</strong>
       <br />
-      لتفادي ذلك، يُرجى إخفاء
-      <strong>{{ exceededItemsCount }}</strong> صنف/أصناف بشكل يدوي أو ترقية
-      الخطة.
+      سيتم <strong class="text-danger">إخفاء</strong> بعض الأصناف في واجهة
+      المنيو.
+      <br />
+      لتفعيل جميع الأصناف، يُرجى ترقية الخطة أو تقليل عدد الأصناف المفعلة.
     </div>
 
-    <!-- ℹ️ تنبيه تنبيهي خفيف -->
+    <!-- ℹ️ تنبيه عند بلوغ الحد -->
     <div
       v-else-if="
         levelLimits.max_items !== 'unlimited' &&
-        visibleItems.length < items.length
+        visibleItems.length === levelLimits.max_items &&
+        items.length > visibleItems.length
       "
       class="alert alert-info text-center"
     >
-      ℹ️ عدد الأصناف المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong>{{
-        visibleItems.length
-      }}</strong>
-      / {{ levelLimits.max_items }}). يمكنك تفعيل المزيد أو ترقية الخطة لزيادة
-      الحد.
+      ℹ️ لقد وصلت إلى الحد الأقصى للأصناف المسموح بها في خطتك (<strong
+        >{{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
+      >).
+      <br />
+      لديك أصناف غير مفعّلة لن تظهر في المنيو، ولا يمكن تفعيلها ما لم يتم ترقية
+      الخطة.
+    </div>
+
+    <!-- ℹ️ تنبيه عادي عند وجود مجال للتفعيل -->
+    <div
+      v-else-if="
+        levelLimits.max_items !== 'unlimited' &&
+        visibleItems.length < levelLimits.max_items &&
+        items.length > visibleItems.length
+      "
+      class="alert alert-info text-center"
+    >
+      ℹ️ عدد الأصناف المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong
+        >{{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
+      >).
+      <br />
+      يمكنك تفعيل المزيد من الأصناف أو ترقية الخطة لزيادة الحد.
     </div>
 
     <!-- فلاتر -->
@@ -196,15 +214,29 @@ export default {
     visibleItems() {
       return this.items.filter((i) => i.it_is_active == 1);
     },
-    exceededItemsCount() {
-      if (this.levelLimits.max_items === "unlimited") return 0;
-      return Math.max(0, this.visibleItems.length - this.levelLimits.max_items);
-    },
     limitReached() {
       return (
         this.levelLimits.max_items !== "unlimited" &&
         this.visibleItems.length > this.levelLimits.max_items
       );
+    },
+    atLimitWithInactive() {
+      return (
+        this.levelLimits.max_items !== "unlimited" &&
+        this.visibleItems.length === this.levelLimits.max_items &&
+        this.items.length > this.visibleItems.length
+      );
+    },
+    underLimitWithMore() {
+      return (
+        this.levelLimits.max_items !== "unlimited" &&
+        this.visibleItems.length < this.levelLimits.max_items &&
+        this.items.length > this.visibleItems.length
+      );
+    },
+    exceededItemsCount() {
+      if (this.levelLimits.max_items === "unlimited") return 0;
+      return Math.max(0, this.visibleItems.length - this.levelLimits.max_items);
     },
     filteredItems() {
       return this.items.filter((item) => {
