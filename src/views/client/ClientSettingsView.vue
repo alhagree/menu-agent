@@ -84,7 +84,7 @@
       <button
         @click="saveSettings"
         class="btn btn-success w-100 mt-3"
-        :disabled="isLoading"
+        :disabled="isLoading || !canCustomize"
       >
         💾 حفظ التغييرات
       </button>
