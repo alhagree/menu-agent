@@ -8,33 +8,27 @@
       </router-link>
     </div>
 
-    <!-- مسج التحذير عند تجاوز الحد -->
-    <div v-if="limitReached" class="alert alert-warning text-center">
-      ⚠️ لديك حالياً <strong>{{ visibleSections.length }}</strong> قسماً مفعلاً،
-      بينما خطتك تسمح بـ <strong>{{ levelLimits.max_sections }}</strong> كحد
-      أقصى.
+    <!-- 🔶 مسج التحذير عند تجاوز الحد -->
+    <div v-if="limitExceeded" class="alert alert-warning text-center">
+      ⚠️ لقد تجاوزت عدد الأقسام المسموح بها في خطتك.
       <br />
-      سيتم
-      <strong class="text-danger">إخفاء {{ exceededSectionsCount }}</strong>
-      قسم/أقسام تلقائيًا في واجهة المنيو الخاصة بالزبائن، لتفادي ذلك، يُرجى
-      إخفاء
-      <strong>{{ exceededSectionsCount }}</strong> قسم/أقسام بشكل يدوي أو ترقية
-      الخطة.
+      عدد الأقسام المفعّلة حالياً:
+      <strong>{{ visibleSections.length }}</strong> /
+      {{ levelLimits.max_sections }}
+      <br />
+      سيتم <span class="text-danger fw-bold">إخفاء</span> بعض الأقسام تلقائيًا
+      من المنيو.
+      <br />
+      لتجنّب ذلك، يُرجى <strong>إخفاء {{ exceededSectionsCount }}</strong>
+      قسم/أقسام يدوياً أو ترقية الخطة.
     </div>
 
-    <!-- مسج تنبيهي خفيف عند عدم تجاوز الحد ولكن هناك أقسام مخفية -->
-    <div
-      v-else-if="
-        levelLimits.max_sections !== 'unlimited' &&
-        visibleSections.length < sections.length
-      "
-      class="alert alert-info text-center"
-    >
-      ℹ️ عدد الأقسام المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong>{{
+    <!-- 🔷 مسج تنبيهي عند بلوغ الحد بدون تجاوز -->
+    <div v-else-if="limitReached" class="alert alert-info text-center">
+      ℹ️ لقد وصلت إلى الحد الأقصى للأقسام المسموح بها في خطتك (<strong>{{
         visibleSections.length
       }}</strong>
-      / {{ levelLimits.max_sections }}). يمكنك تفعيل المزيد أو ترقية الخطة
-      لزيادة الحد.
+      / {{ levelLimits.max_sections }})، لإضافة المزيد يُرجى ترقية الخطة.
     </div>
 
     <!-- فلاتر البحث -->
