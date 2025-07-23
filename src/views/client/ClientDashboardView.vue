@@ -42,30 +42,19 @@
 
     <!-- مزايا الباقة -->
     <div class="plan-box mb-4">
-      <div class="usage-bar">
-        <div class="label">
-          الأقسام: {{ sectionCount }} /
-          {{
-            plan.sectionLimit === "unlimited" ? "غير محدود" : plan.sectionLimit
-          }}
+      <div class="usage-bar" v-for="bar in usageBars" :key="bar.label">
+        <div class="label-row">
+          <span class="label">
+            {{ bar.label }}: {{ bar.count }} / {{ bar.limit }} ({{
+              bar.percent
+            }}%)
+          </span>
         </div>
         <div class="progress">
           <div
-            class="progress-fill bg-primary"
-            :style="{ width: sectionFillWidth + '%' }"
-          ></div>
-        </div>
-      </div>
-
-      <div class="usage-bar">
-        <div class="label">
-          الأصناف: {{ itemCount }} /
-          {{ plan.itemLimit === "unlimited" ? "غير محدود" : plan.itemLimit }}
-        </div>
-        <div class="progress">
-          <div
-            class="progress-fill bg-success"
-            :style="{ width: itemFillWidth + '%' }"
+            class="progress-fill"
+            :class="bar.color"
+            :style="{ width: bar.fill + '%' }"
           ></div>
         </div>
       </div>
@@ -175,6 +164,39 @@ export default {
         },
       ];
     },
+    usageBars() {
+      return [
+        {
+          label: "الأقسام",
+          count: this.sectionCount,
+          limit:
+            this.plan.sectionLimit === "unlimited"
+              ? "غير محدود"
+              : this.plan.sectionLimit,
+          percent:
+            this.plan.sectionLimit === "unlimited"
+              ? 100
+              : Math.round((this.sectionCount / this.plan.sectionLimit) * 100),
+          fill: this.sectionFillWidth,
+          color: "bg-primary",
+        },
+        {
+          label: "الأصناف",
+          count: this.itemCount,
+          limit:
+            this.plan.itemLimit === "unlimited"
+              ? "غير محدود"
+              : this.plan.itemLimit,
+          percent:
+            this.plan.itemLimit === "unlimited"
+              ? 100
+              : Math.round((this.itemCount / this.plan.itemLimit) * 100),
+          fill: this.itemFillWidth,
+          color: "bg-success",
+        },
+      ];
+    },
+
     sectionProgress() {
       if (this.plan.sectionLimit === "unlimited") return 100;
       return Math.min(
@@ -378,5 +400,13 @@ export default {
   width: 0;
   transform-origin: right;
   transition: width 1.5s ease-in-out;
+}
+
+.label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 5px;
 }
 </style>
