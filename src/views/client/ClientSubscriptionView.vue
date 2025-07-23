@@ -61,12 +61,20 @@
             >
             <span>{{ sectionUsagePercent }}%</span>
           </div>
-          <div class="progress">
+          <div class="progress overflow-hidden position-relative">
             <div
-              class="progress-bar bg-info"
+              class="progress-bar bg-info animate-bar"
               role="progressbar"
               :style="{ width: sectionUsagePercent + '%' }"
             ></div>
+          </div>
+          <div
+            v-if="showSectionLimitWarning"
+            class="text-danger mt-1 d-flex align-items-center"
+            style="font-size: 0.9rem"
+          >
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            لقد تجاوزت الحد المسموح من الأقسام.
           </div>
         </div>
 
@@ -80,12 +88,20 @@
             >
             <span>{{ itemUsagePercent }}%</span>
           </div>
-          <div class="progress">
+          <div class="progress overflow-hidden position-relative">
             <div
-              class="progress-bar bg-success"
+              class="progress-bar bg-success animate-bar"
               role="progressbar"
               :style="{ width: itemUsagePercent + '%' }"
             ></div>
+          </div>
+          <div
+            v-if="showItemLimitWarning"
+            class="text-danger mt-1 d-flex align-items-center"
+            style="font-size: 0.9rem"
+          >
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            لقد تجاوزت الحد المسموح من الأصناف.
           </div>
         </div>
 
@@ -232,6 +248,18 @@ export default {
       const max = this.subscription.level_max_items || 0;
       return max > 0 ? Math.min(100, Math.round((used / max) * 100)) : 0;
     },
+    showSectionLimitWarning() {
+      return (
+        this.subscription.level_max_sections > 0 &&
+        this.subscription.section_count > this.subscription.level_max_sections
+      );
+    },
+    showItemLimitWarning() {
+      return (
+        this.subscription.level_max_items > 0 &&
+        this.subscription.item_count > this.subscription.level_max_items
+      );
+    },
   },
   methods: {
     formatDate(dateStr) {
@@ -289,5 +317,16 @@ export default {
   border: 1px dashed #ccc;
   padding: 10px;
   background: white;
+}
+
+.animate-bar {
+  transform: translateX(-100%);
+  animation: slideIn 1.2s ease-out forwards;
+}
+
+@keyframes slideIn {
+  to {
+    transform: translateX(0);
+  }
 }
 </style>
