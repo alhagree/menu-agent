@@ -41,21 +41,24 @@
     <p class="date">اليوم: {{ todayDate }}</p>
 
     <!-- مزايا الباقة -->
-    <div class="plan-box mb-4">
-      <div class="usage-bar" v-for="bar in usageBars" :key="bar.label">
-        <div class="label-row">
-          <span class="label">
-            {{ bar.label }}: {{ bar.count }} / {{ bar.limit }} ({{
-              bar.percent
-            }}%)
-          </span>
+    <div class="plan-usage-row mb-4">
+      <div v-for="bar in usageBars" :key="bar.label" class="usage-box">
+        <div class="usage-header">
+          {{ bar.label }}: {{ bar.count }} / {{ bar.limit }} ({{
+            bar.percent
+          }}%)
         </div>
+
         <div class="progress">
           <div
             class="progress-fill"
             :class="bar.color"
             :style="{ width: bar.fill + '%' }"
           ></div>
+        </div>
+
+        <div class="limit-warning text-danger fw-bold mt-1" v-if="bar.exceeded">
+          🚫 تجاوزت الحد المسموح
         </div>
       </div>
     </div>
@@ -165,36 +168,41 @@ export default {
       ];
     },
     usageBars() {
-      return [
-        {
-          label: "الأقسام",
-          count: this.sectionCount,
-          limit:
-            this.plan.sectionLimit === "unlimited"
-              ? "غير محدود"
-              : this.plan.sectionLimit,
-          percent:
-            this.plan.sectionLimit === "unlimited"
-              ? 100
-              : Math.round((this.sectionCount / this.plan.sectionLimit) * 100),
-          fill: this.sectionFillWidth,
-          color: "bg-primary",
-        },
-        {
-          label: "الأصناف",
-          count: this.itemCount,
-          limit:
-            this.plan.itemLimit === "unlimited"
-              ? "غير محدود"
-              : this.plan.itemLimit,
-          percent:
-            this.plan.itemLimit === "unlimited"
-              ? 100
-              : Math.round((this.itemCount / this.plan.itemLimit) * 100),
-          fill: this.itemFillWidth,
-          color: "bg-success",
-        },
-      ];
+      const bars = [];
+
+      const sectionLimit = this.plan.sectionLimit;
+      const itemLimit = this.plan.itemLimit;
+
+      const sectionPercent =
+        sectionLimit === "unlimited"
+          ? 100
+          : Math.round((this.sectionCount / sectionLimit) * 100);
+      const itemPercent =
+        itemLimit === "unlimited"
+          ? 100
+          : Math.round((this.itemCount / itemLimit) * 100);
+
+      bars.push({
+        label: "الأقسام",
+        count: this.sectionCount,
+        limit: sectionLimit === "unlimited" ? "غير محدود" : sectionLimit,
+        percent: sectionPercent,
+        fill: Math.min(100, sectionPercent),
+        color: sectionPercent > 100 ? "bg-danger" : "bg-primary",
+        exceeded: sectionLimit !== "unlimited" && sectionPercent > 100,
+      });
+
+      bars.push({
+        label: "الأصناف",
+        count: this.itemCount,
+        limit: itemLimit === "unlimited" ? "غير محدود" : itemLimit,
+        percent: itemPercent,
+        fill: Math.min(100, itemPercent),
+        color: itemPercent > 100 ? "bg-danger" : "bg-success",
+        exceeded: itemLimit !== "unlimited" && itemPercent > 100,
+      });
+
+      return bars;
     },
 
     sectionProgress() {
@@ -357,37 +365,6 @@ export default {
 }
 /************************** */
 
-.plan-box {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.plan-title {
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 10px;
-}
-
-.plan-features-row {
-  display: flex;
-  justify-content: flex-start;
-  gap: 20px;
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-.usage-bar {
-  margin-bottom: 15px;
-}
-
-.usage-bar .label {
-  font-size: 13px;
-  margin-bottom: 5px;
-}
-
 .progress {
   height: 10px;
   background-color: #eee;
@@ -402,11 +379,45 @@ export default {
   transition: width 1.5s ease-in-out;
 }
 
-.label-row {
+/******************** */
+
+.plan-usage-row {
   display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
   justify-content: space-between;
-  align-items: center;
+}
+
+.usage-box {
+  flex: 1;
+  min-width: 260px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.usage-header {
+  font-weight: 600;
   font-size: 14px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.progress {
+  height: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 1.5s ease-in-out;
+}
+
+.limit-warning {
+  font-size: 13px;
+  text-align: center;
 }
 </style>
