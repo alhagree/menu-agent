@@ -8,6 +8,35 @@
       </router-link>
     </div>
 
+    <!-- ⚠️ تنبيه التجاوز -->
+    <div v-if="limitReached" class="alert alert-warning text-center">
+      ⚠️ لديك حالياً <strong>{{ visibleItems.length }}</strong> صنفاً مفعلاً،
+      بينما خطتك تسمح بـ <strong>{{ levelLimits.max_items }}</strong> كحد أقصى.
+      <br />
+      سيتم
+      <strong class="text-danger">إخفاء {{ exceededItemsCount }}</strong>
+      صنف/أصناف تلقائيًا في واجهة المنيو الخاصة بالزبائن.
+      <br />
+      لتفادي ذلك، يُرجى إخفاء
+      <strong>{{ exceededItemsCount }}</strong> صنف/أصناف بشكل يدوي أو ترقية
+      الخطة.
+    </div>
+
+    <!-- ℹ️ تنبيه تنبيهي خفيف -->
+    <div
+      v-else-if="
+        levelLimits.max_items !== 'unlimited' &&
+        visibleItems.length < items.length
+      "
+      class="alert alert-info text-center"
+    >
+      ℹ️ عدد الأصناف المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong>{{
+        visibleItems.length
+      }}</strong>
+      / {{ levelLimits.max_items }}). يمكنك تفعيل المزيد أو ترقية الخطة لزيادة
+      الحد.
+    </div>
+
     <!-- فلاتر -->
     <div class="row mb-3">
       <div class="col-md-6">
@@ -147,7 +176,6 @@ import api from "@/axios";
 export default {
   name: "ClientItemsView",
   inject: ["showToast"],
-
   data() {
     return {
       items: [],
@@ -159,9 +187,25 @@ export default {
       clientLinkCode: localStorage.getItem("client_link_code"),
       apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
       isLoading: false,
+      levelLimits: {
+        max_items: 1000,
+      },
     };
   },
   computed: {
+    visibleItems() {
+      return this.items.filter((i) => i.it_is_active == 1);
+    },
+    exceededItemsCount() {
+      if (this.levelLimits.max_items === "unlimited") return 0;
+      return Math.max(0, this.visibleItems.length - this.levelLimits.max_items);
+    },
+    limitReached() {
+      return (
+        this.levelLimits.max_items !== "unlimited" &&
+        this.visibleItems.length > this.levelLimits.max_items
+      );
+    },
     filteredItems() {
       return this.items.filter((item) => {
         const nameMatch = item.it_name
@@ -199,7 +243,7 @@ export default {
           it_description: item.it_description,
           it_se_id: item.it_se_id,
           it_is_active: item.it_is_active ? 0 : 1,
-          it_available: item.it_available, // أُضيفت
+          it_available: item.it_available,
         });
         item.it_is_active = item.it_is_active ? 0 : 1;
         this.showToast("تم تحديث حالة العرض", "success");
@@ -216,10 +260,9 @@ export default {
           it_price: price,
           it_description: item.it_description,
           it_se_id: item.it_se_id,
-          it_is_active: item.it_is_active, // أُضيفت
+          it_is_active: item.it_is_active,
           it_available: item.it_available ? 0 : 1,
         });
-
         item.it_available = item.it_available ? 0 : 1;
         this.showToast("تم تحديث حالة التوفر", "success");
       } catch (err) {
@@ -270,13 +313,24 @@ export default {
         this.isLoading = false;
       }
     },
+    async loadLimits() {
+      try {
+        const res = await api.get("/dashboard");
+        const max = res.data?.level?.itemLimit || 1000;
+        this.levelLimits.max_items =
+          max === "غير محدود" ? "unlimited" : parseInt(max);
+      } catch (err) {
+        console.error("فشل في جلب حدود الأصناف:", err);
+      }
+    },
     resetFilters() {
       this.searchTerm = "";
       this.filterSection = "";
       this.currentPage = 1;
     },
   },
-  mounted() {
+  async mounted() {
+    await this.loadLimits();
     this.loadSections();
     this.loadItems();
   },
