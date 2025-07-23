@@ -53,6 +53,48 @@
       </div>
     </div>
   </div>
+
+  <h4 class="mt-5 mb-3">مزايا الباقة الحالية:</h4>
+  <div class="plan-features">
+    <div class="feature-card name-card">
+      <div class="circle-content">
+        <div class="label">اسم الباقة</div>
+        <div class="value">{{ plan.name }}</div>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="circle-content">
+        <div class="label">الأقسام</div>
+        <div class="value">{{ sectionCount }} / {{ plan.sectionLimit }}</div>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <div class="circle-content">
+        <div class="label">الأصناف</div>
+        <div class="value">{{ itemCount }} / {{ plan.itemLimit }}</div>
+      </div>
+    </div>
+
+    <div class="feature-card" :class="{ enabled: plan.hasDashboard }">
+      <i
+        :class="
+          plan.hasDashboard ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'
+        "
+      ></i>
+      <div class="label">لوحة التحكم</div>
+    </div>
+
+    <div class="feature-card" :class="{ enabled: plan.hasLogo }">
+      <i
+        :class="
+          plan.hasLogo ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'
+        "
+      ></i>
+      <div class="label">تخصيص الشعار</div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -69,6 +111,13 @@ export default {
       daysLeft: null,
       showExpiredMessage: false,
       graceExpired: false,
+      plan: {
+        name: "",
+        sectionLimit: 0,
+        itemLimit: 0,
+        hasDashboard: false,
+        hasLogo: false,
+      },
     };
   },
   computed: {
@@ -157,6 +206,7 @@ export default {
       this.daysLeft = res.data.daysLeft;
       this.showExpiredMessage = res.data.subscriptionExpired;
       this.graceExpired = this.daysLeft < -7; // تجاوز 7 أيام بعد الانتهاء
+      this.plan = res.data.level;
     } catch (err) {
       console.error("فشل تحميل البيانات:", err);
     }
@@ -271,5 +321,52 @@ export default {
   .dashboard {
     padding: 15px;
   }
+}
+
+.plan-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.feature-card {
+  background: white;
+  border-radius: 20px;
+  text-align: center;
+  padding: 15px;
+  border: 2px solid #ccc;
+  transition: 0.3s;
+}
+
+.feature-card.enabled {
+  border-color: #27ae60;
+  color: #27ae60;
+}
+
+.feature-card:not(.enabled) {
+  border-color: #e74c3c;
+  color: #e74c3c;
+}
+
+.feature-card .label {
+  font-size: 14px;
+  margin-top: 6px;
+  color: #555;
+}
+
+.feature-card .value {
+  font-size: 18px;
+  font-weight: bold;
+  color: #222;
+}
+
+.name-card {
+  background: #2f80ed;
+  color: white;
+}
+
+.name-card .label {
+  color: #eee;
 }
 </style>
