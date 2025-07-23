@@ -47,8 +47,10 @@
 
       <!-- 🔹 تفاصيل خطة الاشتراك -->
       <div v-if="subscription.level_name" class="mb-4">
-        <h5 class="text-center mb-3">📦 {{ subscription.level_name }}</h5>
-        <p class="text-center text-muted mb-4">
+        <h4 class="text-center mb-2 fw-bold">
+          📦 {{ subscription.level_name }}
+        </h4>
+        <p class="text-center text-muted small">
           {{ subscription.level_description }}
         </p>
 
