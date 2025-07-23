@@ -67,7 +67,7 @@
     <div class="feature-card">
       <CircleProgress
         :used="itemCount"
-        :total="level.itemLimit === 'unlimited' ? 'unlimited' : level.itemLimit"
+        :total="plan.itemLimit === 'unlimited' ? 'unlimited' : plan.itemLimit"
         label="الأصناف"
       />
     </div>
@@ -76,7 +76,7 @@
       <CircleProgress
         :used="sectionCount"
         :total="
-          level.sectionLimit === 'unlimited' ? 'unlimited' : level.sectionLimit
+          plan.sectionLimit === 'unlimited' ? 'unlimited' : plan.sectionLimit
         "
         label="الأقسام"
       />
