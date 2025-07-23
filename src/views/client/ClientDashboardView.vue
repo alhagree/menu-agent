@@ -44,9 +44,10 @@
     <div class="plan-usage-row mb-4">
       <div v-for="bar in usageBars" :key="bar.label" class="usage-box">
         <div class="usage-header">
-          {{ bar.label }}: {{ bar.count }} / {{ bar.limit }} ({{
-            bar.percent
-          }}%)
+          {{ bar.label }}: {{ bar.count }} / {{ bar.limit }}
+          <template v-if="bar.limit !== 'غير محدود'"
+            >({{ bar.percent }}%)</template
+          >
         </div>
 
         <div class="progress">
