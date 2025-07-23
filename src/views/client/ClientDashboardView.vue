@@ -54,34 +54,33 @@
     </div>
   </div>
 
+  <!-- مزايا الباقة الحالية -->
   <h4 class="mt-5 mb-3">مزايا الباقة الحالية :</h4>
 
+  <!-- ✅ اسم الباقة -->
+  <div class="plan-name-card">
+    <div class="label">اسم الباقة</div>
+    <div class="value">{{ plan.name }}</div>
+  </div>
+
+  <!-- ✅ نسبة الاستخدام كدوائر منفصلة -->
+  <div class="circle-grid">
+    <CircleProgress
+      :used="itemCount"
+      :total="plan.itemLimit === 'unlimited' ? 'unlimited' : plan.itemLimit"
+      label="الأصناف"
+    />
+    <CircleProgress
+      :used="sectionCount"
+      :total="
+        plan.sectionLimit === 'unlimited' ? 'unlimited' : plan.sectionLimit
+      "
+      label="الأقسام"
+    />
+  </div>
+
+  <!-- ✅ مزايا الخطة (لوحة التحكم، الشعار) -->
   <div class="plan-features">
-    <div class="feature-card name-card">
-      <div class="circle-content">
-        <div class="label">اسم الباقة</div>
-        <div class="value">{{ plan.name }}</div>
-      </div>
-    </div>
-
-    <div class="feature-card">
-      <CircleProgress
-        :used="itemCount"
-        :total="plan.itemLimit === 'unlimited' ? 'unlimited' : plan.itemLimit"
-        label="الأصناف"
-      />
-    </div>
-
-    <div class="feature-card">
-      <CircleProgress
-        :used="sectionCount"
-        :total="
-          plan.sectionLimit === 'unlimited' ? 'unlimited' : plan.sectionLimit
-        "
-        label="الأقسام"
-      />
-    </div>
-
     <div class="feature-card" :class="{ enabled: plan.hasDashboard }">
       <i
         :class="
@@ -90,7 +89,6 @@
       ></i>
       <div class="label">لوحة التحكم</div>
     </div>
-
     <div class="feature-card" :class="{ enabled: plan.hasLogo }">
       <i
         :class="
@@ -399,5 +397,43 @@ export default {
   .dashboard {
     padding: 15px;
   }
+}
+
+/********************** */
+
+.plan-name-card {
+  background: #2f80ed;
+  color: white;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  max-width: 220px;
+  margin-inline: auto;
+}
+
+.plan-name-card .label {
+  font-size: 14px;
+  color: #dbe9ff;
+  margin-bottom: 6px;
+}
+.plan-name-card .value {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* شبكة لدوائر النسبة */
+.circle-grid {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.circle-grid .circle-wrapper {
+  width: 120px;
+  height: 120px;
 }
 </style>
