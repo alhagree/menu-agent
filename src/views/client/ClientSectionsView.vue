@@ -1,4 +1,3 @@
-// ClientSectionsView.vue
 <!-- ClientSectionsView.vue -->
 <template>
   <div class="container mt-4">
@@ -9,7 +8,7 @@
       </router-link>
     </div>
 
-    <!-- 🔶 تجاوز الحد المسموح -->
+    <!-- 🔶 تنبيه تجاوز الحد -->
     <div v-if="limitExceeded" class="alert alert-warning text-center">
       ⚠️ لقد تجاوزت عدد الأقسام المسموح بها في خطتك.
       <br />
@@ -25,12 +24,17 @@
       ترقية الخطة.
     </div>
 
-    <!-- 🔷 الوصول للحد المسموح بدون تجاوز -->
-    <div v-else-if="limitReached" class="alert alert-info text-center">
+    <!-- 🔷 تنبيه الوصول للحد مع وجود غير مفعّل -->
+    <div
+      v-else-if="limitReached && hasInactiveSections"
+      class="alert alert-info text-center"
+    >
       ℹ️ لقد وصلت إلى الحد الأقصى للأقسام المسموح بها في خطتك (<strong>{{
         visibleSections.length
       }}</strong>
-      / {{ levelLimits.max_sections }})، لإضافة المزيد يُرجى ترقية الخطة.
+      / {{ levelLimits.max_sections }})، ويوجد
+      <strong>{{ inactiveSections.length }}</strong> قسم/أقسام غير مفعّلة
+      حاليًا. <br />لإعادة تفعيلها، يُرجى إخفاء قسم آخر أو ترقية الخطة.
     </div>
 
     <!-- ✅ جدول عرض الأقسام -->
@@ -133,6 +137,9 @@ export default {
     visibleSections() {
       return this.sections.filter((s) => s.se_is_active == 1);
     },
+    inactiveSections() {
+      return this.sections.filter((s) => s.se_is_active == 0);
+    },
     filteredSections() {
       return this.sections.filter((sec) => {
         const matchesSearch = sec.se_name
@@ -153,7 +160,8 @@ export default {
     limitReached() {
       return (
         this.levelLimits.max_sections !== "unlimited" &&
-        this.visibleSections.length === this.levelLimits.max_sections
+        this.visibleSections.length === this.levelLimits.max_sections &&
+        this.sections.length > this.levelLimits.max_sections
       );
     },
     limitExceeded() {
@@ -161,6 +169,9 @@ export default {
         this.levelLimits.max_sections !== "unlimited" &&
         this.visibleSections.length > this.levelLimits.max_sections
       );
+    },
+    hasInactiveSections() {
+      return this.inactiveSections.length > 0;
     },
   },
   methods: {
