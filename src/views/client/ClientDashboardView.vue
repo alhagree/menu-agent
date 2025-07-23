@@ -42,13 +42,12 @@
 
     <!-- مزايا الباقة -->
     <div class="plan-usage-row mb-4">
-      <div v-for="bar in usageBars" :key="bar.label" class="usage-box">
+      <div v-for="bar in usageBars" :key="bar.label" class="usage-wrapper">
         <div class="usage-header">
           {{ bar.label }}: {{ bar.count }} / {{ bar.limit }} ({{
             bar.percent
           }}%)
         </div>
-
         <div class="progress">
           <div
             class="progress-fill"
@@ -56,9 +55,12 @@
             :style="{ width: bar.fill + '%' }"
           ></div>
         </div>
-
-        <div class="limit-warning text-danger fw-bold mt-1" v-if="bar.exceeded">
-          🚫 تجاوزت الحد المسموح
+        <div
+          v-if="bar.statusText"
+          :class="['mt-2', bar.statusClass]"
+          style="font-size: 13px"
+        >
+          {{ bar.statusText }}
         </div>
       </div>
     </div>
@@ -173,33 +175,55 @@ export default {
       const sectionLimit = this.plan.sectionLimit;
       const itemLimit = this.plan.itemLimit;
 
-      const sectionPercent =
-        sectionLimit === "unlimited"
-          ? 100
-          : Math.round((this.sectionCount / sectionLimit) * 100);
-      const itemPercent =
-        itemLimit === "unlimited"
-          ? 100
-          : Math.round((this.itemCount / itemLimit) * 100);
+      const sectionIsUnlimited = sectionLimit === "unlimited";
+      const itemIsUnlimited = itemLimit === "unlimited";
+
+      const sectionPercent = sectionIsUnlimited
+        ? null
+        : Math.round((this.sectionCount / sectionLimit) * 100);
+
+      const itemPercent = itemIsUnlimited
+        ? null
+        : Math.round((this.itemCount / itemLimit) * 100);
 
       bars.push({
         label: "الأقسام",
         count: this.sectionCount,
-        limit: sectionLimit === "unlimited" ? "غير محدود" : sectionLimit,
-        percent: sectionPercent,
-        fill: Math.min(100, sectionPercent),
+        limit: sectionIsUnlimited ? "غير محدود" : sectionLimit,
+        percent: sectionIsUnlimited ? "--" : sectionPercent,
+        fill: sectionIsUnlimited ? 0 : Math.min(100, sectionPercent),
         color: sectionPercent > 100 ? "bg-danger" : "bg-primary",
-        exceeded: sectionLimit !== "unlimited" && sectionPercent > 100,
+        exceeded: !sectionIsUnlimited && sectionPercent > 100,
+        statusText: sectionIsUnlimited
+          ? ""
+          : sectionPercent > 100
+          ? "⛔ تجاوز الحد المسموح"
+          : "✅ ضمن الحد",
+        statusClass: sectionIsUnlimited
+          ? ""
+          : sectionPercent > 100
+          ? "text-danger fw-bold"
+          : "text-success",
       });
 
       bars.push({
         label: "الأصناف",
         count: this.itemCount,
-        limit: itemLimit === "unlimited" ? "غير محدود" : itemLimit,
-        percent: itemPercent,
-        fill: Math.min(100, itemPercent),
+        limit: itemIsUnlimited ? "غير محدود" : itemLimit,
+        percent: itemIsUnlimited ? "--" : itemPercent,
+        fill: itemIsUnlimited ? 0 : Math.min(100, itemPercent),
         color: itemPercent > 100 ? "bg-danger" : "bg-success",
-        exceeded: itemLimit !== "unlimited" && itemPercent > 100,
+        exceeded: !itemIsUnlimited && itemPercent > 100,
+        statusText: itemIsUnlimited
+          ? ""
+          : itemPercent > 100
+          ? "⛔ تجاوز الحد المسموح"
+          : "✅ ضمن الحد",
+        statusClass: itemIsUnlimited
+          ? ""
+          : itemPercent > 100
+          ? "text-danger fw-bold"
+          : "text-success",
       });
 
       return bars;
