@@ -40,6 +40,64 @@
     <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋</h2>
     <p class="date">اليوم: {{ todayDate }}</p>
 
+    <!-- مزايا الباقة -->
+    <div class="plan-box mb-4">
+      <div class="plan-title">
+        🧾 الباقة الحالية: <strong>{{ plan.name }}</strong>
+      </div>
+
+      <div class="plan-features-row">
+        <span>
+          <i
+            :class="
+              plan.hasDashboard
+                ? 'bi bi-check-circle-fill text-success'
+                : 'bi bi-x-circle-fill text-danger'
+            "
+          ></i>
+          لوحة التحكم
+        </span>
+        <span>
+          <i
+            :class="
+              plan.hasLogo
+                ? 'bi bi-check-circle-fill text-success'
+                : 'bi bi-x-circle-fill text-danger'
+            "
+          ></i>
+          تخصيص الشعار
+        </span>
+      </div>
+
+      <div class="usage-bar">
+        <div class="label">
+          الأقسام: {{ sectionCount }} /
+          {{
+            plan.sectionLimit === "unlimited" ? "غير محدود" : plan.sectionLimit
+          }}
+        </div>
+        <div class="progress">
+          <div
+            class="progress-fill bg-primary"
+            :style="{ width: sectionProgress + '%' }"
+          ></div>
+        </div>
+      </div>
+
+      <div class="usage-bar">
+        <div class="label">
+          الأصناف: {{ itemCount }} /
+          {{ plan.itemLimit === "unlimited" ? "غير محدود" : plan.itemLimit }}
+        </div>
+        <div class="progress">
+          <div
+            class="progress-fill bg-success"
+            :style="{ width: itemProgress + '%' }"
+          ></div>
+        </div>
+      </div>
+    </div>
+
     <!-- الإحصائيات -->
     <div class="stats-grid">
       <div v-for="item in statItems" :key="item.key" class="stat-card">
@@ -69,9 +127,31 @@ export default {
       daysLeft: null,
       showExpiredMessage: false,
       graceExpired: false,
+      plan: {
+        name: "",
+        sectionLimit: 0,
+        itemLimit: 0,
+        hasDashboard: false,
+        hasLogo: false,
+      },
     };
   },
   computed: {
+    sectionProgress() {
+      if (this.plan.sectionLimit === "unlimited") return 100;
+      return Math.min(
+        100,
+        Math.round((this.sectionCount / this.plan.sectionLimit) * 100)
+      );
+    },
+    itemProgress() {
+      if (this.plan.itemLimit === "unlimited") return 100;
+      return Math.min(
+        100,
+        Math.round((this.itemCount / this.plan.itemLimit) * 100)
+      );
+    },
+
     graceEndDateRaw() {
       if (!this.subscriptionEnd) return null;
       const end = new Date(this.subscriptionEnd);
@@ -157,6 +237,7 @@ export default {
       this.daysLeft = res.data.daysLeft;
       this.showExpiredMessage = res.data.subscriptionExpired;
       this.graceExpired = this.daysLeft < -7; // تجاوز 7 أيام بعد الانتهاء
+      this.plan = res.data.level;
     } catch (err) {
       console.error("فشل تحميل البيانات:", err);
     }
@@ -271,5 +352,49 @@ export default {
   .dashboard {
     padding: 15px;
   }
+}
+/********************** */
+
+.plan-box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.plan-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.plan-features-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.usage-bar {
+  margin-bottom: 15px;
+}
+
+.usage-bar .label {
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.progress {
+  height: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  transition: width 0.5s ease-in-out;
 }
 </style>
