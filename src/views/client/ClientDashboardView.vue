@@ -53,60 +53,13 @@
       </div>
     </div>
   </div>
-
-  <!-- مزايا الباقة الحالية -->
-  <h4 class="mt-5 mb-3">مزايا الباقة الحالية :</h4>
-
-  <!-- ✅ اسم الباقة -->
-  <div class="plan-name-card">
-    <div class="label">اسم الباقة</div>
-    <div class="value">{{ plan.name }}</div>
-  </div>
-
-  <!-- ✅ نسبة الاستخدام كدوائر منفصلة -->
-  <div class="circle-grid">
-    <CircleProgress
-      :used="itemCount"
-      :total="plan.itemLimit === 'unlimited' ? 'unlimited' : plan.itemLimit"
-      label="الأصناف"
-    />
-    <CircleProgress
-      :used="sectionCount"
-      :total="
-        plan.sectionLimit === 'unlimited' ? 'unlimited' : plan.sectionLimit
-      "
-      label="الأقسام"
-    />
-  </div>
-
-  <!-- ✅ مزايا الخطة (لوحة التحكم، الشعار) -->
-  <div class="plan-features">
-    <div class="feature-card" :class="{ enabled: plan.hasDashboard }">
-      <i
-        :class="
-          plan.hasDashboard ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'
-        "
-      ></i>
-      <div class="label">لوحة التحكم</div>
-    </div>
-    <div class="feature-card" :class="{ enabled: plan.hasLogo }">
-      <i
-        :class="
-          plan.hasLogo ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'
-        "
-      ></i>
-      <div class="label">تخصيص الشعار</div>
-    </div>
-  </div>
 </template>
 
 <script>
 import api from "../../axios";
-import CircleProgress from "@/components/CircleProgress.vue";
 
 export default {
   name: "ClientDashboardView",
-  components: { CircleProgress },
   data() {
     return {
       username: null,
@@ -116,13 +69,6 @@ export default {
       daysLeft: null,
       showExpiredMessage: false,
       graceExpired: false,
-      plan: {
-        name: "",
-        sectionLimit: 0,
-        itemLimit: 0,
-        hasDashboard: false,
-        hasLogo: false,
-      },
     };
   },
   computed: {
@@ -211,7 +157,6 @@ export default {
       this.daysLeft = res.data.daysLeft;
       this.showExpiredMessage = res.data.subscriptionExpired;
       this.graceExpired = this.daysLeft < -7; // تجاوز 7 أيام بعد الانتهاء
-      this.plan = res.data.level;
     } catch (err) {
       console.error("فشل تحميل البيانات:", err);
     }
@@ -223,7 +168,7 @@ export default {
 .dashboard {
   padding: 30px;
   background: #f4f6f8;
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 60px); /* خصم الشريط العلوي إن وجد */
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -249,9 +194,9 @@ export default {
   border-radius: 16px;
   padding: 20px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* ← عمودي */
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* ← توسيط عمودي */
   text-align: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: 0.3s;
@@ -265,7 +210,7 @@ export default {
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  margin-bottom: 10px;
+  margin-bottom: 10px; /* بدلًا من margin-left */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -322,118 +267,9 @@ export default {
   }
 }
 
-/* ✅ مظهر مزايا الباقة */
-.plan-features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 20px;
-  margin-top: 10px;
-}
-
-.feature-card {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  transition: 0.4s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  animation: fadeSlideUp 0.7s ease;
-  margin: auto;
-  padding: 10px;
-  border: none !important;
-}
-
-.name-card {
-  background: #2f80ed;
-  color: white;
-}
-.name-card .label {
-  color: #e1eaff;
-  font-size: 14px;
-  margin-bottom: 5px;
-}
-.name-card .value {
-  font-weight: bold;
-  font-size: 16px;
-}
-
-/* دوائر المزايا */
-.feature-card.enabled {
-  background: #d4f5e6;
-  color: #27ae60;
-}
-.feature-card:not(.enabled) {
-  background: #ffe3e3;
-  color: #e74c3c;
-}
-
-.feature-card i {
-  font-size: 24px;
-  margin-bottom: 6px;
-}
-.feature-card .label {
-  font-size: 13px;
-  margin-top: 4px;
-}
-
-/* ✅ حركة دخول */
-@keyframes fadeSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
 @media (max-width: 576px) {
   .dashboard {
     padding: 15px;
   }
-}
-
-/********************** */
-
-.plan-name-card {
-  background: #2f80ed;
-  color: white;
-  padding: 20px;
-  border-radius: 16px;
-  text-align: center;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  max-width: 220px;
-  margin-inline: auto;
-}
-
-.plan-name-card .label {
-  font-size: 14px;
-  color: #dbe9ff;
-  margin-bottom: 6px;
-}
-.plan-name-card .value {
-  font-size: 18px;
-  font-weight: bold;
-}
-
-/* شبكة لدوائر النسبة */
-.circle-grid {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  margin-bottom: 25px;
-  flex-wrap: wrap;
-}
-
-.circle-grid .circle-wrapper {
-  width: 120px;
-  height: 120px;
 }
 </style>
