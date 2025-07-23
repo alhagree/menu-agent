@@ -16,7 +16,7 @@
       </h3>
 
       <!-- وصف النظام -->
-      <p class="text-center text-primary" style="font-size: 1rem">
+      <p class="text-center" style="font-size: 1rem">
         هذا النظام مصمم لإدارة المنيو الإلكتروني الخاص بنشاطك التجاري بطريقة
         سهلة وسريعة، ويتيح لك عرض الأصناف والأقسام للعملاء بشكل احترافي ومباشر
         من خلال رمز QR.
@@ -27,9 +27,6 @@
       <!-- معلومات النشاط -->
       <div class="row text-center mb-4">
         <div class="col-md-12">
-          <h5 class="mb-1">
-            <i class="bi bi-shop me-1"></i> اسم النشاط التجاري
-          </h5>
           <p class="fw-bold text-primary fs-5">{{ businessName }}</p>
         </div>
       </div>
