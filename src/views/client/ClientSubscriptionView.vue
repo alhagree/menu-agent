@@ -63,9 +63,9 @@
           </div>
           <div class="progress overflow-hidden position-relative">
             <div
-              class="progress-bar bg-info animate-bar"
+              class="progress-bar bg-info"
               role="progressbar"
-              :style="{ width: sectionUsagePercent + '%' }"
+              :style="{ width: sectionProgressWidth + '%' }"
             ></div>
           </div>
           <div
@@ -90,9 +90,9 @@
           </div>
           <div class="progress overflow-hidden position-relative">
             <div
-              class="progress-bar bg-success animate-bar"
+              class="progress-bar bg-success"
               role="progressbar"
-              :style="{ width: itemUsagePercent + '%' }"
+              :style="{ width: itemProgressWidth + '%' }"
             ></div>
           </div>
           <div
@@ -156,6 +156,8 @@ export default {
       subscription: {},
       link_code: localStorage.getItem("client_link_code") || "",
       apiBaseUrl: process.env.VUE_APP_API_BASE_URL,
+      sectionProgressWidth: 0,
+      itemProgressWidth: 0,
     };
   },
   computed: {
@@ -276,6 +278,10 @@ export default {
           }
         );
         this.subscription = res.data;
+        setTimeout(() => {
+          this.sectionProgressWidth = this.sectionUsagePercent;
+          this.itemProgressWidth = this.itemUsagePercent;
+        }, 100);
       } catch (err) {
         console.error(
           "❌ فشل تحميل بيانات الاشتراك:",
@@ -319,14 +325,12 @@ export default {
   background: white;
 }
 
-.animate-bar {
-  transform: translateX(-100%);
-  animation: slideIn 1.2s ease-out forwards;
-}
-
 @keyframes slideIn {
   to {
     transform: translateX(0);
   }
+}
+.progress-bar {
+  transition: width 1.2s ease-in-out;
 }
 </style>
