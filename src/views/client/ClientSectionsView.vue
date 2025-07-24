@@ -81,7 +81,7 @@
     </div>
 
     <!-- جدول عرض الأقسام -->
-    <div v-if="filteredSections.length">
+    <div v-if="filteredSections && filteredSections.length">
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -189,6 +189,16 @@ export default {
       if (active <= limit && inactive > 0) return "hiddenDueToLimit";
 
       return "other";
+    },
+    filteredSections() {
+      return (this.sections || []).filter((sec) => {
+        const matchesSearch = sec.se_name
+          ?.toLowerCase()
+          .includes(this.searchTerm.toLowerCase());
+        const matchesStatus =
+          this.filterStatus === "" || sec.se_is_active == this.filterStatus;
+        return matchesSearch && matchesStatus;
+      });
     },
   },
   methods: {
