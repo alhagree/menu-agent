@@ -9,7 +9,6 @@
     </div>
 
     <!-- ⚠️ تنبيه التجاوز -->
-    <!-- ⚠️ تنبيه تجاوز الحد -->
     <div v-if="limitReached" class="alert alert-warning text-center">
       ⚠️ لقد تجاوزت عدد الأصناف المسموح بها في خطتك.
       <br />
