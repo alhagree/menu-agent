@@ -8,34 +8,45 @@
       </router-link>
     </div>
 
-    <!-- مسج التحذير عند تجاوز الحد -->
-    <div v-if="limitReached" class="alert alert-warning text-center">
-      ⚠️ لديك حالياً <strong>{{ visibleSections.length }}</strong> قسماً مفعلاً،
-      بينما خطتك تسمح بـ <strong>{{ levelLimits.max_sections }}</strong> كحد
-      أقصى.
+    <!-- تنبيه عند تجاوز عدد الأقسام الفعالة للحد -->
+    <div
+      v-if="sectionLimitStatus === 'exceededActive'"
+      class="alert alert-warning text-center"
+    >
+      ⚠️ لقد تجاوزت الحد المسموح به للأقسام الفعالة في خطتك.
+      <br />
+      حالياً لديك <strong>{{ visibleSections.length }}</strong> قسم مفعّل،
+      والخطة تسمح بـ <strong>{{ levelLimits.max_sections }}</strong> كحد أقصى.
       <br />
       سيتم
       <strong class="text-danger">إخفاء {{ exceededSectionsCount }}</strong>
-      قسم/أقسام تلقائيًا في واجهة المنيو الخاصة بالزبائن.
+      قسم/أقسام تلقائيًا في المنيو.
       <br />
-      لتفادي ذلك، يُرجى إخفاء
-      <strong>{{ exceededSectionsCount }}</strong> قسم/أقسام بشكل يدوي أو ترقية
-      الخطة.
+      يُنصح بإخفاء بعض الأقسام يدويًا أو ترقية خطتك.
     </div>
 
-    <!-- مسج تنبيهي خفيف عند عدم تجاوز الحد ولكن هناك أقسام مخفية -->
+    <!-- تنبيه عند وجود أقسام غير مفعّلة لأن العدد الكلي أكبر من الحد -->
     <div
-      v-else-if="
-        levelLimits.max_sections !== 'unlimited' &&
-        visibleSections.length < sections.length
-      "
+      v-else-if="sectionLimitStatus === 'hiddenDueToLimit'"
       class="alert alert-info text-center"
     >
-      ℹ️ عدد الأقسام المفعّلة حالياً تتناسب مع الحد المسموح في خطتك (<strong>{{
-        visibleSections.length
-      }}</strong>
-      / {{ levelLimits.max_sections }}). يمكنك اخفاء قسم معين واظهار اخر لضمان
-      عرضه في المنيو ، او ترقية الخطة لزيادة الحد.
+      ℹ️ عدد الأقسام المفعّلة حالياً هو
+      <strong>{{ visibleSections.length }}</strong> من أصل
+      <strong>{{ totalSectionsCount }}</strong> قسم.
+      <br />
+      خطتك تسمح بـ <strong>{{ levelLimits.max_sections }}</strong> قسم مفعّل
+      فقط.
+      <br />
+      يوجد <strong>{{ inactiveSections.length }}</strong> قسم/أقسام غير مفعّلة
+      حالياً، يمكنك إخفاء قسم فعّال لإظهار أحدهم، أو ترقية خطتك.
+    </div>
+
+    <!-- لا تنبيه إذا كل شيء ضمن الحد -->
+    <div
+      v-else-if="sectionLimitStatus === 'withinLimit'"
+      class="alert alert-success text-center"
+    >
+      ✅ جميع الأقسام الحالية ضمن الحد المسموح لخطة اشتراكك.
     </div>
 
     <!-- فلاتر البحث -->
@@ -141,15 +152,11 @@ export default {
     visibleSections() {
       return this.sections.filter((s) => s.se_is_active == 1);
     },
-    filteredSections() {
-      return this.sections.filter((sec) => {
-        const matchesSearch = sec.se_name
-          .toLowerCase()
-          .includes(this.searchTerm.toLowerCase());
-        const matchesStatus =
-          this.filterStatus === "" || sec.se_is_active == this.filterStatus;
-        return matchesSearch && matchesStatus;
-      });
+    inactiveSections() {
+      return this.sections.filter((s) => s.se_is_active == 0);
+    },
+    totalSectionsCount() {
+      return this.sections.length;
     },
     exceededSectionsCount() {
       if (this.levelLimits.max_sections === "unlimited") return 0;
@@ -158,11 +165,21 @@ export default {
         this.visibleSections.length - this.levelLimits.max_sections
       );
     },
-    limitReached() {
-      return (
-        this.levelLimits.max_sections !== "unlimited" &&
-        this.visibleSections.length > this.levelLimits.max_sections
-      );
+    sectionLimitStatus() {
+      const limit = this.levelLimits.max_sections;
+      const active = this.visibleSections.length;
+      const inactive = this.inactiveSections.length;
+      const total = active + inactive;
+
+      if (limit === "unlimited") return "unlimited";
+
+      if (total <= limit) return "withinLimit";
+
+      if (active > limit) return "exceededActive";
+
+      if (active <= limit && inactive > 0) return "hiddenDueToLimit";
+
+      return "other";
     },
   },
   methods: {
@@ -232,8 +249,8 @@ export default {
     },
   },
   async mounted() {
-    this.loadSections();
     await this.loadLimits();
+    await this.loadSections();
   },
 };
 </script>
