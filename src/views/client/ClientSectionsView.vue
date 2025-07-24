@@ -9,6 +9,14 @@
     </div>
 
     <!-- تنبيه عند تجاوز عدد الأقسام الفعالة للحد -->
+    <!-- حالة التحميل -->
+    <div
+      v-if="sectionLimitStatus === 'loading'"
+      class="alert alert-info text-center"
+    >
+      ⏳ جاري تحميل بيانات الأقسام وحدود الخطة...
+    </div>
+
     <div
       v-if="sectionLimitStatus === 'exceededActive'"
       class="alert alert-warning text-center"
@@ -150,13 +158,13 @@ export default {
   },
   computed: {
     visibleSections() {
-      return this.sections.filter((s) => s.se_is_active == 1);
+      return (this.sections || []).filter((s) => s.se_is_active == 1);
     },
     inactiveSections() {
-      return this.sections.filter((s) => s.se_is_active == 0);
+      return (this.sections || []).filter((s) => s.se_is_active == 0);
     },
     totalSectionsCount() {
-      return this.sections.length;
+      return (this.sections || []).length;
     },
     exceededSectionsCount() {
       if (this.levelLimits.max_sections === "unlimited") return 0;
@@ -167,16 +175,17 @@ export default {
     },
     sectionLimitStatus() {
       const limit = this.levelLimits.max_sections;
+
+      // لا حساب إذا لم يتم تحميل الأقسام بعد
+      if (!this.sections || this.sections.length === 0) return "loading";
+
       const active = this.visibleSections.length;
       const inactive = this.inactiveSections.length;
       const total = active + inactive;
 
       if (limit === "unlimited") return "unlimited";
-
       if (total <= limit) return "withinLimit";
-
       if (active > limit) return "exceededActive";
-
       if (active <= limit && inactive > 0) return "hiddenDueToLimit";
 
       return "other";
@@ -235,12 +244,22 @@ export default {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        this.levelLimits.max_sections =
-          response.data?.level?.sectionLimit === "غير محدود"
-            ? "unlimited"
-            : parseInt(response.data.level.sectionLimit || 1000);
+
+        const level = response.data?.level || {}; // ← حتى لو undefined يصير كائن فارغ
+        const sectionLimit = level.sectionLimit;
+
+        if (
+          !sectionLimit ||
+          sectionLimit === "غير محدود" ||
+          sectionLimit === "unlimited"
+        ) {
+          this.levelLimits.max_sections = "unlimited";
+        } else {
+          this.levelLimits.max_sections = parseInt(sectionLimit);
+        }
       } catch (err) {
         console.error("فشل في جلب حدود الخطة:", err);
+        this.levelLimits.max_sections = "unlimited"; // ← fallback افتراضي
       }
     },
     resetFilters() {
