@@ -1,4 +1,3 @@
-<!-- ClientItemsView.vue -->
 <template>
   <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -8,47 +7,50 @@
       </router-link>
     </div>
 
-    <!-- ⚠️ تنبيه التجاوز -->
-    <div v-if="limitReached" class="alert alert-warning text-center">
-      ⚠️ لقد تجاوزت عدد الأصناف المسموح بها في خطتك.
-      <br />
-      عدد الأصناف المفعّلة حاليًا: <strong>{{ visibleItems.length }}</strong> /
-      <strong>{{ levelLimits.max_items }}</strong>
-      <br />
-      سيتم <strong class="text-danger">إخفاء</strong> بعض الأصناف في واجهة
-      المنيو.
-      <br />
-      لتفعيل جميع الأصناف، يُرجى ترقية الخطة أو تقليل عدد الأصناف المفعلة.
-    </div>
-
-    <!-- ℹ️ تنبيه عند بلوغ الحد -->
+    <!-- 🟡 حالة التحميل -->
     <div
-      v-else-if="
-        levelLimits.max_items !== 'unlimited' &&
-        visibleItems.length === levelLimits.max_items &&
-        items.length > visibleItems.length
-      "
+      v-if="itemsLimitStatus === 'loading'"
       class="alert alert-info text-center"
     >
-      ℹ️ لقد وصلت إلى الحد الأقصى للأصناف المسموح بها في خطتك (<strong
-        >{{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
+      ⏳ جاري تحميل بيانات الأصناف وحدود الخطة...
+    </div>
+
+    <!-- 🔴 تجاوز الحد -->
+    <div
+      v-else-if="itemsLimitStatus === 'exceeded'"
+      class="alert alert-warning text-center"
+    >
+      ⚠️ لقد تجاوزت الحد المسموح به للأصناف الفعالة في خطتك.
+      <br />
+      عدد الأصناف المفعّلة حالياً: <strong>{{ visibleItems.length }}</strong> /
+      <strong>{{ levelLimits.max_items }}</strong>
+      <br />
+      سيتم <strong class="text-danger">إخفاء</strong> بعض الأصناف تلقائيًا في
+      المنيو.
+      <br />
+      يُنصح بإخفاء بعض الأصناف يدويًا أو ترقية خطتك.
+    </div>
+
+    <!-- 🔵 عند الوصول للحد ووجود أصناف غير مفعّلة -->
+    <div
+      v-else-if="itemsLimitStatus === 'atLimit'"
+      class="alert alert-info text-center"
+    >
+      ℹ️ لقد وصلت إلى الحد الأقصى للأصناف المسموح بها في خطتك (<strong>
+        {{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
       >).
       <br />
       لديك أصناف غير مفعّلة لن تظهر في المنيو، ولا يمكن تفعيلها ما لم يتم ترقية
       الخطة.
     </div>
 
-    <!-- ℹ️ تنبيه عادي عند وجود مجال للتفعيل -->
+    <!-- 🔵 يوجد مجال للتفعيل -->
     <div
-      v-else-if="
-        levelLimits.max_items !== 'unlimited' &&
-        visibleItems.length < levelLimits.max_items &&
-        items.length > visibleItems.length
-      "
+      v-else-if="itemsLimitStatus === 'underLimit'"
       class="alert alert-info text-center"
     >
-      ℹ️ عدد الأصناف المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong
-        >{{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
+      ℹ️ عدد الأصناف المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong>
+        {{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
       >).
       <br />
       يمكنك تفعيل المزيد من الأصناف أو ترقية الخطة لزيادة الحد.
@@ -113,7 +115,6 @@
               <button
                 class="btn btn-sm w-50"
                 :class="item.it_is_active ? 'btn-success' : 'btn-danger'"
-                style="min-width: 80px"
                 @click="toggleStatus(item)"
               >
                 {{ item.it_is_active ? "معروض" : "مخفي" }}
@@ -123,13 +124,11 @@
               <button
                 class="btn btn-sm w-50"
                 :class="item.it_available ? 'btn-success' : 'btn-danger'"
-                style="min-width: 80px"
                 @click="toggleAvailable(item)"
               >
                 {{ item.it_available ? "متاح" : "غير متاح" }}
               </button>
             </td>
-
             <td>
               <img
                 :src="getImageUrl(item.it_image)"
@@ -142,7 +141,6 @@
               <router-link
                 :to="`/client/items/edit/${item.it_id}`"
                 class="btn btn-sm btn-warning w-50"
-                style="min-width: 80px"
               >
                 تعديل
               </router-link>
@@ -213,29 +211,19 @@ export default {
     visibleItems() {
       return this.items.filter((i) => i.it_is_active == 1);
     },
-    limitReached() {
-      return (
-        this.levelLimits.max_items !== "unlimited" &&
-        this.visibleItems.length > this.levelLimits.max_items
-      );
-    },
-    atLimitWithInactive() {
-      return (
-        this.levelLimits.max_items !== "unlimited" &&
-        this.visibleItems.length === this.levelLimits.max_items &&
-        this.items.length > this.visibleItems.length
-      );
-    },
-    underLimitWithMore() {
-      return (
-        this.levelLimits.max_items !== "unlimited" &&
-        this.visibleItems.length < this.levelLimits.max_items &&
-        this.items.length > this.visibleItems.length
-      );
-    },
-    exceededItemsCount() {
-      if (this.levelLimits.max_items === "unlimited") return 0;
-      return Math.max(0, this.visibleItems.length - this.levelLimits.max_items);
+    itemsLimitStatus() {
+      if (!this.items || this.items.length === 0) return "loading";
+      if (this.levelLimits.max_items === "unlimited") return "unlimited";
+
+      const active = this.visibleItems.length;
+      const total = this.items.length;
+
+      if (active > this.levelLimits.max_items) return "exceeded";
+      if (active === this.levelLimits.max_items && total > active)
+        return "atLimit";
+      if (active < this.levelLimits.max_items && total > active)
+        return "underLimit";
+      return "ok";
     },
     filteredItems() {
       return this.items.filter((item) => {
