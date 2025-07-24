@@ -7,53 +7,54 @@
       </router-link>
     </div>
 
-    <!-- 🟡 حالة التحميل -->
+    <!-- 🔄 حالة التحميل -->
     <div
-      v-if="itemsLimitStatus === 'loading'"
+      v-if="itemLimitStatus === 'loading'"
       class="alert alert-info text-center"
     >
       ⏳ جاري تحميل بيانات الأصناف وحدود الخطة...
     </div>
 
-    <!-- 🔴 تجاوز الحد -->
+    <!-- ⚠️ تجاوز الحد -->
     <div
-      v-else-if="itemsLimitStatus === 'exceeded'"
+      v-else-if="itemLimitStatus === 'exceededActive'"
       class="alert alert-warning text-center"
     >
-      ⚠️ لقد تجاوزت الحد المسموح به للأصناف الفعالة في خطتك.
+      ⚠️ لقد تجاوزت الحد المسموح به للأصناف المفعّلة في خطتك.
       <br />
-      عدد الأصناف المفعّلة حالياً: <strong>{{ visibleItems.length }}</strong> /
-      <strong>{{ levelLimits.max_items }}</strong>
+      حالياً لديك <strong>{{ visibleItems.length }}</strong> صنف مفعّل، والخطة
+      تسمح بـ <strong>{{ levelLimits.max_items }}</strong> كحد أقصى.
       <br />
-      سيتم <strong class="text-danger">إخفاء</strong> بعض الأصناف تلقائيًا في
-      المنيو.
+      سيتم
+      <strong class="text-danger">
+        إخفاء {{ visibleItems.length - levelLimits.max_items }}
+      </strong>
+      صنف/أصناف تلقائيًا في المنيو.
       <br />
       يُنصح بإخفاء بعض الأصناف يدويًا أو ترقية خطتك.
     </div>
 
-    <!-- 🔵 عند الوصول للحد ووجود أصناف غير مفعّلة -->
+    <!-- ℹ️ عدد مفعّل ضمن الحد ولكن يوجد أصناف غير مفعّلة -->
     <div
-      v-else-if="itemsLimitStatus === 'atLimit'"
+      v-else-if="itemLimitStatus === 'hiddenDueToLimit'"
       class="alert alert-info text-center"
     >
-      ℹ️ لقد وصلت إلى الحد الأقصى للأصناف المسموح بها في خطتك (<strong>
-        {{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
-      >).
+      ℹ️ عدد الأصناف المفعّلة حالياً هو
+      <strong>{{ visibleItems.length }}</strong> من أصل
+      <strong>{{ items.length }}</strong> صنف.
       <br />
-      لديك أصناف غير مفعّلة لن تظهر في المنيو، ولا يمكن تفعيلها ما لم يتم ترقية
-      الخطة.
+      خطتك تسمح بـ <strong>{{ levelLimits.max_items }}</strong> صنف مفعّل فقط.
+      <br />
+      يوجد <strong>{{ items.length - visibleItems.length }}</strong> صنف/أصناف
+      غير مفعّلة حالياً، يمكنك إخفاء صنف فعّال لإظهار أحدهم، أو ترقية خطتك.
     </div>
 
-    <!-- 🔵 يوجد مجال للتفعيل -->
+    <!-- ✅ كل شيء تمام -->
     <div
-      v-else-if="itemsLimitStatus === 'underLimit'"
-      class="alert alert-info text-center"
+      v-else-if="itemLimitStatus === 'withinLimit'"
+      class="alert alert-success text-center"
     >
-      ℹ️ عدد الأصناف المفعّلة حالياً أقل من الحد المسموح في خطتك (<strong>
-        {{ visibleItems.length }} / {{ levelLimits.max_items }}</strong
-      >).
-      <br />
-      يمكنك تفعيل المزيد من الأصناف أو ترقية الخطة لزيادة الحد.
+      ✅ جميع الأصناف الحالية ضمن الحد المسموح لخطة اشتراكك.
     </div>
 
     <!-- فلاتر -->
@@ -209,7 +210,7 @@ export default {
   },
   computed: {
     visibleItems() {
-      return this.items.filter((i) => i.it_is_active == 1);
+      return (this.items || []).filter((i) => i.it_is_active == 1);
     },
     itemsLimitStatus() {
       if (!this.items || this.items.length === 0) return "loading";
@@ -224,6 +225,21 @@ export default {
       if (active < this.levelLimits.max_items && total > active)
         return "underLimit";
       return "ok";
+    },
+    itemLimitStatus() {
+      const limit = this.levelLimits.max_items;
+
+      if (!this.items || this.items.length === 0) return "loading";
+
+      const active = this.visibleItems.length;
+      const inactive = this.items.filter((i) => i.it_is_active == 0).length;
+      const total = this.items.length;
+
+      if (limit === "unlimited") return "unlimited";
+      if (active > limit) return "exceededActive";
+      if (active <= limit && total > limit && inactive > 0)
+        return "hiddenDueToLimit";
+      return "withinLimit";
     },
     filteredItems() {
       return this.items.filter((item) => {
