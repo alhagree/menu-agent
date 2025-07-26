@@ -41,7 +41,7 @@
     <p class="date">اليوم: {{ todayDate }}</p>
 
     <!-- بطاقة تفاصيل الخطة -->
-    <div class="plan-info-box mb-4 bg-white border border-primary-subtle">
+    <div class="plan-info-box mb-4 bg-white">
       <h5 class="mb-2 text-primary">
         🧾 الخطة الحالية: {{ plan.name || "غير محددة" }}
       </h5>
