@@ -40,20 +40,31 @@
     <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋</h2>
     <p class="date">اليوم: {{ todayDate }}</p>
 
-    <!-- بطاقة تفاصيل الخطة -->
     <!-- بطاقة معلومات الخطة النشطة -->
     <div class="plan-active-box mb-4">
-      <h5 class="mb-3 text-primary fw-bold">
-        🧾 الخطة الحالية: {{ plan.name || "غير محددة" }}
-      </h5>
+      <div class="d-flex flex-column align-items-center gap-2 text-center">
+        <div class="d-flex align-items-center gap-2 justify-content-center">
+          <i class="bi bi-clipboard2-check-fill text-primary fs-5"></i>
+          <h5 class="m-0 fw-bold text-primary">
+            الخطة الحالية: {{ plan.name || "غير محددة" }}
+          </h5>
+        </div>
 
-      <p class="plan-description mb-3">
-        {{ plan.description || "لا يوجد وصف متاح لهذه الخطة." }}
-      </p>
+        <div class="d-flex flex-column flex-md-row align-items-center gap-2">
+          <span class="text-secondary">
+            {{ plan.description || "بدون قيود على الأقسام أو الأصناف." }}
+          </span>
 
-      <router-link to="/subscription" class="btn btn-outline-primary">
-        تعرف أكثر على تفاصيل اشتراكك
-      </router-link>
+          <router-link
+            to="/subscription"
+            class="btn btn-sm btn-outline-primary"
+            style="white-space: nowrap"
+          >
+            <i class="bi bi-info-circle me-1"></i>
+            تفاصيل الاشتراك
+          </router-link>
+        </div>
+      </div>
     </div>
 
     <!-- مزايا الباقة -->
@@ -441,21 +452,11 @@ export default {
 
 .plan-active-box {
   background-color: #f0f8ff;
-  border: 2px dashed #4da6ff;
+  border: 1.5px dashed #3399ff;
   border-radius: 14px;
-  padding: 25px;
+  padding: 20px 25px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
-}
-
-.plan-active-box h5 {
-  font-size: 20px;
-}
-
-.plan-description {
-  font-size: 16px;
-  color: #444;
-  line-height: 1.6;
-  white-space: pre-line; /* يدعم السطرين */
+  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.05);
+  transition: all 0.2s ease-in-out;
 }
 </style>
