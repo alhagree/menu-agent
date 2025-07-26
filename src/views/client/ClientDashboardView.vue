@@ -37,7 +37,8 @@
     </div>
 
     <!-- العنوان -->
-    <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋</h2>
+    <h2 class="title">مرحباً بك من جديد يا {{ fullname }} 👋</h2>
+    <h2 class="title">{{ username }}</h2>
     <p class="date">اليوم: {{ todayDate }}</p>
 
     <!-- بطاقة معلومات الخطة النشطة -->
@@ -114,6 +115,7 @@ export default {
   data() {
     return {
       username: null,
+      fullname: null,
       sectionCount: 0,
       itemCount: 0,
       subscriptionEnd: null,
@@ -278,6 +280,7 @@ export default {
     try {
       const res = await api.get("/dashboard");
       this.username = res.data.username;
+      this.fullname = res.data.fullname;
       this.sectionCount = res.data.sectionCount;
       this.itemCount = res.data.itemCount;
       this.subscriptionEnd = res.data.subscriptionEnd;
@@ -465,8 +468,7 @@ export default {
 }
 
 .plan-active-box {
-  border: 1.5px dashed;
-  border-radius: 14px;
+  border-radius: 16px;
   padding: 20px 25px;
   text-align: center;
   transition: all 0.3s ease-in-out;
