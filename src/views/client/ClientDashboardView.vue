@@ -49,7 +49,7 @@
         {{ plan.description || "لا يوجد وصف متاح لهذه الخطة حالياً." }}
       </p>
       <a
-        href="/subscription"
+        href="/client/subscription"
         class="btn btn-sm btn-outline-primary mt-2"
         style="font-weight: 500"
       >
