@@ -56,7 +56,7 @@
           </span>
 
           <router-link
-            to="/subscription"
+            to="/client/subscription"
             class="btn btn-sm btn-outline-primary"
             style="white-space: nowrap"
           >
@@ -472,7 +472,7 @@ export default {
   text-align: center;
   transition: all 0.3s ease-in-out;
   background-color: #ffffff; /* رمادي فاتح مريح */
-  border: 2px dashed #adb5bd; /* رمادي متوسط */
+  border: 2px solid #adb5bd; /* رمادي متوسط */
   color: #495057; /* رمادي غامق للنص */
 }
 
