@@ -40,22 +40,21 @@
     <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋</h2>
     <p class="date">اليوم: {{ todayDate }}</p>
 
-    <!-- بطاقة معلومات الخطة -->
-    <div class="plan-info-box mb-4">
-      <h5 class="mb-2">
-        📦 خطتك الحالية:
-        <strong class="text-primary">{{ plan.name || "غير محددة" }}</strong>
+    <!-- بطاقة تفاصيل الخطة -->
+    <div class="plan-info-box mb-4 bg-white border border-primary-subtle">
+      <h5 class="mb-2 text-primary">
+        🧾 الخطة الحالية: {{ plan.name || "غير محددة" }}
       </h5>
-      <p class="m-0">
-        ⏳
-        <span v-if="daysLeft > 0">
-          تبقى <strong>{{ daysLeft }}</strong> يومًا على انتهاء الاشتراك.
-        </span>
-        <span v-else-if="daysLeft === 0"> اليوم هو آخر يوم في الاشتراك. </span>
-        <span v-else>
-          انتهى الاشتراك منذ <strong>{{ daysLeft * -1 }}</strong> يومًا.
-        </span>
+      <p class="text-muted mb-2">
+        {{ plan.description || "لا يوجد وصف متاح لهذه الخطة حالياً." }}
       </p>
+      <a
+        href="/subscription"
+        class="btn btn-sm btn-outline-primary mt-2"
+        style="font-weight: 500"
+      >
+        تعرف على مزايا اشتراكك
+      </a>
     </div>
 
     <!-- مزايا الباقة -->
@@ -113,6 +112,7 @@ export default {
       graceExpired: false,
       plan: {
         name: "",
+        description: "",
         sectionLimit: 0,
         itemLimit: 0,
         hasDashboard: false,
