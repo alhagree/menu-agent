@@ -473,27 +473,31 @@ export default {
   transition: all 0.3s ease-in-out;
 }
 
-/* خطة تجريبية */
+/* 🧪 خطة تجريبية – ألوان هادئة */
 .plan-begin {
-  background-color: #f8f9fa;
-  border-color: #adb5bd;
+  background-color: #f1f3f5; /* رمادي فاتح مريح */
+  border: 2px dashed #adb5bd; /* رمادي متوسط */
+  color: #495057; /* رمادي غامق للنص */
 }
 
-/* خطة أساسية */
+/* 🧰 خطة أساسية – ألوان هادئة وموثوقة */
 .plan-basic {
-  background-color: #eaf4ff;
-  border-color: #3399ff;
+  background-color: #e3f2fd; /* أزرق سماوي ناعم */
+  border: 2px solid #42a5f5; /* أزرق متوسط */
+  color: #0d47a1; /* أزرق داكن للنص */
 }
 
-/* خطة متقدمة */
+/* 🚀 خطة متقدمة – ألوان خضراء دافعة للنجاح */
 .plan-advanced {
-  background-color: #e7fbee;
-  border-color: #28a745;
+  background-color: #e8f5e9; /* أخضر فاتح */
+  border: 2px solid #43a047; /* أخضر متوسط */
+  color: #1b5e20; /* أخضر داكن */
 }
 
-/* خطة النخبة */
+/* 👑 خطة النخبة – فخامة وتميز */
 .plan-elite {
-  background-color: #fdf4e7;
-  border-color: #d4a017;
+  background-color: #fff8e1; /* ذهبي فاتح */
+  border: 2px solid #d4af37; /* ذهبي ملكي */
+  color: #6d4c41; /* بني فخم */
 }
 </style>
