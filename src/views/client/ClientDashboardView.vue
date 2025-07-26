@@ -468,11 +468,9 @@ export default {
   border: 1.5px dashed;
   border-radius: 14px;
   padding: 20px 25px;
-  margin: 5px;
   text-align: center;
   transition: all 0.3s ease-in-out;
   background-color: #ffffff; /* رمادي فاتح مريح */
-  border: 2px solid #adb5bd; /* رمادي متوسط */
   color: #495057; /* رمادي غامق للنص */
 }
 
