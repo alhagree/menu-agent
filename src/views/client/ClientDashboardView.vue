@@ -468,6 +468,7 @@ export default {
   border: 1.5px dashed;
   border-radius: 14px;
   padding: 20px 25px;
+  margin: 5px;
   text-align: center;
   transition: all 0.3s ease-in-out;
 }
