@@ -41,7 +41,7 @@
     <p class="date">اليوم: {{ todayDate }}</p>
 
     <!-- بطاقة معلومات الخطة النشطة -->
-    <div class="plan-active-box mb-4">
+    <div :class="['plan-active-box', getPlanClass(plan.code)]" class="mb-4">
       <div class="d-flex flex-column align-items-center gap-2 text-center">
         <div class="d-flex align-items-center gap-2 justify-content-center">
           <i class="bi bi-clipboard2-check-fill text-primary fs-5"></i>
@@ -250,6 +250,20 @@ export default {
     },
   },
   methods: {
+    getPlanClass(code) {
+      switch (code) {
+        case "begin":
+          return "plan-begin";
+        case "basic":
+          return "plan-basic";
+        case "advanced":
+          return "plan-advanced";
+        case "elite":
+          return "plan-elite";
+        default:
+          return "plan-begin";
+      }
+    },
     arabicDate(date) {
       if (!date) return "غير متوفر";
       const d = new Date(date);
@@ -451,12 +465,34 @@ export default {
 }
 
 .plan-active-box {
-  background-color: #f0f8ff;
-  border: 1.5px dashed #3399ff;
+  border: 1.5px dashed;
   border-radius: 14px;
   padding: 20px 25px;
   text-align: center;
-  box-shadow: 0 3px 8px rgba(0, 123, 255, 0.05);
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+/* خطة تجريبية */
+.plan-begin {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* خطة أساسية */
+.plan-basic {
+  background-color: #eaf4ff;
+  border-color: #3399ff;
+}
+
+/* خطة متقدمة */
+.plan-advanced {
+  background-color: #e7fbee;
+  border-color: #28a745;
+}
+
+/* خطة النخبة */
+.plan-elite {
+  background-color: #fdf4e7;
+  border-color: #d4a017;
 }
 </style>
