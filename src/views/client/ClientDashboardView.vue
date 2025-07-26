@@ -40,6 +40,24 @@
     <h2 class="title">مرحباً بك من جديد يا {{ username }} 👋</h2>
     <p class="date">اليوم: {{ todayDate }}</p>
 
+    <!-- بطاقة معلومات الخطة -->
+    <div class="plan-info-box mb-4">
+      <h5 class="mb-2">
+        📦 خطتك الحالية:
+        <strong class="text-primary">{{ plan.name || "غير محددة" }}</strong>
+      </h5>
+      <p class="m-0">
+        ⏳
+        <span v-if="daysLeft > 0">
+          تبقى <strong>{{ daysLeft }}</strong> يومًا على انتهاء الاشتراك.
+        </span>
+        <span v-else-if="daysLeft === 0"> اليوم هو آخر يوم في الاشتراك. </span>
+        <span v-else>
+          انتهى الاشتراك منذ <strong>{{ daysLeft * -1 }}</strong> يومًا.
+        </span>
+      </p>
+    </div>
+
     <!-- مزايا الباقة -->
     <div class="plan-usage-row mb-4">
       <div v-for="bar in usageBars" :key="bar.label" class="usage-box">
@@ -419,6 +437,15 @@ export default {
 
 .limit-warning {
   font-size: 13px;
+  text-align: center;
+}
+
+.plan-info-box {
+  background-color: #fff;
+  border: 2px dashed #007bff22;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
   text-align: center;
 }
 </style>
