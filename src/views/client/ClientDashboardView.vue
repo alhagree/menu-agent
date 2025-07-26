@@ -41,20 +41,19 @@
     <p class="date">اليوم: {{ todayDate }}</p>
 
     <!-- بطاقة تفاصيل الخطة -->
-    <div class="plan-info-box mb-4 bg-white">
-      <h5 class="mb-2 text-primary">
+    <!-- بطاقة معلومات الخطة النشطة -->
+    <div class="plan-active-box mb-4">
+      <h5 class="mb-3 text-primary fw-bold">
         🧾 الخطة الحالية: {{ plan.name || "غير محددة" }}
       </h5>
-      <p class="text-muted mb-2">
-        {{ plan.description || "لا يوجد وصف متاح لهذه الخطة حالياً." }}
+
+      <p class="plan-description mb-3">
+        {{ plan.description || "لا يوجد وصف متاح لهذه الخطة." }}
       </p>
-      <a
-        href="/client/subscription"
-        class="btn btn-sm btn-outline-primary mt-2"
-        style="font-weight: 500"
-      >
-        تعرف على مزايا اشتراكك
-      </a>
+
+      <router-link to="/subscription" class="btn btn-outline-primary">
+        تعرف أكثر على تفاصيل اشتراكك
+      </router-link>
     </div>
 
     <!-- مزايا الباقة -->
@@ -440,12 +439,23 @@ export default {
   text-align: center;
 }
 
-.plan-info-box {
-  background-color: #fff;
-  border: 2px dashed #007bff22;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+.plan-active-box {
+  background-color: #f0f8ff;
+  border: 2px dashed #4da6ff;
+  border-radius: 14px;
+  padding: 25px;
   text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
+}
+
+.plan-active-box h5 {
+  font-size: 20px;
+}
+
+.plan-description {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+  white-space: pre-line; /* يدعم السطرين */
 }
 </style>
